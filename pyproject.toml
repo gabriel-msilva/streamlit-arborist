@@ -62,3 +62,17 @@ test = {features = ["build", "test"], solve-group = "default"}
 dev = {features = ["build", "test", "lint"], solve-group = "default"}
 
 [tool.pixi.tasks]
+
+[tool.ruff]
+target-version = "py39"
+
+[tool.ruff.lint]
+select = [
+  "E4", "E7", "E9", # pycodestyle
+  "F",              # Pyflakes
+  "I",              # isort
+  "A",              # flake8-builtins
+  "B",              # flake8-bugbear
+  "SIM",            # flake8-simplify
+]
+unfixable = ["F401"]
