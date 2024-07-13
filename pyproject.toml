@@ -1,0 +1,20 @@
+[project]
+name = "streamlit-arborist"
+version = "0.1.0"
+description = "Add a short description here"
+authors = [{name = "Gabriel Mello Silva", email = "gabriel-melloc@proton.me"}]
+requires-python = ">= 3.11"
+dependencies = []
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tool.pixi.pypi-dependencies]
+streamlit-arborist = { path = ".", editable = true }
+
+[tool.pixi.tasks]
