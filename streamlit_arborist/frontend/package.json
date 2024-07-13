@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "react": "^16.13.1",
+    "react-arborist": "^3.4.0",
     "react-dom": "^16.13.1",
     "streamlit-component-lib": "^2.0.0"
   },
