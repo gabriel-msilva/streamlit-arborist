@@ -12,7 +12,6 @@ from tempfile import TemporaryFile
 
 import requests
 
-
 LOGGER = logging.getLogger(__file__)
 
 
@@ -27,8 +26,12 @@ def _find_free_port():
 class AsyncSubprocess:
     """A context manager. Wraps subprocess. Popen to capture output safely."""
 
-    def __init__(self, args: typing.List[str], cwd: typing.Optional[str] = None,
-                 env: typing.Optional[typing.Dict[str, str]] = None):
+    def __init__(
+        self,
+        args: typing.List[str],
+        cwd: typing.Optional[str] = None,
+        env: typing.Optional[typing.Dict[str, str]] = None,
+    ):
         """Initialize an AsyncSubprocess instance.
 
         Args:
@@ -98,7 +101,7 @@ class StreamlitRunner:
     """A context manager for running Streamlit scripts."""
 
     def __init__(
-            self, script_path: os.PathLike, server_port: typing.Optional[int] = None
+        self, script_path: os.PathLike, server_port: typing.Optional[int] = None
     ):
         """Initialize a StreamlitRunner instance.
 
@@ -115,7 +118,7 @@ class StreamlitRunner:
         self.start()
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, type, value, traceback):  # noqa: A002
         """Stop the Streamlit server and close resources when exiting the context."""
         self.stop()
 
