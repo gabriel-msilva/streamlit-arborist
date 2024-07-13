@@ -7,8 +7,8 @@ requires-python = ">=3.9"
 dependencies = ["streamlit >= 1.29"]
 
 [project.urls]
-homepage = "https://github.com/gabriel-msilva/streamlit-tree-view"
-repository = "https://github.com/gabriel-msilva/streamlit-tree-view"
+homepage = "https://github.com/gabriel-msilva/streamlit-arborist"
+repository = "https://github.com/gabriel-msilva/streamlit-arborist"
 
 [project.optional-dependencies]
 test = [
