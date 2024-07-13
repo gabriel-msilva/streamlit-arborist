@@ -1,20 +1,64 @@
 [project]
 name = "streamlit-arborist"
 version = "0.1.0"
-description = "Add a short description here"
-authors = [{name = "Gabriel Mello Silva", email = "gabriel-melloc@proton.me"}]
-requires-python = ">= 3.11"
-dependencies = []
+description = "Streamlit component for creating tree views"
+authors = [{name = "Gabriel Mello Silva", email = "gabriel.zyx@gmail.com"}]
+requires-python = ">=3.9"
+dependencies = ["streamlit >= 1.29"]
+
+[project.urls]
+homepage = "https://github.com/gabriel-msilva/streamlit-tree-view"
+repository = "https://github.com/gabriel-msilva/streamlit-tree-view"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "playwright==1.42.0",
+    "pytest-playwright-snapshot",
+    "pytest-rerunfailures",
+    "requests==2.32.3",
+]
 
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools.packages.find]
+include = ["streamlit_arborist"]
+namespaces = false
+
 [tool.pixi.project]
-channels = ["conda-forge"]
+channels = ["conda-forge", "microsoft"]
 platforms = ["linux-64"]
+# Create a mapping for `microsoft` channel so that `playwright` is not installed with
+# pypi too. See issue: https://github.com/prefix-dev/pixi/issues/1230
+conda-pypi-map = { microsoft = "local_mapping.json" }
+
+[tool.pixi.dependencies]
+streamlit = ">=1.29"
 
 [tool.pixi.pypi-dependencies]
 streamlit-arborist = { path = ".", editable = true }
+
+[tool.pixi.feature.build.dependencies]
+python = "3.9.*"
+nodejs = "*"
+
+[tool.pixi.feature.test.dependencies]
+requests = "2.32.3"
+pytest = "8.*"
+playwright = { version = "1.42.0", channel = "microsoft" }
+
+[tool.pixi.feature.test.pypi-dependencies]
+pytest-playwright-snapshot = "*"
+pytest-rerunfailures = "*"
+
+[tool.pixi.feature.lint]
+dependencies = {pre-commit = "*"}
+
+[tool.pixi.environments]
+default = {features = [], solve-group = "default"}
+test = {features = ["build", "test"], solve-group = "default"}
+dev = {features = ["build", "test", "lint"], solve-group = "default"}
 
 [tool.pixi.tasks]
