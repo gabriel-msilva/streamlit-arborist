@@ -1,4 +1,5 @@
 import os
+from typing import List, Union
 
 import streamlit.components.v1 as components
 
@@ -38,41 +39,83 @@ else:
     build_dir = os.path.join(parent_dir, "frontend/build")
     _component_func = components.declare_component("streamlit_arborist", path=build_dir)
 
+# https://github.com/brimdata/react-arborist/blob/v3.4.0/packages/react-arborist/src/types/tree-props.ts
 
-# Create a wrapper function for the component. This is an optional
-# best practice - we could simply expose the component function returned by
-# `declare_component` and call it done. The wrapper allows us to customize
-# our component's API: we can pre-process its input args, post-process its
-# output value, and add a docstring for users.
-def streamlit_arborist(name, key=None):
-    """Create a new instance of "streamlit_arborist".
 
-    Parameters
-    ----------
-    name: str
-        The name of the thing we're saying hello to. The component will display
-        the text "Hello, {name}!"
-    key: str or None
-        An optional key that uniquely identifies this component. If this is
-        None, and the component's arguments are changed, the component will
-        be re-mounted in the Streamlit frontend and lose its current state.
+def tree_view(
+    data: List[dict],
+    # Sizes
+    row_height: int = 24,
+    width: Union[int, str] = 300,
+    height: int = 500,
+    indent: int = 24,
+    overscan_count: int = 1,
+    padding_top: int = None,
+    padding_bottom: int = None,
+    padding: int = None,
+    # Config
+    children_accessor: str = "children",
+    id_accessor: str = "id",
+    open_by_default: bool = True,
+    selection_follows_focus: bool = False,
+    disable_multi_selection: bool = False,
+    # disable_edit: bool = False,
+    disable_drag: bool = False,
+    disable_drop: bool = False,
+    # Selection
+    selection: str = None,
+    initial_open_state: dict = None,
+    # Search
+    search_term: str = None,
+    # Node style
+    leaf_icon: str = None,
+    internal_icon: dict = None,
+    # Streamlit
+    key: str = None,
+    on_change=None,
+) -> str:
+    internal_icon = internal_icon or {}
+    icons = {
+        "leaf": leaf_icon,
+        "internal": {"open": internal_icon["open"], "closed": internal_icon["closed"]},
+    }
 
-    Returns
-    -------
-    int
-        The number of times the component's "Click Me" button has been clicked.
-        (This is the value passed to `Streamlit.setComponentValue` on the
-        frontend.)
-
-    """
     # Call through to our private component function. Arguments we pass here
     # will be sent to the frontend, where they'll be available in an "args"
     # dictionary.
     #
     # "default" is a special argument that specifies the initial return
     # value of the component before the user has interacted with it.
-    component_value = _component_func(name=name, key=key, default=0)
+    component_value = _component_func(
+        data=data,
+        # Sizes
+        row_height=row_height,
+        overscan_count=overscan_count,
+        width=width,
+        height=height,
+        indent=indent,
+        padding_top=padding_top,
+        padding_bottom=padding_bottom,
+        padding=padding,
+        # Config
+        children_accessor=children_accessor,
+        id_accessor=id_accessor,
+        open_by_default=open_by_default,
+        selection_follows_focus=selection_follows_focus,
+        disable_multi_selection=disable_multi_selection,
+        # disable_edit=disable_edit,
+        disable_drag=disable_drag,
+        disable_drop=disable_drop,
+        # Selection
+        selection=selection,
+        initial_open_state=initial_open_state,
+        # Search
+        search_term=search_term,
+        icons=icons,
+        # Streamlit
+        key=key,
+        on_change=on_change,
+        default={},
+    )
 
-    # We could modify the value returned from the component if we wanted.
-    # There's no need to do this in our simple example - but it's an option.
     return component_value

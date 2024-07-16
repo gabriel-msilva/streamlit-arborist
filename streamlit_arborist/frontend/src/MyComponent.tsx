@@ -4,23 +4,20 @@ import {
   withStreamlitConnection,
 } from "streamlit-component-lib"
 import React, { ReactNode } from "react"
+import { NodeRendererProps, Tree } from "react-arborist"
 
 interface State {
   numClicks: number
   isFocused: boolean
 }
 
-/**
- * This is a React-based component template. The `render()` function is called
- * automatically when your component should be re-rendered.
- */
+
 class MyComponent extends StreamlitComponentBase<State> {
   public state = { numClicks: 0, isFocused: false }
 
   public render = (): ReactNode => {
     // Arguments that are passed to the plugin in Python are accessible
     // via `this.props.args`. Here, we access the "name" arg.
-    const name = this.props.args["name"]
 
     // Streamlit sends us a theme object via props that we can use to ensure
     // that our component has visuals that match the active theme in a
@@ -33,41 +30,78 @@ class MyComponent extends StreamlitComponentBase<State> {
     if (theme) {
       // Use the theme object to style our button border. Alternatively, the
       // theme style is defined in CSS vars.
-      const borderStyling = `1px solid ${
-        this.state.isFocused ? theme.primaryColor : "gray"
-      }`
+      const borderStyling = `1px solid ${this.state.isFocused ? theme.primaryColor : "gray"}`
       style.border = borderStyling
       style.outline = borderStyling
     }
 
-    // Show a button and some text.
-    // When the button is clicked, we'll increment our "numClicks" state
-    // variable, and send its new value back to Streamlit, where it'll
-    // be available to the Python program.
-    return (
-      <span>
-        Hello, {name}! &nbsp;
-        <button
-          style={style}
-          onClick={this.onClicked}
-          disabled={this.props.disabled}
-          onFocus={this._onFocus}
-          onBlur={this._onBlur}
-        >
-          Click Me!
-        </button>
-      </span>
-    )
-  }
+    const icons = this.props.args["icons"]
 
-  /** Click handler for our "Click Me!" button. */
-  private onClicked = (): void => {
-    // Increment state.numClicks, and pass the new value back to
-    // Streamlit via `Streamlit.setComponentValue`.
-    this.setState(
-      prevState => ({ numClicks: prevState.numClicks + 1 }),
-      () => Streamlit.setComponentValue(this.state.numClicks)
-    )
+    function Node(props: NodeRendererProps<any>) {
+      let icon;
+      if (props.node.isLeaf) {
+        icon = icons["leaf"] || "🌳";
+      } else {
+        if (props.node.isOpen) {
+          icon = icons["internal"]["open"] || "🗁";
+        } else {
+          icon = icons["internal"]["closed"] || "🗀";
+        }
+      }
+
+      return (
+        <div ref={props.dragHandle} style={props.style}>
+          <span onClick={(e) => {
+            e.stopPropagation();
+            props.node.toggle();
+          }}>
+            {icon}
+          </span>{" " + props.node.data.name}
+        </div>
+      );
+    }
+
+    return (
+      <Tree
+        initialData={this.props.args["data"]}
+
+        // Sizes
+        width={this.props.args["width"]}
+        height={this.props.args["height"]}
+        indent={this.props.args["indent"]}
+        rowHeight={this.props.args["row_height"]}
+        overscanCount={this.props.args["overscan_count"]}
+        paddingTop={this.props.args["padding_top"]}
+        paddingBottom={this.props.args["padding_bottom"]}
+        padding={this.props.args["padding"]}
+
+        // Config
+        childrenAccessor={this.props.args["children_accessor"]}
+        idAccessor={this.props.args["id_accessor"]}
+        openByDefault={this.props.args["open_by_default"]}
+        selectionFollowsFocus={this.props.args["selection_follows_focus"]}
+        disableMultiSelection={this.props.args["disable_multi_selection"]}
+        // disableEdit={this.props.args["disable_edit"]}
+        disableDrag={this.props.args["disable_drag"]}
+        disableDrop={this.props.args["disable_drop"]}
+
+        // Selection
+        selection={this.props.args["selection"]}
+        initialOpenState={this.props.args["initial_open_state"]}
+
+        // Search
+        searchTerm={this.props.args["search_term"]}
+
+        // Event handlers
+        onActivate={(node) => {
+          if (node.parent) {
+            Streamlit.setComponentValue(node.id);
+          }
+        }}
+      >
+        {Node}
+      </Tree>
+    );
   }
 
   /** Focus handler for our "Click Me!" button. */
