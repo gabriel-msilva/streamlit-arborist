@@ -33,14 +33,12 @@ The development environment is managed with [pixi](https://pixi.sh/latest/).
 
    ```sh
    pixi install --environment dev
-   pixi shell --environment dev
    ```
 
 2. Install `npm` package in [streamlit_arborist/frontend](./streamlit_arborist/frontend/):
 
    ```sh
-   cd streamlit_arborist/frontend
-   npm clean-install
+   pixi run npm -e dev
    ```
 
 ### Running
@@ -48,14 +46,13 @@ The development environment is managed with [pixi](https://pixi.sh/latest/).
 1. Run the [example.py](./streamlit_arborist/example.py) app file with Streamlit:
 
    ```sh
-   # http://localhost:8501
-   streamlit run streamlit_arborist/example.py
+   pixi run backend -e dev
    ```
 
 2. Start the component's frontend server:
 
    ```sh
-   # http://localhost:3001
-   cd streamlit_arborist/frontend
-   npm run start
+   pixi run frontend -e dev
    ```
+
+Open the app running at <http://localhost:8501>.

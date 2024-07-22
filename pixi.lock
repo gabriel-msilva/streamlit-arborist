@@ -4092,7 +4092,7 @@ packages:
   name: streamlit-arborist
   version: 0.1.0
   path: .
-  sha256: 3611ec5fa4ce9a0a663422b1c7631f16d333d25b63e6ae6c03f97903ee4066c4
+  sha256: 01013e2620e618efbb5ef4f6c67c165962edbaeee2b52e2a371833e74a775a67
   requires_dist:
   - streamlit>=1.29
   - pytest ; extra == 'test'
