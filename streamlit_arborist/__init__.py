@@ -1,7 +1,8 @@
 import os
-from typing import List, Union
+from typing import Dict, List, Union
 
 import streamlit.components.v1 as components
+from streamlit.runtime.state import WidgetCallback
 
 # Create a _RELEASE constant. We'll set this to False while we're developing
 # the component, and True when we're ready to package and distribute it.
@@ -64,21 +65,101 @@ def tree_view(
     disable_drop: bool = False,
     # Selection
     selection: str = None,
-    initial_open_state: dict = None,
+    initial_open_state: Dict[str, bool] = None,
     # Search
     search_term: str = None,
     # Node style
-    leaf_icon: str = None,
-    internal_icon: dict = None,
+    icons: Dict[str, str] = None,
     # Streamlit
-    key: str = None,
-    on_change=None,
+    key: Union[str, int] = None,
+    on_change: WidgetCallback = None,
 ) -> str:
-    internal_icon = internal_icon or {}
-    icons = {
-        "leaf": leaf_icon,
-        "internal": {"open": internal_icon["open"], "closed": internal_icon["closed"]},
-    }
+    """
+    Create a tree view.
+
+    Parameters
+    ----------
+    data : List[dict]
+        _description_
+
+    row_height : int, default 24
+
+    width : int or str, default 300
+        View width in pixels or as a CSS width string (e.g. ``"auto"``).
+        https://developer.mozilla.org/pt-BR/docs/Web/CSS/width
+
+    height : int, default 500
+        View height in pixels.
+
+    indent : int, optional
+        Node indendation in pixels, by default 24
+
+    overscan_count : int, default 1
+        Number of additional rows rendered outside the visible viewport to ensure smooth
+        scrolling and better performance.
+
+    padding_top : int, optional
+        Space between the tree and its top border, in pixels.
+
+    padding_bottom : int, optional
+        Space between the tree and its bottom border, in pixels.
+
+    padding : int, optional
+        Space between the tree and its top/bottom borders, in pixels.
+        Overrides both `padding_top` and `padding_bottom`.
+
+    children_accessor : str, default "children"
+        The children key in the tree data.
+
+    id_accessor : str, default "id"
+        The ID key in the tree data.
+
+    open_by_default : bool, default True
+        Whether all nodes should be open when rendered.
+
+    selection_follows_focus : bool, optional
+        _description_, by default False
+
+    disable_multi_selection : bool, optional
+        _description_, by default False
+
+    disable_drag : bool, optional
+        _description_, by default False
+
+    disable_drop : bool, optional
+        _description_, by default False
+
+    selection : str or int, optional
+        The node `id` to select and scroll when rendered.
+
+    initial_open_state : Dict[str, bool], optional
+        A dict of node ID keys and bool values indicating whether the node is open
+        (`True`) or closed (`False`) when rendered.
+
+    search_term : str, optional
+        Only show nodes that match `search_term`.
+        If a child matches, all its parents also match.
+        Internal nodes are opened when filtering.
+
+    icons : dict, optional
+        A dict of keys ``"open"``, ``"closed"``, and ``"leaf"`` with string values
+        representing the icons to use for open internal nodes, closed internal nodes,
+        and leaf nodes, respectively.
+
+    key : str, optional
+        An optional string or integer to use as the unique key for the widget.
+        If this is omitted, a key will be generated for the widget based on its content.
+        Multiple widgets of the same type may not share the same key.
+
+    on_change : callable, optional
+        An optional callback invoked when this text input's value changes.
+
+    Returns
+    -------
+    str
+        The `id` of the selected node.
+    """
+    icons = icons or {}
 
     # Call through to our private component function. Arguments we pass here
     # will be sent to the frontend, where they'll be available in an "args"
@@ -108,10 +189,12 @@ def tree_view(
         disable_drop=disable_drop,
         # Selection
         selection=selection,
+        # Open State
         initial_open_state=initial_open_state,
         # Search
         search_term=search_term,
-        icons=icons,
+        # Style
+        icons=dict(icons),
         # Streamlit
         key=key,
         on_change=on_change,

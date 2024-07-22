@@ -4,13 +4,26 @@ import {
   withStreamlitConnection,
 } from "streamlit-component-lib"
 import React, { ReactNode } from "react"
-import { NodeRendererProps, Tree } from "react-arborist"
+import { NodeApi, NodeRendererProps, Tree } from "react-arborist"
+import styles from "./arborist.module.css"
 
 interface State {
   numClicks: number
   isFocused: boolean
 }
 
+interface Icons {
+  open: string
+  closed: string
+  leaf: string
+}
+
+function get_icon(node: NodeApi<any>, icons: Icons) {
+  if (node.isLeaf) {
+    return icons.leaf || "🌳";
+  }
+  return node.isOpen ? icons.open || "🗁" : icons.closed || "🗀";
+}
 
 class MyComponent extends StreamlitComponentBase<State> {
   public state = { numClicks: 0, isFocused: false }
@@ -36,27 +49,21 @@ class MyComponent extends StreamlitComponentBase<State> {
     }
 
     const icons = this.props.args["icons"]
-
-    function Node(props: NodeRendererProps<any>) {
-      let icon;
-      if (props.node.isLeaf) {
-        icon = icons["leaf"] || "🌳";
-      } else {
-        if (props.node.isOpen) {
-          icon = icons["internal"]["open"] || "🗁";
-        } else {
-          icon = icons["internal"]["closed"] || "🗀";
-        }
-      }
-
+    function Node({ node, style, dragHandle }: NodeRendererProps<any>) {
       return (
-        <div ref={props.dragHandle} style={props.style}>
-          <span onClick={(e) => {
-            e.stopPropagation();
-            props.node.toggle();
-          }}>
-            {icon}
-          </span>{" " + props.node.data.name}
+        <div
+          ref={dragHandle}
+          className={styles.node}
+          style={style}
+        >
+          <span
+            onClick={(e) => {
+              e.stopPropagation();
+              node.toggle();
+            }}
+          >
+            {get_icon(node, icons)}
+          </span>{" " + node.data.name}
         </div>
       );
     }
@@ -94,9 +101,9 @@ class MyComponent extends StreamlitComponentBase<State> {
 
         // Event handlers
         onActivate={(node) => {
-          if (node.parent) {
-            Streamlit.setComponentValue(node.id);
-          }
+          // if (node.parent) {
+          Streamlit.setComponentValue(node.data);
+          // }
         }}
       >
         {Node}

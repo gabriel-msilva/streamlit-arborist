@@ -1,0 +1,12 @@
+[role="treeitem"] {
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+[role="treeitem"][aria-selected="true"] {
+  background-color: var(--primary-color);
+}
+
+[role="treeitem"][aria-selected="false"]:hover {
+  background-color: var(--secondary-background-color);
+}
