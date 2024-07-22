@@ -6,6 +6,7 @@ import {
 import React, { ReactNode } from "react"
 import { NodeApi, NodeRendererProps, Tree } from "react-arborist"
 import styles from "./arborist.module.css"
+import clsx from "clsx"
 
 interface State {
   numClicks: number
@@ -53,7 +54,7 @@ class MyComponent extends StreamlitComponentBase<State> {
       return (
         <div
           ref={dragHandle}
-          className={styles.node}
+          className={clsx(styles.node, node.state)}
           style={style}
         >
           <span
@@ -88,9 +89,9 @@ class MyComponent extends StreamlitComponentBase<State> {
         openByDefault={this.props.args["open_by_default"]}
         selectionFollowsFocus={this.props.args["selection_follows_focus"]}
         disableMultiSelection={this.props.args["disable_multi_selection"]}
-        // disableEdit={this.props.args["disable_edit"]}
-        disableDrag={this.props.args["disable_drag"]}
-        disableDrop={this.props.args["disable_drop"]}
+        disableEdit={true}
+        disableDrag={true}
+        disableDrop={true}
 
         // Selection
         selection={this.props.args["selection"]}
@@ -102,7 +103,7 @@ class MyComponent extends StreamlitComponentBase<State> {
         // Event handlers
         onActivate={(node) => {
           // if (node.parent) {
-          Streamlit.setComponentValue(node.data);
+          Streamlit.setComponentValue(node.id);
           // }
         }}
       >

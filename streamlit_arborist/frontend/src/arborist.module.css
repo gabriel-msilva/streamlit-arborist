@@ -1,12 +1,14 @@
-[role="treeitem"] {
-  cursor: pointer;
+.node {
   border-radius: 0.25rem;
+  cursor: pointer;
+  display: flex;
 }
 
-[role="treeitem"][aria-selected="true"] {
-  background-color: var(--primary-color);
-}
-
-[role="treeitem"][aria-selected="false"]:hover {
+.node:hover {
   background-color: var(--secondary-background-color);
+}
+
+.node:global(.isSelected), .node:global(.isSelected):hover {
+  background-color: var(--primary-color);
+  font-weight: 600;
 }

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "clsx": "^2.1.1",
     "react": "^16.13.1",
     "react-arborist": "^3.4.0",
     "react-dom": "^16.13.1",
