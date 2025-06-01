@@ -19,19 +19,11 @@ interface Icons {
   leaf: string
 }
 
-function get_icon(node: NodeApi<any>, icons: Icons) {
-  if (node.isLeaf) {
-    return icons.leaf || "🌳";
-  }
-  return node.isOpen ? icons.open || "🗁" : icons.closed || "🗀";
-}
-
 class MyComponent extends StreamlitComponentBase<State> {
   public state = { numClicks: 0, isFocused: false }
 
   public render = (): ReactNode => {
-    // Arguments that are passed to the plugin in Python are accessible
-    // via `this.props.args`. Here, we access the "name" arg.
+    // Arguments that are passed to the plugin in Python are accessible via `this.props.args`.
 
     // Streamlit sends us a theme object via props that we can use to ensure
     // that our component has visuals that match the active theme in a
@@ -49,30 +41,9 @@ class MyComponent extends StreamlitComponentBase<State> {
       style.outline = borderStyling
     }
 
-    const icons = this.props.args["icons"]
-    function Node({ node, style, dragHandle }: NodeRendererProps<any>) {
-      return (
-        <div
-          ref={dragHandle}
-          className={clsx(styles.node, node.state)}
-          style={style}
-        >
-          <span
-            onClick={(e) => {
-              e.stopPropagation();
-              node.toggle();
-            }}
-          >
-            {get_icon(node, icons)}
-          </span>{" " + node.data.name}
-        </div>
-      );
-    }
-
     return (
       <Tree
         initialData={this.props.args["data"]}
-
         // Sizes
         width={this.props.args["width"]}
         height={this.props.args["height"]}
@@ -82,7 +53,6 @@ class MyComponent extends StreamlitComponentBase<State> {
         paddingTop={this.props.args["padding_top"]}
         paddingBottom={this.props.args["padding_bottom"]}
         padding={this.props.args["padding"]}
-
         // Config
         childrenAccessor={this.props.args["children_accessor"]}
         idAccessor={this.props.args["id_accessor"]}
@@ -92,35 +62,39 @@ class MyComponent extends StreamlitComponentBase<State> {
         disableEdit={true}
         disableDrag={true}
         disableDrop={true}
-
         // Selection
         selection={this.props.args["selection"]}
         initialOpenState={this.props.args["initial_open_state"]}
-
         // Search
         searchTerm={this.props.args["search_term"]}
-
         // Event handlers
-        onActivate={(node) => {
-          // if (node.parent) {
-          Streamlit.setComponentValue(node.id);
-          // }
-        }}
+        onActivate={(node) => { Streamlit.setComponentValue(node.data) }}
       >
-        {Node}
+        {this.Node}
       </Tree>
     );
   }
 
-  /** Focus handler for our "Click Me!" button. */
-  private _onFocus = (): void => {
-    this.setState({ isFocused: true })
+  private Node = ({ node, style, dragHandle }: NodeRendererProps<any>) => {
+    return (
+      <div ref={dragHandle} className={clsx(styles.node, node.state)} style={style}>
+        <span className={styles.icon} onClick={(e) => { e.stopPropagation(); node.toggle(); }}>
+          {this.getIcon(node)}
+        </span>
+        {node.data.name}
+      </div>
+    );
   }
 
-  /** Blur handler for our "Click Me!" button. */
-  private _onBlur = (): void => {
-    this.setState({ isFocused: false })
-  }
+  private getIcon(node: NodeApi<any>) {
+    let icons = this.props.args["icons"]
+
+    if (node.isLeaf) {
+      return icons.leaf;
+    }
+
+    return node.isOpen ? icons.open : icons.closed;
+}
 }
 
 // "withStreamlitConnection" is a wrapper function. It bootstraps the

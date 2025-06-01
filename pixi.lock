@@ -2857,7 +2857,7 @@ packages:
 - pypi: .
   name: streamlit-arborist
   version: 0.1.0
-  sha256: e438f9ce62653bdeaba659bdf8e8e897968d29f2736484f024d3588849d067c9
+  sha256: 6e501ad8273e8651b8f167d0ee2e7671ae676ead8a8c528a07ab46996fc6fb2f
   requires_dist:
   - streamlit>=1.29
   requires_python: '>=3.9'

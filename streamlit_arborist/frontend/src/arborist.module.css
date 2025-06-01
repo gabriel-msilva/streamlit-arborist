@@ -1,3 +1,9 @@
+.icon {
+  align-items: center;
+  display: inline-flex;
+  margin-right: 5px;
+}
+
 .node {
   border-radius: 0.25rem;
   cursor: pointer;

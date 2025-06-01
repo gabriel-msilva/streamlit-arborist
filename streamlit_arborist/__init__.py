@@ -40,9 +40,8 @@ else:
     build_dir = os.path.join(parent_dir, "frontend/build")
     _component_func = components.declare_component("streamlit_arborist", path=build_dir)
 
+
 # https://github.com/brimdata/react-arborist/blob/v3.4.0/packages/react-arborist/src/types/tree-props.ts
-
-
 def tree_view(
     data: List[dict],
     # Sizes
@@ -73,7 +72,7 @@ def tree_view(
     # Streamlit
     key: Union[str, int] = None,
     on_change: WidgetCallback = None,
-) -> str:
+) -> dict:
     """
     Create a tree view.
 
@@ -156,17 +155,17 @@ def tree_view(
 
     Returns
     -------
-    str
-        The `id` of the selected node.
+    dict
+        A dictionary representing the selected node, or an empty dictionary if no node
+        is selected.
     """
     icons = icons or {}
+    icons = {
+        "open": icons.get("icons", "📂"),
+        "closed": icons.get("closed", "📁"),
+        "leaf": icons.get("leaf", "📄"),
+    }
 
-    # Call through to our private component function. Arguments we pass here
-    # will be sent to the frontend, where they'll be available in an "args"
-    # dictionary.
-    #
-    # "default" is a special argument that specifies the initial return
-    # value of the component before the user has interacted with it.
     component_value = _component_func(
         data=data,
         # Sizes
@@ -194,7 +193,7 @@ def tree_view(
         # Search
         search_term=search_term,
         # Style
-        icons=dict(icons),
+        icons=icons,
         # Streamlit
         key=key,
         on_change=on_change,
