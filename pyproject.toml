@@ -1,27 +1,18 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "streamlit-arborist"
 version = "0.1.0"
 description = "Streamlit component for creating tree views"
 authors = [{name = "Gabriel Mello Silva", email = "gabriel.zyx@gmail.com"}]
 requires-python = ">=3.9"
-dependencies = ["streamlit >= 1.29"]
+dependencies = ["streamlit>=1.29"]
 
 [project.urls]
 homepage = "https://github.com/gabriel-msilva/streamlit-arborist"
 repository = "https://github.com/gabriel-msilva/streamlit-arborist"
-
-[project.optional-dependencies]
-test = [
-    "pytest",
-    "playwright==1.42.0",
-    "pytest-playwright-snapshot",
-    "pytest-rerunfailures",
-    "requests==2.32.3",
-]
-
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 include = ["streamlit_arborist"]
@@ -36,34 +27,29 @@ platforms = ["linux-64"]
 conda-pypi-map = { microsoft = "local_mapping.json" }
 
 [tool.pixi.dependencies]
+python = "3.9.*"
+nodejs = "*"
 streamlit = ">=1.29"
 
 [tool.pixi.pypi-dependencies]
 streamlit-arborist = { path = ".", editable = true }
 
-[tool.pixi.feature.build.dependencies]
-python = "3.9.*"
-nodejs = "*"
-
-[tool.pixi.feature.test.dependencies]
-requests = "2.32.3"
+[tool.pixi.feature.dev.dependencies]
+playwright = { version = "1.42.0.*", channel = "microsoft" }
+pre-commit = "*"
 pytest = "8.*"
-playwright = { version = "1.42.0", channel = "microsoft" }
+requests = "2.32.3.*"
 
-[tool.pixi.feature.test.pypi-dependencies]
+[tool.pixi.feature.dev.pypi-dependencies]
 pytest-playwright-snapshot = "*"
 pytest-rerunfailures = "*"
 
-[tool.pixi.feature.lint]
-dependencies = {pre-commit = "*"}
-
 [tool.pixi.environments]
 default = {features = [], solve-group = "default"}
-test = {features = ["build", "test"], solve-group = "default"}
-dev = {features = ["build", "test", "lint"], solve-group = "default"}
+dev = {features = ["dev"], solve-group = "default"}
 
 [tool.pixi.tasks]
-npm = "cd streamlit_arborist/frontend && npm clean-install"
+setup = "pre-commit install && (cd streamlit_arborist/frontend && npm clean-install -e dev)"
 backend = "streamlit run streamlit_arborist/example.py"
 frontend = "cd streamlit_arborist/frontend && npm run start"
 
