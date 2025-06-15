@@ -29,24 +29,16 @@ conda-pypi-map = { microsoft = "local_mapping.json" }
 [tool.pixi.dependencies]
 python = "3.9.*"
 nodejs = "*"
-streamlit = ">=1.29"
-
-[tool.pixi.pypi-dependencies]
-streamlit-arborist = { path = ".", editable = true }
-
-[tool.pixi.feature.dev.dependencies]
+streamlit = "1.29.*"
 playwright = { version = "1.42.0.*", channel = "microsoft" }
 pre-commit = "*"
 pytest = "8.*"
 requests = "2.32.3.*"
 
-[tool.pixi.feature.dev.pypi-dependencies]
+[tool.pixi.pypi-dependencies]
+streamlit-arborist = { path = ".", editable = true }
 pytest-playwright-snapshot = "*"
 pytest-rerunfailures = "*"
-
-[tool.pixi.environments]
-default = {features = [], solve-group = "default"}
-dev = {features = ["dev"], solve-group = "default"}
 
 [tool.pixi.tasks]
 setup = "pre-commit install && (cd streamlit_arborist/frontend && npm clean-install -e dev)"
