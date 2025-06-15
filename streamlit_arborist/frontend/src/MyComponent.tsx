@@ -44,31 +44,37 @@ class MyComponent extends StreamlitComponentBase<State> {
     return (
       <Tree
         initialData={this.props.args["data"]}
+
         // Sizes
+        rowHeight={this.props.args["row_height"]}
+        overscanCount={this.props.args["overscan_count"]}
         width={this.props.args["width"]}
         height={this.props.args["height"]}
         indent={this.props.args["indent"]}
-        rowHeight={this.props.args["row_height"]}
-        overscanCount={this.props.args["overscan_count"]}
         paddingTop={this.props.args["padding_top"]}
         paddingBottom={this.props.args["padding_bottom"]}
         padding={this.props.args["padding"]}
+
         // Config
         childrenAccessor={this.props.args["children_accessor"]}
         idAccessor={this.props.args["id_accessor"]}
         openByDefault={this.props.args["open_by_default"]}
-        selectionFollowsFocus={this.props.args["selection_follows_focus"]}
-        disableMultiSelection={this.props.args["disable_multi_selection"]}
+        disableMultiSelection={true}
         disableEdit={true}
         disableDrag={true}
         disableDrop={true}
-        // Selection
-        selection={this.props.args["selection"]}
-        initialOpenState={this.props.args["initial_open_state"]}
-        // Search
-        searchTerm={this.props.args["search_term"]}
+
         // Event handlers
         onActivate={(node) => { Streamlit.setComponentValue(node.data) }}
+
+        // Selection
+        selection={this.props.args["selection"]}
+
+        // Open State
+        initialOpenState={this.props.args["initial_open_state"]}
+
+        // Search
+        searchTerm={this.props.args["search_term"]}
       >
         {this.Node}
       </Tree>
@@ -77,8 +83,15 @@ class MyComponent extends StreamlitComponentBase<State> {
 
   private Node = ({ node, style, dragHandle }: NodeRendererProps<any>) => {
     return (
-      <div ref={dragHandle} className={clsx(styles.node, node.state)} style={style}>
-        <span className={styles.icon} onClick={(e) => { e.stopPropagation(); node.toggle(); }}>
+      <div
+        className={clsx(styles.node, node.state)}
+        style={style}
+        ref={dragHandle}
+      >
+        <span
+          className={styles.icon}
+          onClick={(e) => { e.stopPropagation(); node.toggle(); }}
+        >
           {this.getIcon(node)}
         </span>
         {node.data.name}
@@ -87,14 +100,14 @@ class MyComponent extends StreamlitComponentBase<State> {
   }
 
   private getIcon(node: NodeApi<any>) {
-    let icons = this.props.args["icons"]
+    let icons: Icons = this.props.args["icons"] as Icons
 
     if (node.isLeaf) {
       return icons.leaf;
     }
 
     return node.isOpen ? icons.open : icons.closed;
-}
+  }
 }
 
 // "withStreamlitConnection" is a wrapper function. It bootstraps the

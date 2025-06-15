@@ -1,8 +1,9 @@
 import os
+from functools import partial
 from typing import Dict, List, Union
 
 import streamlit.components.v1 as components
-from streamlit.runtime.state import WidgetCallback
+from streamlit.runtime.state import WidgetArgs, WidgetCallback, WidgetKwargs
 
 # Create a _RELEASE constant. We'll set this to False while we're developing
 # the component, and True when we're ready to package and distribute it.
@@ -44,6 +45,7 @@ else:
 # https://github.com/brimdata/react-arborist/blob/v3.4.0/packages/react-arborist/src/types/tree-props.ts
 def tree_view(
     data: List[dict],
+    icons: Dict[str, str] = None,
     # Sizes
     row_height: int = 24,
     width: Union[int, str] = 300,
@@ -67,11 +69,11 @@ def tree_view(
     initial_open_state: Dict[str, bool] = None,
     # Search
     search_term: str = None,
-    # Node style
-    icons: Dict[str, str] = None,
     # Streamlit
     key: Union[str, int] = None,
     on_change: WidgetCallback = None,
+    args: WidgetArgs = None,
+    kwargs: WidgetKwargs = None,
 ) -> dict:
     """
     Create a tree view.
@@ -79,9 +81,20 @@ def tree_view(
     Parameters
     ----------
     data : List[dict]
-        _description_
+        A list of dictionaries representing the tree data.
+        Each dictionary should have an `id` and `name` keys, and may have a `children`
+        key containing a list of child nodes.
+
+    icons : dict, optional
+        A dict of keys ``"open"``, ``"closed"``, and ``"leaf"`` with string values
+        representing the icons to use for open internal nodes, closed internal nodes,
+        and leaf nodes, respectively.
 
     row_height : int, default 24
+
+    overscan_count : int, default 1
+        Number of additional rows rendered outside the visible viewport to ensure smooth
+        scrolling and better performance.
 
     width : int or str, default 300
         View width in pixels or as a CSS width string (e.g. ``"auto"``).
@@ -92,10 +105,6 @@ def tree_view(
 
     indent : int, optional
         Node indendation in pixels, by default 24
-
-    overscan_count : int, default 1
-        Number of additional rows rendered outside the visible viewport to ensure smooth
-        scrolling and better performance.
 
     padding_top : int, optional
         Space between the tree and its top border, in pixels.
@@ -116,18 +125,6 @@ def tree_view(
     open_by_default : bool, default True
         Whether all nodes should be open when rendered.
 
-    selection_follows_focus : bool, optional
-        _description_, by default False
-
-    disable_multi_selection : bool, optional
-        _description_, by default False
-
-    disable_drag : bool, optional
-        _description_, by default False
-
-    disable_drop : bool, optional
-        _description_, by default False
-
     selection : str or int, optional
         The node `id` to select and scroll when rendered.
 
@@ -140,18 +137,19 @@ def tree_view(
         If a child matches, all its parents also match.
         Internal nodes are opened when filtering.
 
-    icons : dict, optional
-        A dict of keys ``"open"``, ``"closed"``, and ``"leaf"`` with string values
-        representing the icons to use for open internal nodes, closed internal nodes,
-        and leaf nodes, respectively.
-
     key : str, optional
         An optional string or integer to use as the unique key for the widget.
         If this is omitted, a key will be generated for the widget based on its content.
         Multiple widgets of the same type may not share the same key.
 
     on_change : callable, optional
-        An optional callback invoked when this text input's value changes.
+        An optional callback invoked when the widget's value changes. No arguments are passed to it.
+
+    args : tuple, optional
+        A tuple of arguments to pass to the `on_change` callback.
+
+    kwargs : dict, optional
+        An optional dict of kwargs to pass to the `on_change` callback.
 
     Returns
     -------
@@ -166,8 +164,13 @@ def tree_view(
         "leaf": icons.get("leaf", "📄"),
     }
 
+    args = args or ()
+    kwargs = kwargs or {}
+    on_change = partial(on_change, *args, **kwargs) if on_change else None
+
     component_value = _component_func(
         data=data,
+        icons=icons,
         # Sizes
         row_height=row_height,
         overscan_count=overscan_count,
@@ -192,8 +195,6 @@ def tree_view(
         initial_open_state=initial_open_state,
         # Search
         search_term=search_term,
-        # Style
-        icons=icons,
         # Streamlit
         key=key,
         on_change=on_change,
