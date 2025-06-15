@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Streamlit component for creating tree views"
 authors = [{name = "Gabriel Mello Silva", email = "gabriel.zyx@gmail.com"}]
 requires-python = ">=3.9"
-dependencies = ["streamlit>=1.29"]
+dependencies = ["streamlit>=1.36.0"]  # 1.36.0 implements `on_change` for CustomComponent
 
 [project.urls]
 homepage = "https://github.com/gabriel-msilva/streamlit-arborist"
@@ -29,7 +29,7 @@ conda-pypi-map = { microsoft = "local_mapping.json" }
 [tool.pixi.dependencies]
 python = "3.9.*"
 nodejs = "*"
-streamlit = "1.29.*"
+streamlit = "1.36.*"
 playwright = { version = "1.42.0.*", channel = "microsoft" }
 pre-commit = "*"
 pytest = "8.*"
