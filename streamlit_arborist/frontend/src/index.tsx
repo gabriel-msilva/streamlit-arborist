@@ -1,10 +1,10 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import MyComponent from "./MyComponent"
+import TreeView from "./TreeView"
 
 ReactDOM.render(
   <React.StrictMode>
-    <MyComponent />
+    <TreeView />
   </React.StrictMode>,
   document.getElementById("root")
 )

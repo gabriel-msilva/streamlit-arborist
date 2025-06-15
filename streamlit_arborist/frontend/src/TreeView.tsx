@@ -19,7 +19,7 @@ interface Icons {
   leaf: string
 }
 
-class MyComponent extends StreamlitComponentBase<State> {
+class TreeView extends StreamlitComponentBase<State> {
   public state = { numClicks: 0, isFocused: false }
 
   public render = (): ReactNode => {
@@ -115,4 +115,4 @@ class MyComponent extends StreamlitComponentBase<State> {
 // passing arguments from Python -> Component.
 //
 // You don't need to edit withStreamlitConnection (but you're welcome to!).
-export default withStreamlitConnection(MyComponent)
+export default withStreamlitConnection(TreeView)
