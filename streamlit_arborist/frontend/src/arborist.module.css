@@ -1,7 +1,8 @@
 .icon {
   align-items: center;
   display: inline-flex;
-  margin-right: 5px;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
 }
 
 .node {
@@ -11,10 +12,10 @@
 }
 
 .node:hover {
-  background-color: var(--secondary-background-color);
+  background-color: color-mix(in srgb, var(--text-color) 5%, transparent);
 }
 
 .node:global(.isSelected), .node:global(.isSelected):hover {
-  background-color: var(--primary-color);
+  background-color: color-mix(in srgb, var(--text-color) 15%, transparent);
   font-weight: 600;
 }
