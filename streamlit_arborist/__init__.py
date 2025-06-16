@@ -48,7 +48,7 @@ def tree_view(
     icons: Dict[str, str] = None,
     # Sizes
     row_height: int = 24,
-    width: Union[int, str] = 300,
+    width: Union[int, str] = "100%",
     height: int = 500,
     indent: int = 24,
     overscan_count: int = 1,

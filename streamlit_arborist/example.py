@@ -29,11 +29,7 @@ st.header("Streamlit Arborist")
 
 with st.sidebar:
     search_term = st.text_input("Search term")
-    value = tree_view(
-        DATA,
-        width="100%",
-        search_term=search_term,
-    )
+    value = tree_view(DATA, search_term=search_term)
 
 st.markdown("Selected data:")
 st.json(value)
