@@ -14,6 +14,9 @@ dependencies = ["streamlit>=1.36.0"]  # 1.36.0 implements `on_change` for Custom
 homepage = "https://github.com/gabriel-msilva/streamlit-arborist"
 repository = "https://github.com/gabriel-msilva/streamlit-arborist"
 
+[tool.setuptools]
+include-package-data = true
+
 [tool.setuptools.packages.find]
 include = ["streamlit_arborist"]
 namespaces = false
@@ -37,6 +40,7 @@ requests = "2.32.3.*"
 
 [tool.pixi.pypi-dependencies]
 streamlit-arborist = { path = ".", editable = true }
+build = "*"
 pytest-playwright-snapshot = "*"
 pytest-rerunfailures = "*"
 
@@ -44,6 +48,7 @@ pytest-rerunfailures = "*"
 setup = "pre-commit install && (cd streamlit_arborist/frontend && npm clean-install -e dev)"
 backend = "streamlit run streamlit_arborist/example.py"
 frontend = "cd streamlit_arborist/frontend && npm run start"
+build = "(cd streamlit_arborist/frontend && npm run build) && python -m build"
 
 [tool.ruff]
 target-version = "py39"

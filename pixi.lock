@@ -194,7 +194,9 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zlib-1.3.1-hb9d3cd8_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstandard-0.23.0-py39h8cd3c5a_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb8e6e7a_2.conda
+      - pypi: https://files.pythonhosted.org/packages/84/c2/80633736cd183ee4a62107413def345f7e6e3c01563dbca1417363cf957e/build-1.2.2.post1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/19/9b9d4934c2162a7a61bb5a3996d5908c665b9890705edb30f52632ef5dcd/pixelmatch-0.2.3-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/bd/24/12818598c362d7f300f18e74db45963dbcb85150324092410c8b49405e42/pyproject_hooks-1.2.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/98/1c/b00940ab9eb8ede7897443b771987f2f4a76f06be02f1b3f01eb7567e24a/pytest_base_url-2.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/d8/96/5f8a4545d783674f3de33f0ebc4db16cc76ce77a4c404d284f43f09125e3/pytest_playwright-0.7.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/65/7c/b8ead32d2880ce38d41f424270bd2143164d972aa93bc2a5aa14e7819184/pytest_playwright_snapshot-1.0-py3-none-any.whl
@@ -545,6 +547,41 @@ packages:
   - pkg:pypi/brotli?source=hash-mapping
   size: 350112
   timestamp: 1749230342584
+- pypi: https://files.pythonhosted.org/packages/84/c2/80633736cd183ee4a62107413def345f7e6e3c01563dbca1417363cf957e/build-1.2.2.post1-py3-none-any.whl
+  name: build
+  version: 1.2.2.post1
+  sha256: 1d61c0887fa860c01971625baae8bdd338e517b836a2f70dd1f7aa3a6b2fc5b5
+  requires_dist:
+  - packaging>=19.1
+  - pyproject-hooks
+  - colorama ; os_name == 'nt'
+  - importlib-metadata>=4.6 ; python_full_version < '3.10.2'
+  - tomli>=1.1.0 ; python_full_version < '3.11'
+  - furo>=2023.8.17 ; extra == 'docs'
+  - sphinx~=7.0 ; extra == 'docs'
+  - sphinx-argparse-cli>=1.5 ; extra == 'docs'
+  - sphinx-autodoc-typehints>=1.10 ; extra == 'docs'
+  - sphinx-issues>=3.0.0 ; extra == 'docs'
+  - build[uv,virtualenv] ; extra == 'test'
+  - filelock>=3 ; extra == 'test'
+  - pytest>=6.2.4 ; extra == 'test'
+  - pytest-cov>=2.12 ; extra == 'test'
+  - pytest-mock>=2 ; extra == 'test'
+  - pytest-rerunfailures>=9.1 ; extra == 'test'
+  - pytest-xdist>=1.34 ; extra == 'test'
+  - wheel>=0.36.0 ; extra == 'test'
+  - setuptools>=42.0.0 ; python_full_version < '3.10' and extra == 'test'
+  - setuptools>=56.0.0 ; python_full_version == '3.10.*' and extra == 'test'
+  - setuptools>=56.0.0 ; python_full_version == '3.11.*' and extra == 'test'
+  - setuptools>=67.8.0 ; python_full_version >= '3.12' and extra == 'test'
+  - build[uv] ; extra == 'typing'
+  - importlib-metadata>=5.1 ; extra == 'typing'
+  - mypy~=1.9.0 ; extra == 'typing'
+  - tomli ; extra == 'typing'
+  - typing-extensions>=3.7.4.3 ; extra == 'typing'
+  - uv>=0.1.18 ; extra == 'uv'
+  - virtualenv>=20.0.35 ; extra == 'virtualenv'
+  requires_python: '>=3.8'
 - conda: https://conda.anaconda.org/conda-forge/linux-64/bzip2-1.0.8-h4bc722e_7.conda
   sha256: 5ced96500d945fb286c9c838e54fa759aa04a7129c59800f0846b4335cee770d
   md5: 62ee74e96c5ebb0af99386de58cf9553
@@ -2197,6 +2234,11 @@ packages:
   - pkg:pypi/pygments?source=hash-mapping
   size: 888600
   timestamp: 1736243563082
+- pypi: https://files.pythonhosted.org/packages/bd/24/12818598c362d7f300f18e74db45963dbcb85150324092410c8b49405e42/pyproject_hooks-1.2.0-py3-none-any.whl
+  name: pyproject-hooks
+  version: 1.2.0
+  sha256: 9e5c6bfa8dcc30091c74b0cf803c81fdd29d94f01992a7707bc97babb1141913
+  requires_python: '>=3.7'
 - conda: https://conda.anaconda.org/conda-forge/noarch/pysocks-1.7.1-pyha55dd90_7.conda
   sha256: ba3b032fa52709ce0d9fd388f63d330a026754587a2f461117cac9ab73d8d0d8
   md5: 461219d1a5bd61342293efa2c0c90eac
@@ -2542,7 +2584,7 @@ packages:
 - pypi: .
   name: streamlit-arborist
   version: 0.1.0
-  sha256: 4a13086c526d7d7d27e64cece38d68cb7eeb4b86251b237b55817af6e968def0
+  sha256: e4a64872670c1ee0dee9d02290e31a9230eef6a5f2c7b0bd194d2b33d3a9e7ca
   requires_dist:
   - streamlit>=1.36.0
   requires_python: '>=3.9'
