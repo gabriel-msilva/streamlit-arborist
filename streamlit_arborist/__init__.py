@@ -159,7 +159,7 @@ def tree_view(
     """
     icons = icons or {}
     icons = {
-        "open": icons.get("icons", "📂"),
+        "open": icons.get("open", "📂"),
         "closed": icons.get("closed", "📁"),
         "leaf": icons.get("leaf", "📄"),
     }
