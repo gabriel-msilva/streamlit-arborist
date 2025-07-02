@@ -10,12 +10,3 @@
   cursor: pointer;
   display: flex;
 }
-
-.node:hover {
-  background-color: color-mix(in srgb, var(--text-color) 5%, transparent);
-}
-
-.node:global(.isSelected), .node:global(.isSelected):hover {
-  background-color: color-mix(in srgb, var(--text-color) 15%, transparent);
-  font-weight: 600;
-}

@@ -1,23 +1,27 @@
+import clsx from "clsx"
+import React, { ReactNode, useState, useMemo } from "react"
+import { NodeApi, NodeRendererProps, Tree } from "react-arborist"
 import {
   Streamlit,
   StreamlitComponentBase,
   withStreamlitConnection,
 } from "streamlit-component-lib"
-import React, { ReactNode } from "react"
-import { NodeApi, NodeRendererProps, Tree } from "react-arborist"
+
 import styles from "./arborist.module.css"
-import clsx from "clsx"
+
 
 interface State {
   numClicks: number
   isFocused: boolean
 }
 
+
 interface Icons {
   open: string
   closed: string
   leaf: string
 }
+
 
 class TreeView extends StreamlitComponentBase<State> {
   public state = { numClicks: 0, isFocused: false }
@@ -82,11 +86,33 @@ class TreeView extends StreamlitComponentBase<State> {
   }
 
   private Node = ({ node, style, dragHandle }: NodeRendererProps<any>) => {
+    const [isHover, setHover] = useState(false);
+
+    // This is a workaround for the fact that Streamlit's `props.theme` object does not
+    // contain all color properties, such as `darkenedBgMix15` and `darkenedBgMix25`.
+    const theme = useMemo(
+      () => JSON.parse(JSON.stringify(this.props.theme)), [this.props.theme]
+    );
+
+    const hoverStyle: React.CSSProperties = { backgroundColor: theme.darkenedBgMix15 };
+    const selectedStyle: React.CSSProperties = {
+      backgroundColor: theme.darkenedBgMix25,
+      fontWeight: "bold"
+    };
+
     return (
       <div
         className={clsx(styles.node, node.state)}
-        style={style}
+        style={
+          {
+            ...style,
+            ...(isHover ? hoverStyle : {}),
+            ...(node.isSelected ? selectedStyle : {})
+          }
+        }
         ref={dragHandle}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
       >
         <span
           className={styles.icon}
@@ -100,7 +126,7 @@ class TreeView extends StreamlitComponentBase<State> {
   }
 
   private getIcon(node: NodeApi<any>) {
-    let icons: Icons = this.props.args["icons"] as Icons
+    let icons: Icons = this.props.args["icons"] as Icons;
 
     if (node.isLeaf) {
       return icons.leaf;
