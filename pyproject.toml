@@ -6,9 +6,11 @@ build-backend = "setuptools.build_meta"
 name = "streamlit-arborist"
 version = "0.1.0"
 description = "Streamlit component for creating tree views"
-authors = [{name = "Gabriel Mello Silva", email = "gabriel.zyx@gmail.com"}]
+authors = [{ name = "Gabriel Mello Silva", email = "gabriel.zyx@gmail.com" }]
 requires-python = ">=3.9"
-dependencies = ["streamlit>=1.36.0"]  # 1.36.0 implements `on_change` for CustomComponent
+dependencies = [
+  "streamlit>=1.36.0", # 1.36.0 implements `on_change` for CustomComponent
+]
 
 [project.urls]
 homepage = "https://github.com/gabriel-msilva/streamlit-arborist"
@@ -31,6 +33,7 @@ conda-pypi-map = { microsoft = "local_mapping.json" }
 
 [tool.pixi.dependencies]
 python = "3.9.*"
+ipython = "8.*"
 nodejs = "*"
 streamlit = "1.36.*"
 playwright = { version = "1.42.0.*", channel = "microsoft" }
@@ -45,21 +48,28 @@ pytest-playwright-snapshot = "*"
 pytest-rerunfailures = "*"
 
 [tool.pixi.tasks]
-setup = "pre-commit install && (cd streamlit_arborist/frontend && npm clean-install -e dev)"
+setup = "bash scripts/setup.sh"
+build = "bash scripts/build.sh"
+tests = "pytest e2e -vv"
 backend = "streamlit run streamlit_arborist/example.py"
-frontend = "cd streamlit_arborist/frontend && npm run start"
-build = "(cd streamlit_arborist/frontend && npm run build) && python -m build"
+frontend = { cmd = "npm run start", cwd = "streamlit_arborist/frontend" }
+
+[tool.pytest.ini_options]
+addopts = "--headed --browser firefox"
+testpaths = ["e2"]
 
 [tool.ruff]
 target-version = "py39"
 
 [tool.ruff.lint]
 select = [
-  "E4", "E7", "E9", # pycodestyle
-  "F",              # Pyflakes
-  "I",              # isort
-  "A",              # flake8-builtins
-  "B",              # flake8-bugbear
-  "SIM",            # flake8-simplify
+  "E4",
+  "E7",
+  "E9",  # pycodestyle
+  "F",   # Pyflakes
+  "I",   # isort
+  "A",   # flake8-builtins
+  "B",   # flake8-bugbear
+  "SIM", # flake8-simplify
 ]
 unfixable = ["F401"]
