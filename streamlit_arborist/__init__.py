@@ -48,7 +48,7 @@ def tree_view(
     icons: Dict[str, str] = None,
     # Sizes
     row_height: int = 24,
-    width: Union[int, str] = "100%",
+    width: Union[int, str] = "auto",
     height: int = 500,
     indent: int = 24,
     overscan_count: int = 1,
@@ -59,11 +59,7 @@ def tree_view(
     children_accessor: str = "children",
     id_accessor: str = "id",
     open_by_default: bool = True,
-    selection_follows_focus: bool = False,
     disable_multi_selection: bool = False,
-    # disable_edit: bool = False,
-    disable_drag: bool = False,
-    disable_drop: bool = False,
     # Selection
     selection: str = None,
     initial_open_state: Dict[str, bool] = None,
@@ -96,9 +92,9 @@ def tree_view(
         Number of additional rows rendered outside the visible viewport to ensure smooth
         scrolling and better performance.
 
-    width : int or str, default 300
-        View width in pixels or as a CSS width string (e.g. ``"auto"``).
-        https://developer.mozilla.org/pt-BR/docs/Web/CSS/width
+    width : int or str, default "auto"
+        View width in pixels or a valid
+        `CSS width <https://developer.mozilla.org/pt-BR/docs/Web/CSS/width>`_ string.
 
     height : int, default 500
         View height in pixels.
@@ -128,6 +124,9 @@ def tree_view(
     selection : str or int, optional
         The node `id` to select and scroll when rendered.
 
+    disable_multi_selection : bool, default False
+        Whether to disable multi-selection of nodes.
+
     initial_open_state : Dict[str, bool], optional
         A dict of node ID keys and bool values indicating whether the node is open
         (`True`) or closed (`False`) when rendered.
@@ -153,9 +152,8 @@ def tree_view(
 
     Returns
     -------
-    dict
-        A dictionary representing the selected node, or an empty dictionary if no node
-        is selected.
+    list
+        A list containing the data of selected nodes.
     """
     icons = icons or {}
     icons = {
@@ -166,7 +164,8 @@ def tree_view(
 
     args = args or ()
     kwargs = kwargs or {}
-    on_change = partial(on_change, *args, **kwargs) if on_change else None
+    if on_change:
+        on_change = partial(on_change, *args, **kwargs)
 
     component_value = _component_func(
         data=data,
@@ -184,11 +183,7 @@ def tree_view(
         children_accessor=children_accessor,
         id_accessor=id_accessor,
         open_by_default=open_by_default,
-        selection_follows_focus=selection_follows_focus,
         disable_multi_selection=disable_multi_selection,
-        # disable_edit=disable_edit,
-        disable_drag=disable_drag,
-        disable_drop=disable_drop,
         # Selection
         selection=selection,
         # Open State

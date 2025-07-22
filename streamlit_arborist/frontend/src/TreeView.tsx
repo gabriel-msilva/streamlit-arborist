@@ -63,13 +63,16 @@ class TreeView extends StreamlitComponentBase<State> {
         childrenAccessor={this.props.args["children_accessor"]}
         idAccessor={this.props.args["id_accessor"]}
         openByDefault={this.props.args["open_by_default"]}
-        disableMultiSelection={true}
+        disableMultiSelection={this.props.args["disable_multi_selection"]}
         disableEdit={true}
         disableDrag={true}
         disableDrop={true}
 
         // Event handlers
-        onActivate={(node) => { Streamlit.setComponentValue(node.data) }}
+        onSelect={(nodes) => {
+           const selectedData = nodes.map(node => node.data);
+           Streamlit.setComponentValue(selectedData)
+        }}
 
         // Selection
         selection={this.props.args["selection"]}
