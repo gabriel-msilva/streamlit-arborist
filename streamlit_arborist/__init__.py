@@ -70,7 +70,7 @@ def tree_view(
     on_change: WidgetCallback = None,
     args: WidgetArgs = None,
     kwargs: WidgetKwargs = None,
-) -> dict:
+) -> List[dict]:
     """
     Create a tree view.
 
@@ -152,7 +152,7 @@ def tree_view(
 
     Returns
     -------
-    list
+    list of dict
         A list containing the data of selected nodes.
     """
     icons = icons or {}
