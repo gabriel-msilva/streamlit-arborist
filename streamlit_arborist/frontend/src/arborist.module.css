@@ -1,3 +1,17 @@
+[role="tree"] {
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  background-color: var(--secondary-background-color);
+}
+
+[role="tree"]:focus-within {
+  border-color: var(--primary-color);
+  transition-property: border;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.2, 0.8, 0.4, 1);
+}
+
 .icon {
   align-items: center;
   display: inline-flex;
