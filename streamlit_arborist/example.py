@@ -2,6 +2,8 @@ import streamlit as st
 
 from streamlit_arborist import tree_view
 
+st.set_page_config("streamlit-arborist", initial_sidebar_state="expanded")
+
 
 @st.cache_data
 def get_data():
@@ -41,12 +43,19 @@ def extract_ids(data) -> list:
     return ids
 
 
-st.title("streamlit-arborist")
-
 data = get_data()
 
 with st.sidebar:
-    st.title("Configuration")
+    st.header("Instructions")
+    st.markdown(
+        """
+    - Click on a node to select it.
+    - Click on a node icon to open or close it.
+    - Press Shift + Click to select multiple nodes.
+    - Use arrow keys to navigate through the tree, then press space to select a node.
+    """
+    )
+    st.header("Configuration")
     st.markdown("See all options in the [documentation]().")
 
     with st.expander("Icons", expanded=True):
@@ -78,6 +87,10 @@ with st.sidebar:
 
     search_term = st.text_input("Search term")
 
+st.title("streamlit-arborist")
+
+st.header("Tree View")
+
 with st.expander("Sample data"):
     st.json(data)
 
@@ -92,11 +105,11 @@ st.code(
         selection={selection!r},
         search_term={search_term!r},
         disable_multi_selection={disable_multi_selection!r},
+        height=300,
     )
     """
 )
 
-st.header("Tree View")
 col1, col2 = st.columns(2)
 
 with col1:
@@ -107,6 +120,7 @@ with col1:
         selection=selection,
         search_term=search_term,
         disable_multi_selection=disable_multi_selection,
+        height=300,
     )
 
 with col2:

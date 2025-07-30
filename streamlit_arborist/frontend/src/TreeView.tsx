@@ -70,8 +70,8 @@ class TreeView extends StreamlitComponentBase<State> {
 
         // Event handlers
         onSelect={(nodes) => {
-           const selectedData = nodes.map(node => node.data);
-           Streamlit.setComponentValue(selectedData)
+          const selectedData = nodes.map(node => node.data)
+          Streamlit.setComponentValue(selectedData)
         }}
 
         // Selection
