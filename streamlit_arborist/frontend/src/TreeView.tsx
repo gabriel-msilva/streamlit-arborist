@@ -123,7 +123,7 @@ class TreeView extends StreamlitComponentBase<State> {
         >
           {this.getIcon(node)}
         </span>
-        {node.data.name}
+        {node.data.name || node.data.id}
       </div>
     );
   }
@@ -139,9 +139,5 @@ class TreeView extends StreamlitComponentBase<State> {
   }
 }
 
-// "withStreamlitConnection" is a wrapper function. It bootstraps the
-// connection between your component and the Streamlit app, and handles
-// passing arguments from Python -> Component.
-//
-// You don't need to edit withStreamlitConnection (but you're welcome to!).
+
 export default withStreamlitConnection(TreeView)
