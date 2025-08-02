@@ -49,14 +49,16 @@ with st.sidebar:
     st.header("Instructions")
     st.markdown(
         """
-    - Click on a node to select it.
-    - Click on a node icon to open or close it.
-    - Press Shift + Click to select multiple nodes.
-    - Use arrow keys to navigate through the tree, then press space to select a node.
-    """
+        - Click on a node to select it.
+        - Click on a node icon to open or close it.
+        - Press Shift + Click to select multiple nodes.
+        - Use arrow keys to navigate through the tree, then press space to select a node.
+        """
     )
     st.header("Configuration")
-    st.markdown("See all options in the [documentation]().")
+    st.markdown(
+        "See all options in the [documentation](https://github.com/gabriel-msilva/streamlit-arborist)."
+    )
 
     with st.expander("Icons", expanded=True):
         col1, col2, col3 = st.columns(3)

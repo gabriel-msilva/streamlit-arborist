@@ -158,6 +158,11 @@ def tree_view(
     >>> data2 = [{"key": "A", "contents": [{"key": "A.1"}, {"key": "A.2"}]}]
     >>> tree_view(data2, children_accessor="contents", id_accessor="key")
 
+    You can also include additional keys in the nodes:
+
+    >>> data3 = [{"id": "1", "name": "Node 1", "description": "This is node 1"}]
+    >>> tree_view(data3)
+
     Customize the appearance of the tree view:
 
     >>> tree_view(
