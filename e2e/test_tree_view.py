@@ -231,16 +231,25 @@ def test_should_change_icons(page: Page):
     leaf_input = page.get_by_label("Leaf", exact=True)
     leaf_input.fill("[leaf]")
     leaf_input.press("Enter")
+
+    page.wait_for_timeout(500)
+
     expect(leaf_icon).to_have_text("[leaf]")
 
     open_input = page.get_by_label("Open", exact=True)
     open_input.fill("[open]")
     open_input.press("Enter")
+
+    page.wait_for_timeout(500)
+
     expect(open_icon).to_have_text("[open]")
 
     closed_input = page.get_by_label("Closed", exact=True)
     closed_input.fill("[closed]")
     closed_input.press("Enter")
+
+    page.wait_for_timeout(500)
+
     closed_icon.click()
     expect(closed_icon).to_have_text("[closed]")
 
