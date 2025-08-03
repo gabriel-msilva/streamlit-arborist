@@ -93,9 +93,8 @@ class TreeView extends StreamlitComponentBase<State> {
 
     // This is a workaround for the fact that Streamlit's `props.theme` object does not
     // contain all color properties, such as `darkenedBgMix15` and `darkenedBgMix25`.
-    const theme = useMemo(
-      () => JSON.parse(JSON.stringify(this.props.theme)), [this.props.theme]
-    );
+    const themeProp = this.props.theme;
+    const theme = useMemo(() => JSON.parse(JSON.stringify(themeProp)), [themeProp]);
 
     const hoverStyle: React.CSSProperties = { backgroundColor: theme.darkenedBgMix15 };
     const selectedStyle: React.CSSProperties = {
