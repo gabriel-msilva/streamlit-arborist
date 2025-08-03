@@ -1,9 +1,12 @@
+import json
 import re
 from pathlib import Path
 
 import pytest
 from e2e_utils import StreamlitRunner
 from playwright.sync_api import Page, expect
+
+from streamlit_arborist.example import get_data
 
 ROOT_DIRECTORY = Path(__file__).parents[1].absolute()
 EXAMPLE_FILE = ROOT_DIRECTORY / "streamlit_arborist" / "example.py"
@@ -32,6 +35,45 @@ def go_to_app(page: Page, streamlit_app: StreamlitRunner):
     page.goto(streamlit_app.server_url)
     # Wait for app to load
     page.get_by_role("img", name="Running...").is_hidden()
+
+
+def assert_component_value_equals(expected: str, page: Page):
+    # Streamlit renders Markdown code blocks as <pre><code> elements
+    json_block = page.locator("pre code").nth(1)
+
+    page.wait_for_timeout(500)
+
+    assert json.loads(json_block.text_content()) == expected
+
+
+def test_should_return_default_value(page: Page):
+    assert_component_value_equals([], page)
+
+
+@pytest.mark.parametrize("index", [0, 2])
+def test_should_return_selected_value(page: Page, index: int):
+    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+
+    node = frame.get_by_role("treeitem", level=1).nth(index)
+    node.click()
+
+    expected = [node for node in get_data() if node["id"] == str(index + 1)]
+    assert_component_value_equals(expected, page)
+
+
+def test_should_return_multiple_selected_values(page: Page):
+    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+
+    treeitems = frame.get_by_role("treeitem", level=1)
+
+    first_node = treeitems.nth(0)
+    second_node = treeitems.nth(1)
+
+    first_node.click()
+    second_node.click(modifiers=["Shift"])
+
+    expected = [node for node in get_data() if node["id"] in ["1", "2"]]
+    assert_component_value_equals(expected, page)
 
 
 def test_should_select_node(page: Page):
@@ -154,6 +196,8 @@ def test_should_search_nodes(page: Page):
 
     search_term.fill("general")
     search_term.press("Enter")
+
+    page.wait_for_timeout(500)
 
     expect(frame.get_by_role("treeitem", level=1)).to_have_text("📂Chat Rooms")
     expect(frame.get_by_role("treeitem", level=2)).to_have_text("📄General")

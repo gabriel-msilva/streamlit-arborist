@@ -1,3 +1,5 @@
+import json
+
 import streamlit as st
 
 from streamlit_arborist import tree_view
@@ -127,4 +129,6 @@ with col1:
 
 with col2:
     st.markdown("Selected data:")
-    st.json(value)
+
+    body = json.dumps(value, indent=2)
+    st.code(body, language="json")
