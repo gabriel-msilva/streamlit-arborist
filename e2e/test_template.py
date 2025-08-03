@@ -73,9 +73,10 @@ def test_should_select_multiple_nodes(page: Page):
 def test_should_disable_multi_selection(page: Page):
     frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
 
-    checkbox = page.get_by_label("Disable multi-selection")
+    checkbox = page.locator("label:has-text('Disable multi-selection')")
 
     expect(checkbox).not_to_be_checked()
+    checkbox.scroll_into_view_if_needed()
     checkbox.click()
     expect(checkbox).to_be_checked()
 
@@ -137,12 +138,10 @@ def test_should_nodes_be_closed(page: Page):
     expect(chat_rooms).to_have_class(NODE_STATES["isOpen"])
     expect(direct_messages).to_have_class(NODE_STATES["isOpen"])
 
-    checkbox = page.get_by_label("Open by default")
+    checkbox = page.locator("label:has-text('Open by default')")
 
     expect(checkbox).to_be_checked()
-
     checkbox.click()
-
     expect(checkbox).not_to_be_checked()
 
     expect(chat_rooms).to_have_class(NODE_STATES["isClosed"])
@@ -161,6 +160,8 @@ def test_should_search_nodes(page: Page):
 
     search_term.fill("read")
     search_term.press("Enter")
+
+    page.wait_for_timeout(500)
 
     tree_items = frame.get_by_role("treeitem", level=1)
 
