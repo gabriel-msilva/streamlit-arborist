@@ -25,11 +25,11 @@ frontend:
 
 .PHONY: tests
 tests:
-	uv run pytest e2e -vv
+	uv run pytest --headed --browser firefox
 
 .PHONY: docs
 docs:
-	uv run sphinx-build -b html docs/ docs/_build/
+	uv run --group docs sphinx-build -b html docs/ docs/_build/
 
 .PHONY: lint
 lint:

@@ -17,12 +17,8 @@ homepage = "https://github.com/gabriel-msilva/streamlit-arborist"
 repository = "https://github.com/gabriel-msilva/streamlit-arborist"
 
 [dependency-groups]
-dev = [
-  "pre-commit==4.2.0",
-  { include-group = "test" },
-  { include-group = "docs" },
-]
-test = [
+dev = ["pre-commit==4.2.0", { include-group = "tests" }]
+tests = [
   "pytest==7.4.0",
   "playwright==1.48.0",
   "pytest-playwright-snapshot==1.0",
@@ -39,8 +35,8 @@ include = ["streamlit_arborist"]
 namespaces = false
 
 [tool.pytest.ini_options]
-addopts = "--headed --browser firefox"
 testpaths = ["e2e"]
+addopts = "-vv"
 
 [tool.ruff]
 target-version = "py39"
