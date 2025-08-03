@@ -1569,14 +1569,12 @@ dev = [
     { name = "pytest-playwright-snapshot" },
     { name = "pytest-rerunfailures" },
     { name = "requests" },
-    { name = "sphinx" },
-    { name = "sphinx-rtd-theme" },
 ]
 docs = [
     { name = "sphinx" },
     { name = "sphinx-rtd-theme" },
 ]
-test = [
+tests = [
     { name = "playwright" },
     { name = "pytest" },
     { name = "pytest-playwright-snapshot" },
@@ -1595,14 +1593,12 @@ dev = [
     { name = "pytest-playwright-snapshot", specifier = "==1.0" },
     { name = "pytest-rerunfailures", specifier = "==12.0" },
     { name = "requests", specifier = "==2.31.0" },
-    { name = "sphinx", specifier = "==7.4.7" },
-    { name = "sphinx-rtd-theme", specifier = "==3.0.2" },
 ]
 docs = [
     { name = "sphinx", specifier = "==7.4.7" },
     { name = "sphinx-rtd-theme", specifier = "==3.0.2" },
 ]
-test = [
+tests = [
     { name = "playwright", specifier = "==1.48.0" },
     { name = "pytest", specifier = "==7.4.0" },
     { name = "pytest-playwright-snapshot", specifier = "==1.0" },
