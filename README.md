@@ -25,34 +25,39 @@ st.write(value)
 This repository is based on
 [streamlit/component-template](https://github.com/streamlit/component-template) template.
 
-The development environment is managed with [pixi](https://pixi.sh/latest/).
+The development environment requires
+[uv](https://docs.astral.sh/uv/getting-started/installation/)
+and [Node.js + npm](https://nodejs.org/en/download/current) installed.
 
 ### Setup
 
-1. Install the `dev` environment defined in [pyproject.toml](./pyproject.toml):
+Install the `dev` Python environment defined in [pyproject.toml](./pyproject.toml)
+and `npm` packages in [streamlit_arborist/frontend](./streamlit_arborist/frontend/):
 
-   ```sh
-   pixi install --frozen
-   ```
-
-2. Install `npm` packages in [streamlit_arborist/frontend](./streamlit_arborist/frontend/):
-
-   ```sh
-   pixi run npm
-   ```
+```sh
+make setup
+```
 
 ### Running
 
 1. Run the [example.py](./streamlit_arborist/example.py) app file with Streamlit:
 
    ```sh
-   pixi run backend
+   make backend
    ```
 
 2. Start the component's frontend server:
 
    ```sh
-   pixi run frontend
+   make frontend
    ```
 
 Open the app running at <http://localhost:8501>.
+
+### Build
+
+Set `_RELEASE = True` in [`__init__.py`](./streamlit_arborist/__init__.py) and run:
+
+```sh
+make build
+```

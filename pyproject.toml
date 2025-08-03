@@ -7,14 +7,24 @@ name = "streamlit-arborist"
 version = "0.1.0"
 description = "Streamlit component for creating tree views"
 authors = [{ name = "Gabriel Mello Silva", email = "gabriel.zyx@gmail.com" }]
+license-files = ["LICENSE"]
 requires-python = ">=3.9"
-dependencies = [
-  "streamlit>=1.36.0", # 1.36.0 implements `on_change` for CustomComponent
-]
+# Version 1.36.0 implements `on_change` for `CustomComponent`
+dependencies = ["streamlit>=1.36.0"]
 
 [project.urls]
 homepage = "https://github.com/gabriel-msilva/streamlit-arborist"
 repository = "https://github.com/gabriel-msilva/streamlit-arborist"
+
+[dependency-groups]
+dev = ["pre-commit==4.2.0", { include-group = "test" }]
+test = [
+  "pytest==7.4.0",
+  "playwright==1.48.0",
+  "pytest-playwright-snapshot==1.0",
+  "pytest-rerunfailures==12.0",
+  "requests==2.31.0",
+]
 
 [tool.setuptools]
 include-package-data = true
@@ -23,40 +33,9 @@ include-package-data = true
 include = ["streamlit_arborist"]
 namespaces = false
 
-[tool.pixi.project]
-# Channel priority is dictated by the order in the array
-channels = ["conda-forge", "microsoft"]
-platforms = ["linux-64"]
-# Create a mapping for `microsoft` channel so that `playwright` is not installed with
-# pypi too. See issue: https://github.com/prefix-dev/pixi/issues/1230
-conda-pypi-map = { microsoft = "local_mapping.json" }
-
-[tool.pixi.dependencies]
-python = "3.9.*"
-ipython = "8.*"
-nodejs = "*"
-streamlit = "1.36.*"
-playwright = { version = "1.42.0.*", channel = "microsoft" }
-pre-commit = "*"
-pytest = "8.*"
-requests = "2.32.3.*"
-
-[tool.pixi.pypi-dependencies]
-streamlit-arborist = { path = ".", editable = true }
-build = "*"
-pytest-playwright-snapshot = "*"
-pytest-rerunfailures = "*"
-
-[tool.pixi.tasks]
-setup = "bash scripts/setup.sh"
-build = "bash scripts/build.sh"
-tests = "pytest e2e -vv"
-backend = "streamlit run streamlit_arborist/example.py"
-frontend = { cmd = "npm run start", cwd = "streamlit_arborist/frontend" }
-
 [tool.pytest.ini_options]
 addopts = "--headed --browser firefox"
-testpaths = ["e2"]
+testpaths = ["e2e"]
 
 [tool.ruff]
 target-version = "py39"
