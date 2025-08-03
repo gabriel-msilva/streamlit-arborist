@@ -27,6 +27,10 @@ frontend:
 tests:
 	uv run pytest e2e -vv
 
+.PHONY: docs
+docs:
+	uv run sphinx-build -b html docs/ docs/_build/
+
 .PHONY: lint
 lint:
 	uv run pre-commit run --all-files

@@ -45,11 +45,11 @@ def tree_view(
     on_change: Callable[..., None] = None,
 ) -> List[dict]:
     """
-    Create a tree view.
+    Display a tree view.
 
     Parameters
     ----------
-    data : List[dict]
+    data : list of dict
         A list of dictionaries representing the tree data.
         Each dictionary must have an `id` key.
         Optional keys are `name` for display (otherwise uses `id`), and `children` for child nodes.
@@ -70,7 +70,7 @@ def tree_view(
         View height in pixels.
 
     indent : int, optional
-        Node indendation in pixels, by default 24
+        Node indentation in pixels, by default 24
 
     overscan_count : int, default 1
         Number of additional rows rendered outside the visible viewport to ensure smooth
@@ -152,30 +152,6 @@ def tree_view(
 
     >>> from streamlit_arborist import tree_view
     >>> tree_view(data)
-
-    You can change the key names using `children_accessor` and `id_accessor`.
-
-    >>> data2 = [{"key": "A", "contents": [{"key": "A.1"}, {"key": "A.2"}]}]
-    >>> tree_view(data2, children_accessor="contents", id_accessor="key")
-
-    You can also include additional keys in the nodes:
-
-    >>> data3 = [{"id": "1", "name": "Node 1", "description": "This is node 1"}]
-    >>> tree_view(data3)
-
-    Customize the appearance of the tree view:
-
-    >>> tree_view(
-    ...     data,
-    ...     icons={"open": "🔓", "closed": "🔒", "leaf": "🍀"},
-    ...     row_height=30,
-    ...     height=400,
-    ...     padding_top=10,
-    ... )
-
-    Add a search term to filter nodes:
-
-    >>> tree_view(data, search_term="Child")
     """
     icons = icons or {}
     icons = {

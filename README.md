@@ -1,29 +1,53 @@
 # streamlit-arborist
 
-Streamlit component for creating tree views.
+_streamlit-arborist_ is a [Streamlit](https://streamlit.io) component based on
+[react-arborist](https://github.com/brimdata/react-arborist) for visualizing
+hierarchical data structures as interactive tree views.
 
-## Installation instructions
+## Installation
 
 ```sh
 pip install streamlit-arborist
 ```
 
-## Usage instructions
+## Basic usage
 
 ```python
-import streamlit as st
+from streamlit_arborist import tree_view
 
-from streamlit_arborist import streamlit_arborist
+data = [
+   {
+      "id": "1",
+      "name": "Parent 1",
+      "children": [
+         {"id": "1.1", "name": "Child 1"},
+         {"id": "1.2", "name": "Child 2"}
+      ]
+   },
+   {
+      "id": "2",
+      "name": "Parent 2",
+      "children": [
+         {"id": "2.1", "name": "Child 3"},
+         {"id": "2.2", "name": "Child 4"}
+      ]
+   }
+]
 
-value = streamlit_arborist()
+tree_view()
+```
 
-st.write(value)
+```sh
+streamlit run app.py
 ```
 
 ## Development
 
 This repository is based on
 [streamlit/component-template](https://github.com/streamlit/component-template) template.
+Find details about
+[custom components](https://docs.streamlit.io/develop/concepts/custom-components)
+in Streamlit documentation.
 
 The development environment requires
 [uv](https://docs.astral.sh/uv/getting-started/installation/)
@@ -39,6 +63,8 @@ make setup
 ```
 
 ### Running
+
+While developing the frontend, set `_RELEASE = False` in [`__init__.py`](./streamlit_arborist/__init__.py).
 
 1. Run the [example.py](./streamlit_arborist/example.py) app file with Streamlit:
 
@@ -60,4 +86,13 @@ Set `_RELEASE = True` in [`__init__.py`](./streamlit_arborist/__init__.py) and r
 
 ```sh
 make build
+```
+
+### Documentation
+
+The documentation files are located in [docs/](./docs/) directory and written with
+[Sphinx](https://www.sphinx-doc.org/en/).
+
+```sh
+make docs
 ```

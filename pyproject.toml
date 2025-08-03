@@ -17,7 +17,11 @@ homepage = "https://github.com/gabriel-msilva/streamlit-arborist"
 repository = "https://github.com/gabriel-msilva/streamlit-arborist"
 
 [dependency-groups]
-dev = ["pre-commit==4.2.0", { include-group = "test" }]
+dev = [
+  "pre-commit==4.2.0",
+  { include-group = "test" },
+  { include-group = "docs" },
+]
 test = [
   "pytest==7.4.0",
   "playwright==1.48.0",
@@ -25,6 +29,7 @@ test = [
   "pytest-rerunfailures==12.0",
   "requests==2.31.0",
 ]
+docs = ["sphinx==7.4.7", "sphinx-rtd-theme==3.0.2"]
 
 [tool.setuptools]
 include-package-data = true

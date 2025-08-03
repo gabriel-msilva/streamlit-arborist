@@ -43,8 +43,23 @@ repos:
       - id: markdownlint
         args: ["--fix"]
 
+  # Lint: Sphinx documentation
+  - repo: https://github.com/sphinx-contrib/sphinx-lint
+    rev: v1.0.0
+    hooks:
+      - id: sphinx-lint
+        args: ["--enable", "all", "--disable", "line-too-long"]
+
   # Sync uv.lock
   - repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.8.4
     hooks:
       - id: uv-lock
+
+  # Fix common misspellings in text files
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        types_or: [python, rst, markdown]
+        additional_dependencies: [tomli]
