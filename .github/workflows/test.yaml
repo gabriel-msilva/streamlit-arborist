@@ -23,27 +23,17 @@ jobs:
 
   pytest:
     runs-on: ubuntu-latest
+    needs: [pre-commit]
     strategy:
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v6
-        with:
-          version: "0.8.4"
-          python-version: ${{ matrix.python-version }}
-
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      - name: Install Python dependencies
-        run: |
-          uv sync --locked --group tests
-          uv run playwright install firefox chromium
 
       - name: Install Node.js dependencies
         run: |
@@ -51,5 +41,14 @@ jobs:
           npm run build
         working-directory: ./streamlit_arborist/frontend
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.8.4"
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Python dependencies
+        run: uv run --group tests --frozen playwright install firefox chromium
+
       - name: Run tests
-        run: uv run pytest --browser firefox --browser chromium
+        run: uv run --group tests --frozen pytest --browser firefox --browser chromium
