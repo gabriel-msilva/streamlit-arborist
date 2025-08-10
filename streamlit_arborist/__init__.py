@@ -3,6 +3,10 @@ from typing import Callable, Dict, List, Union
 
 import streamlit.components.v1 as components
 
+from streamlit_arborist import _version
+
+__version__ = _version.get_version_dict()["version"]
+
 _RELEASE = True
 
 if not _RELEASE:

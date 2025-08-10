@@ -1,10 +1,10 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "version-pioneer"]
 build-backend = "hatchling.build"
 
 [project]
 name = "streamlit-arborist"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Streamlit component for creating tree views"
 authors = [{ name = "Gabriel Mello Silva", email = "gabriel.zyx@gmail.com" }]
 license-files = ["LICENSE"]
@@ -30,7 +30,11 @@ homepage = "https://github.com/gabriel-msilva/streamlit-arborist"
 repository = "https://github.com/gabriel-msilva/streamlit-arborist"
 
 [dependency-groups]
-dev = ["pre-commit==4.2.0", { include-group = "tests" }]
+dev = [
+  "pre-commit==4.2.0",
+  "version-pioneer[cli]==0.0.13",
+  { include-group = "tests" },
+]
 tests = [
   "pytest==7.4.0",
   "playwright==1.48.0",
@@ -39,6 +43,17 @@ tests = [
   "requests==2.31.0",
 ]
 docs = ["sphinx==7.4.7", "sphinx-rtd-theme==3.0.2"]
+
+[tool.hatch.version]
+source = "version-pioneer"
+
+[tool.version-pioneer]
+versionscript = "streamlit_arborist/_version.py"
+versionfile-sdist = "streamlit_arborist/_version.py"
+versionfile-wheel = "streamlit_arborist/_version.py"
+
+[tool.hatch.build.hooks.version-pioneer]
+# section is empty because we read config from `[tool.version-pioneer]` section.
 
 [tool.pytest.ini_options]
 testpaths = ["e2e"]
