@@ -30,16 +30,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Install Node.js dependencies
-        run: |
-          npm install
-          npm run build
-        working-directory: ./streamlit_arborist/frontend
+      - name: Build frontend
+        uses: ./.github/actions/build-frontend
 
       - name: Install uv
         uses: astral-sh/setup-uv@v6
