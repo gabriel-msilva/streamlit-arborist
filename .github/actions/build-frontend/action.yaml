@@ -1,0 +1,22 @@
+name: Build Frontend
+description: Set up Node.js and build a frontend application
+inputs:
+  node-version:
+    description: Node.js version
+    required: false
+    default: "22"
+
+runs:
+  using: composite
+  steps:
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Build frontend
+      shell: bash
+      run: |
+        npm install
+        npm run build
+      working-directory: ./streamlit_arborist/frontend
