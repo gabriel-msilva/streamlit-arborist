@@ -1,4 +1,4 @@
-name: Build
+name: Test, Build and Release
 
 on:
   push:
@@ -10,8 +10,49 @@ on:
     branches: [main]
 
 jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.8.4"
+          python-version: "3.9"
+
+      - name: Run pre-commit hooks
+        run: uvx pre-commit@4.2.0 run --show-diff-on-failure --color=always --all-files
+
+  pytest:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build frontend
+        uses: ./.github/actions/build-frontend
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.8.4"
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Python dependencies
+        run: uv run --group tests --frozen playwright install firefox chromium
+
+      - name: Run tests
+        run: uv run --group tests --frozen pytest --browser firefox --browser chromium
+
   build:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags')
+    needs:
+      - pre-commit
+      - pytest
     steps:
       - uses: actions/checkout@v4
 
@@ -34,6 +75,10 @@ jobs:
 
   docs:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags')
+    needs:
+      - pre-commit
+      - pytest
     steps:
       - uses: actions/checkout@v4
 
