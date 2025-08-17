@@ -13,11 +13,11 @@ def get_version_dict():
     return get_version_dict_wo_exec(
         cwd=cwd,
         style="pep440",
-        tag_prefix="v",
+        tag_prefix="",
     )
 
 
 if __name__ == "__main__":
     import json
 
-    print(json.dumps(get_version_dict()))
+    print(json.dumps(get_version_dict(), indent=2))
