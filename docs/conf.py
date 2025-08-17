@@ -6,10 +6,12 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+from streamlit_arborist import __version__
+
 project = "streamlit-arborist"
 copyright = "2025, Gabriel Mello Silva"  # noqa: A001
 author = "Gabriel Mello Silva"
-release = "0.1.0"
+release = __version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
