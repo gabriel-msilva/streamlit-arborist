@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 name = "streamlit-arborist"
 dynamic = ["version"]
 description = "Streamlit component for creating tree views"
+readme = "README.md"
 authors = [{ name = "Gabriel Mello Silva", email = "gabriel.zyx@gmail.com" }]
 license-files = ["LICENSE"]
 requires-python = ">=3.9"

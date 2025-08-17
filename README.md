@@ -34,7 +34,7 @@ data = [
    }
 ]
 
-tree_view()
+tree_view(data)
 ```
 
 ```sh
