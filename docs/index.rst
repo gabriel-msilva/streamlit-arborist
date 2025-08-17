@@ -10,6 +10,11 @@ hierarchical data structures as interactive tree views.
 
    pip install streamlit-arborist
 
+**Version**: |release|
+
+**Useful links**:
+`Source Repository <https://github.com/gabriel-msilva/streamlit-arborist/>`_
+| `Issues & Ideas <https://github.com/gabriel-msilva/streamlit-arborist/issues>`_
 
 .. toctree::
    :maxdepth: 2
