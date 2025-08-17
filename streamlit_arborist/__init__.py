@@ -56,7 +56,8 @@ def tree_view(
     data : list of dict
         A list of dictionaries representing the tree data.
         Each dictionary must have an `id` key.
-        Optional keys are `name` for display (otherwise uses `id`), and `children` for child nodes.
+        Optional keys are `name` for display (otherwise uses `id`), and `children` for
+        child nodes.
 
     icons : dict, optional
         A dict of keys ``"open"``, ``"closed"``, and ``"leaf"`` with string values
@@ -132,8 +133,11 @@ def tree_view(
     --------
     The data should be a list of dictionaries, where each dictionary represents a node
     in the tree.
-    Each node should have an `id` and `name` keys, and may have a `children` key
-    containing a list of child nodes.
+    Each node should have the following keys:
+
+    * ``id`` (required)
+    * ``name``: string to display (optional), and
+    * ``children``: list of nested nodes (optional)
 
     >>> data = [
     ...     {

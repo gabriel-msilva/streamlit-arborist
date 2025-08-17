@@ -15,8 +15,11 @@ Data
 
 The data should be a list of dictionaries, where each dictionary represents a node
 in the tree.
-Each node must have an ``id`` key and, optionally, ``name`` for display or ``children``
-for nested nodes.
+Each node should have the following keys:
+
+* ``id`` (required)
+* ``name``: string to display (optional), and
+* ``children``: list of nested nodes (optional)
 
 .. code-block:: python
 
@@ -43,11 +46,11 @@ for nested nodes.
 
     tree_view(data)
 
-You can include additional keys in the node's data:
+You may include additional keys in the node's data:
 
 .. code-block:: python
 
-    [
+    data = [
         {"id": "1", "name": "Node 1", "description": "This is node 1"},
         {"id": "2", "name": "Node 2", "description": "This is node 2"}
     ]
@@ -63,7 +66,6 @@ Selection
 ---------
 
 Select nodes by clicking on them.
-By default, users can select multiple nodes by holding down the *Shift* key.
 The component returns a list of the selected nodes' data.
 
 .. code-block:: python
@@ -72,6 +74,7 @@ The component returns a list of the selected nodes' data.
     >>> selected
     [{"id": "1.1", "name": "Child 1"}]
 
+By default, users can select multiple nodes by holding down the *Shift* key.
 To disable multiple selection:
 
 .. code-block:: python
