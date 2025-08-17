@@ -31,6 +31,7 @@ repository = "https://github.com/gabriel-msilva/streamlit-arborist"
 
 [dependency-groups]
 dev = [
+  "ipython>=8.18.1",
   "pre-commit==4.2.0",
   "version-pioneer[cli]==0.0.13",
   { include-group = "tests" },
@@ -47,13 +48,13 @@ docs = ["sphinx==7.4.7", "sphinx-rtd-theme==3.0.2"]
 [tool.hatch.version]
 source = "version-pioneer"
 
+[tool.hatch.build.hooks.version-pioneer]
+# section is empty because we read config from `[tool.version-pioneer]` section.
+
 [tool.version-pioneer]
 versionscript = "streamlit_arborist/_version.py"
 versionfile-sdist = "streamlit_arborist/_version.py"
 versionfile-wheel = "streamlit_arborist/_version.py"
-
-[tool.hatch.build.hooks.version-pioneer]
-# section is empty because we read config from `[tool.version-pioneer]` section.
 
 [tool.pytest.ini_options]
 testpaths = ["e2e"]
