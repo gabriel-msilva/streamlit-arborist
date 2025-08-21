@@ -119,7 +119,7 @@ with col1:
     )
 
 with col2:
-    st.markdown("Selected data:")
+    st.markdown("Selected node:")
 
     body = json.dumps(value, indent=2) if value else None
     st.code(body)

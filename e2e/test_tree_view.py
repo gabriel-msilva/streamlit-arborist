@@ -7,7 +7,7 @@ from e2e_utils import StreamlitRunner
 from playwright.sync_api import Page, expect
 
 ROOT_DIRECTORY = Path(__file__).parents[1].absolute()
-EXAMPLE_FILE = ROOT_DIRECTORY / "streamlit_arborist" / "example.py"
+EXAMPLE_FILE = ROOT_DIRECTORY / "app" / "example.py"
 
 COMPONENT_FRAME_SELECTOR = 'iframe[title="streamlit_arborist\\.streamlit_arborist"]'
 COLORS = {

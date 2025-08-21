@@ -17,7 +17,7 @@ setup:
 
 .PHONY: backend
 backend:
-	uv run streamlit run streamlit_arborist/example.py
+	uv run streamlit run app/example.py
 
 .PHONY: frontend
 frontend:
