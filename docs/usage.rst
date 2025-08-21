@@ -65,21 +65,14 @@ Change the default key names using ``children_accessor`` and ``id_accessor``.
 Selection
 ---------
 
-Select nodes by clicking on them.
-The component returns a list of the selected nodes' data.
+Select leaf nodes by clicking on them.
+The component returns the selected nodes' data, including extra keys.
 
 .. code-block:: python
 
     >>> selected = tree_view(data)
     >>> selected
-    [{"id": "1.1", "name": "Child 1"}]
-
-By default, users can select multiple nodes by holding down the *Shift* key.
-To disable multiple selection:
-
-.. code-block:: python
-
-    tree_view(data, disable_multi_selection=True)
+    {"id": "1.1", "name": "Child 1"}
 
 Programmatically select a node by passing its *id*:
 
@@ -90,7 +83,8 @@ Programmatically select a node by passing its *id*:
 Appearance
 ----------
 
-Change the icons for *open*/*closed* internal nodes and *leaf* nodes using the ``icons`` parameter.
+Change the icons for *open*/*closed* internal nodes and *leaf* nodes using the ``icons``
+parameter.
 
 .. code-block:: python
 

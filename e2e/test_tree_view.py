@@ -6,8 +6,6 @@ import pytest
 from e2e_utils import StreamlitRunner
 from playwright.sync_api import Page, expect
 
-from streamlit_arborist.example import get_data
-
 ROOT_DIRECTORY = Path(__file__).parents[1].absolute()
 EXAMPLE_FILE = ROOT_DIRECTORY / "streamlit_arborist" / "example.py"
 
@@ -33,6 +31,7 @@ def streamlit_app():
 @pytest.fixture(autouse=True, scope="function")
 def go_to_app(page: Page, streamlit_app: StreamlitRunner):
     page.goto(streamlit_app.server_url)
+
     # Wait for app to load
     page.get_by_role("img", name="Running...").is_hidden()
 
@@ -43,40 +42,46 @@ def assert_component_value_equals(expected: str, page: Page):
 
     page.wait_for_timeout(500)
 
-    assert json.loads(json_block.text_content()) == expected
+    if expected is None:
+        assert json_block.text_content() == "None"
+    else:
+        assert json.loads(json_block.text_content()) == expected
 
 
 def test_should_return_default_value(page: Page):
-    assert_component_value_equals([], page)
+    assert_component_value_equals(None, page)
 
 
-@pytest.mark.parametrize("index", [0, 2])
-def test_should_return_selected_value(page: Page, index: int):
+@pytest.mark.parametrize(
+    "level, index, expected",
+    [(1, 0, {"id": "1", "name": "Unread"}), (2, 1, {"id": "c2", "name": "Random"})],
+)
+def test_should_return_selected_value(
+    page: Page, level: int, index: int, expected: dict
+):
     frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
 
-    node = frame.get_by_role("treeitem", level=1).nth(index)
+    node = frame.get_by_role("treeitem", level=level).nth(index)
     node.click()
 
-    expected = [node for node in get_data() if node["id"] == str(index + 1)]
     assert_component_value_equals(expected, page)
 
 
-def test_should_return_multiple_selected_values(page: Page):
+def test_should_toggle_internal_node_on_click(page: Page):
     frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
 
-    treeitems = frame.get_by_role("treeitem", level=1)
+    internal_node = frame.get_by_role("treeitem", level=1).nth(2)
+    inner_div = internal_node.locator("div")
 
-    first_node = treeitems.nth(0)
-    second_node = treeitems.nth(1)
+    expect(inner_div).to_have_class(NODE_STATES["isOpen"])
 
-    first_node.click()
-    second_node.click(modifiers=["Shift"])
+    internal_node.click()
 
-    expected = [node for node in get_data() if node["id"] in ["1", "2"]]
-    assert_component_value_equals(expected, page)
+    expect(inner_div).to_have_class(NODE_STATES["isClosed"])
+    assert_component_value_equals(None, page)
 
 
-def test_should_select_node(page: Page):
+def test_should_select_node_on_click(page: Page):
     frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
 
     general = frame.get_by_role("treeitem", level=2).nth(0)
@@ -89,55 +94,6 @@ def test_should_select_node(page: Page):
 
     expect(general).to_have_attribute("aria-selected", "true")
     expect(inner_div).to_have_css("background-color", COLORS["selected"])
-
-
-def test_should_select_multiple_nodes(page: Page):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
-
-    treeitems = frame.get_by_role("treeitem", level=2)
-
-    general = treeitems.nth(0)
-    random = treeitems.nth(1)
-    open_source_projects = treeitems.nth(2)
-
-    expect(general).to_have_attribute("aria-selected", "false")
-    expect(random).to_have_attribute("aria-selected", "false")
-    expect(open_source_projects).to_have_attribute("aria-selected", "false")
-
-    general.click()
-    open_source_projects.click(modifiers=["Shift"])
-
-    expect(general).to_have_attribute("aria-selected", "true")
-    expect(random).to_have_attribute("aria-selected", "true")
-    expect(open_source_projects).to_have_attribute("aria-selected", "true")
-
-
-def test_should_disable_multi_selection(page: Page):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
-
-    checkbox = page.locator("label:has-text('Disable multi-selection')")
-
-    expect(checkbox).not_to_be_checked()
-    checkbox.scroll_into_view_if_needed()
-    checkbox.click()
-    expect(checkbox).to_be_checked()
-
-    treeitems = frame.get_by_role("treeitem", level=2)
-
-    general = treeitems.nth(0)
-    random = treeitems.nth(1)
-    open_source_projects = treeitems.nth(2)
-
-    expect(general).to_have_attribute("aria-selected", "false")
-    expect(random).to_have_attribute("aria-selected", "false")
-    expect(open_source_projects).to_have_attribute("aria-selected", "false")
-
-    general.click()
-    open_source_projects.click(modifiers=["Shift"])
-
-    expect(general).to_have_attribute("aria-selected", "false")
-    expect(random).to_have_attribute("aria-selected", "false")
-    expect(open_source_projects).to_have_attribute("aria-selected", "true")
 
 
 def test_should_hover_node(page: Page):
@@ -155,19 +111,6 @@ def test_should_hover_node(page: Page):
     page.mouse.move(0, 0)
 
     expect(inner_div).to_have_css("background-color", COLORS["background"])
-
-
-def test_should_close_node(page: Page):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
-
-    chat_rooms = frame.get_by_role("treeitem", level=1).nth(2)
-    inner_div = chat_rooms.locator("div")
-
-    expect(inner_div).to_have_class(NODE_STATES["isOpen"])
-
-    inner_div.locator("span").click()
-
-    expect(inner_div).to_have_class(NODE_STATES["isClosed"])
 
 
 def test_should_nodes_be_closed(page: Page):

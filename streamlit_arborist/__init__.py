@@ -7,7 +7,7 @@ from streamlit_arborist import _version
 
 __version__ = _version.get_version_dict()["version"]
 
-_RELEASE = True
+_RELEASE = False
 
 if not _RELEASE:
     _component_func = components.declare_component(
@@ -38,7 +38,6 @@ def tree_view(
     children_accessor: str = "children",
     id_accessor: str = "id",
     open_by_default: bool = True,
-    disable_multi_selection: bool = False,
     # Selection
     selection: str = None,
     initial_open_state: Dict[str, bool] = None,
@@ -47,7 +46,7 @@ def tree_view(
     # Streamlit
     key: Union[str, int] = None,
     on_change: Callable[..., None] = None,
-) -> List[dict]:
+) -> dict:
     """
     Display a tree view.
 
@@ -100,9 +99,6 @@ def tree_view(
     open_by_default : bool, default True
         Whether all nodes should be open when rendered.
 
-    disable_multi_selection : bool, default False
-        Whether to disable multi-selection of nodes.
-
     selection : str or int, optional
         The node `id` to select and scroll when rendered.
 
@@ -126,8 +122,9 @@ def tree_view(
 
     Returns
     -------
-    list of dict
-        A list containing the data of selected nodes.
+    dict
+        The data of the selected node.
+        Returns `None` if no node is selected.
 
     Examples
     --------
@@ -138,6 +135,8 @@ def tree_view(
     * ``id`` (required)
     * ``name``: string to display (optional), and
     * ``children``: list of nested nodes (optional)
+
+    Nodes without ``children`` key are considered leafs.
 
     >>> data = [
     ...     {
@@ -184,7 +183,6 @@ def tree_view(
         children_accessor=children_accessor,
         id_accessor=id_accessor,
         open_by_default=open_by_default,
-        disable_multi_selection=disable_multi_selection,
         # Selection
         selection=selection,
         # Open State
@@ -194,7 +192,7 @@ def tree_view(
         # Streamlit
         key=key,
         on_change=on_change,
-        default=[],
+        default=None,
     )
 
     return component_value

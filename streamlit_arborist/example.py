@@ -37,10 +37,10 @@ def extract_ids(data) -> list:
     ids = []
 
     for item in data:
-        ids.append(item["id"])
-
         if "children" in item:
             ids.extend(extract_ids(item["children"]))
+        else:
+            ids.append(item["id"])
 
     return ids
 
@@ -51,9 +51,8 @@ with st.sidebar:
     st.header("Instructions")
     st.markdown(
         """
-        - Click on a node to select it.
-        - Click on a node icon to open or close it.
-        - Press Shift + Click to select multiple nodes.
+        - Click on a leaf node (file) to select it.
+        - Click on an internal node (folder) to toggle its open/closed state.
         - Use arrow keys to navigate through the tree, then press space to select a node.
         """
     )
@@ -83,12 +82,6 @@ with st.sidebar:
         help="The node id to select and scroll when rendered.",
     )
 
-    disable_multi_selection = st.checkbox(
-        "Disable multi-selection",
-        value=False,
-        help="Whether to disable multi-selection of nodes.",
-    )
-
     search_term = st.text_input("Search term")
 
 st.title("streamlit-arborist")
@@ -108,7 +101,6 @@ st.code(
         open_by_default={open_by_default!r},
         selection={selection!r},
         search_term={search_term!r},
-        disable_multi_selection={disable_multi_selection!r},
         height=300,
     )
     """
@@ -123,12 +115,11 @@ with col1:
         open_by_default=open_by_default,
         selection=selection,
         search_term=search_term,
-        disable_multi_selection=disable_multi_selection,
         height=300,
     )
 
 with col2:
     st.markdown("Selected data:")
 
-    body = json.dumps(value, indent=2)
-    st.code(body, language="json")
+    body = json.dumps(value, indent=2) if value else None
+    st.code(body)

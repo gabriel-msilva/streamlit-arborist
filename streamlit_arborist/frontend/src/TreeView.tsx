@@ -63,15 +63,16 @@ class TreeView extends StreamlitComponentBase<State> {
         childrenAccessor={this.props.args["children_accessor"]}
         idAccessor={this.props.args["id_accessor"]}
         openByDefault={this.props.args["open_by_default"]}
-        disableMultiSelection={this.props.args["disable_multi_selection"]}
+        disableMultiSelection={true}
         disableEdit={true}
         disableDrag={true}
         disableDrop={true}
 
         // Event handlers
         onSelect={(nodes) => {
-          const selectedData = nodes.map(node => node.data)
-          Streamlit.setComponentValue(selectedData)
+          if (nodes.length !== 0) {
+            Streamlit.setComponentValue(nodes[0].data)
+          }
         }}
 
         // Selection
@@ -105,6 +106,7 @@ class TreeView extends StreamlitComponentBase<State> {
     return (
       <div
         className={clsx(styles.node, node.state)}
+        ref={dragHandle}
         style={
           {
             ...style,
@@ -112,16 +114,16 @@ class TreeView extends StreamlitComponentBase<State> {
             ...(node.isSelected ? selectedStyle : {})
           }
         }
-        ref={dragHandle}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
+        onClick={(e) => {
+          if (node.isInternal) {
+            e.stopPropagation();
+            node.toggle();
+          }
+        }}
       >
-        <span
-          className={styles.icon}
-          onClick={(e) => { e.stopPropagation(); node.toggle(); }}
-        >
-          {this.getIcon(node)}
-        </span>
+        <span className={styles.icon}>{this.getIcon(node)}</span>
         {node.data.name || node.data.id}
       </div>
     );
