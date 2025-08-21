@@ -7,7 +7,7 @@ from streamlit_arborist import _version
 
 __version__ = _version.get_version_dict()["version"]
 
-_RELEASE = False
+_RELEASE = True
 
 if not _RELEASE:
     _component_func = components.declare_component(

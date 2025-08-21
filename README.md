@@ -1,5 +1,9 @@
 # streamlit-arborist
 
+[![CI - Test, Build and Release](https://github.com/gabriel-msilva/streamlit-arborist/actions/workflows/test-build-release.yaml/badge.svg)](https://github.com/gabriel-msilva/streamlit-arborist/actions/workflows/test-build-release.yaml)
+![PyPI - Version](https://img.shields.io/pypi/v/streamlit-arborist)
+![PyPI - License](https://img.shields.io/pypi/l/streamlit-arborist)
+
 _streamlit-arborist_ is a [Streamlit](https://streamlit.io) component based on
 [react-arborist](https://github.com/brimdata/react-arborist) for visualizing
 hierarchical data structures as interactive tree views.
