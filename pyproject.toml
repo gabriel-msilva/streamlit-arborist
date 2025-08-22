@@ -29,6 +29,7 @@ classifiers = [
 [project.urls]
 homepage = "https://github.com/gabriel-msilva/streamlit-arborist"
 repository = "https://github.com/gabriel-msilva/streamlit-arborist"
+documentation = "https://streamlit-arborist.readthedocs.io"
 
 [dependency-groups]
 dev = [
@@ -45,6 +46,10 @@ tests = [
   "requests==2.31.0",
 ]
 docs = ["sphinx==7.4.7", "sphinx-rtd-theme==3.0.2"]
+
+[tool.hatch.build]
+artifacts = ["streamlit_arborist/frontend/build/**"]
+exclude = ["streamlit_arborist/frontend/**"]
 
 [tool.hatch.version]
 source = "version-pioneer"
