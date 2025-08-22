@@ -8,6 +8,9 @@ _streamlit-arborist_ is a [Streamlit](https://streamlit.io) component based on
 [react-arborist](https://github.com/brimdata/react-arborist) for visualizing
 hierarchical data structures as interactive tree views.
 
+- Demo application: [st-arborist-example.streamlit.app](https://st-arborist-example.streamlit.app/)
+- Documentation: [streamlit-arborist.readthedocs.io](https://streamlit-arborist.readthedocs.io/)
+
 ## Installation
 
 ```sh
@@ -15,6 +18,8 @@ pip install streamlit-arborist
 ```
 
 ## Basic usage
+
+A minimal `app.py` file with sample data:
 
 ```python
 from streamlit_arborist import tree_view
@@ -40,6 +45,8 @@ data = [
 
 tree_view(data)
 ```
+
+Run Streamlit:
 
 ```sh
 streamlit run app.py
@@ -70,7 +77,7 @@ make setup
 
 While developing the frontend, set `_RELEASE = False` in [`__init__.py`](./streamlit_arborist/__init__.py).
 
-1. Run the [example.py](./streamlit_arborist/example.py) app file with Streamlit:
+1. Run the [app/example.py](./app/example.py) app file with Streamlit:
 
    ```sh
    make backend
