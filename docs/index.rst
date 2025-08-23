@@ -19,7 +19,7 @@ streamlit-arborist documentation
 `react-arborist <https://github.com/brimdata/react-arborist>`_ for visualizing
 hierarchical data structures as interactive tree views.
 
-Check the `demo application <https://streamlit-arborist-demo.streamlit.app/>`_ in
+Check the `demo application <https://streamlit-arborist-example.streamlit.app/>`_ in
 Streamlit Cloud.
 
 Installation
