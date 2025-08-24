@@ -4,9 +4,7 @@ from typing import Callable, Dict, List, Union
 import streamlit.components.v1 as components
 from streamlit.string_util import validate_icon_or_emoji
 
-from streamlit_arborist import _version
-
-__version__ = _version.get_version_dict()["version"]
+__version__ = "0.2.1"
 
 _RELEASE = True
 
