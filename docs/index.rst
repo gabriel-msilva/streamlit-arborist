@@ -33,5 +33,6 @@ Installation
    :maxdepth: 2
    :caption: Contents
 
-   usage/
-   api/
+   usage
+   api
+   releases
