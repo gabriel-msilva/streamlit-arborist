@@ -123,7 +123,7 @@ class TreeView extends StreamlitComponentBase<State> {
           }
         }}
       >
-        <span className={styles.icon}>{this.getIcon(node)}</span>
+        {this.getIcon(node)}
         {node.data.name || node.data.id}
       </div>
     );
@@ -131,12 +131,24 @@ class TreeView extends StreamlitComponentBase<State> {
 
   private getIcon(node: NodeApi<any>) {
     let icons: Icons = this.props.args["icons"] as Icons;
+    let icon: string;
 
     if (node.isLeaf) {
-      return icons.leaf;
+      icon = icons.leaf
+    } else {
+      icon = node.isOpen ? icons.open : icons.closed;
     }
 
-    return node.isOpen ? icons.open : icons.closed;
+    const materialMatch = icon.match(/^:material\/(.+):$/);
+    if (materialMatch) {
+      return (
+        <span className={`material-symbols-rounded ${styles.icon}`}>
+          {materialMatch[1]}
+        </span>
+      );
+    }
+
+    return <span className={styles.icon}>{icon}</span>;
   }
 }
 

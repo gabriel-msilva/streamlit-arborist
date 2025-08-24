@@ -2,6 +2,7 @@ import os
 from typing import Callable, Dict, List, Union
 
 import streamlit.components.v1 as components
+from streamlit.string_util import validate_icon_or_emoji
 
 from streamlit_arborist import _version
 
@@ -18,6 +19,16 @@ else:
     parent_dir = os.path.dirname(os.path.abspath(__file__))
     build_dir = os.path.join(parent_dir, "frontend/build")
     _component_func = components.declare_component("streamlit_arborist", path=build_dir)
+
+
+def _normalize_icons(icons: dict) -> dict:
+    result = {}
+
+    for key in ("open", "closed", "leaf"):
+        value = icons.get(key) or None
+        result[key] = validate_icon_or_emoji(value)
+
+    return result
 
 
 # See `TreeProps` type in the react-arborist package:
@@ -63,6 +74,16 @@ def tree_view(
         representing the icons to use for open internal nodes, closed internal nodes,
         and leaf nodes, respectively.
 
+        The following options are valid values:
+
+        * A single-character emoji.
+          For example, you can set ``icons={"open": "🔓", "closed": "🔒", "leaf": "🍀"}``.
+          Emoji short codes are not supported.
+
+        * An icon from the Material Symbols library (rounded style) in the format
+          ``":material/icon_name:"`` where ``"icon_name"`` is the name of the icon in
+          snake case.
+
     row_height : int, default 24
         Height of each row in pixels.
 
@@ -73,8 +94,8 @@ def tree_view(
     height : int, default 500
         View height in pixels.
 
-    indent : int, optional
-        Node indentation in pixels, by default 24
+    indent : int, default 24
+        Node indentation in pixels.
 
     overscan_count : int, default 1
         Number of additional rows rendered outside the visible viewport to ensure smooth
@@ -160,12 +181,7 @@ def tree_view(
     >>> from streamlit_arborist import tree_view
     >>> tree_view(data)
     """
-    icons = icons or {}
-    icons = {
-        "open": icons.get("open") or "📂",
-        "closed": icons.get("closed") or "📁",
-        "leaf": icons.get("leaf") or "📄",
-    }
+    icons = _normalize_icons(icons or {})
 
     component_value = _component_func(
         data=data,

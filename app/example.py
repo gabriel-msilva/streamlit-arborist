@@ -4,7 +4,7 @@ import streamlit as st
 
 from streamlit_arborist import tree_view
 
-st.set_page_config("streamlit-arborist", initial_sidebar_state="expanded")
+st.set_page_config(page_title="streamlit-arborist")
 
 
 @st.cache_data
@@ -58,7 +58,7 @@ with st.sidebar:
     )
     st.header("Configuration")
     st.markdown(
-        "See all options in the [documentation](https://github.com/gabriel-msilva/streamlit-arborist)."
+        "See all options in the [documentation](https://streamlit-arborist.readthedocs.io/)."
     )
 
     with st.expander("Icons", expanded=True):
@@ -82,7 +82,9 @@ with st.sidebar:
         help="The node id to select and scroll when rendered.",
     )
 
-    search_term = st.text_input("Search term")
+    search_term = st.text_input(
+        "Search term", help="Only show nodes that match this term"
+    )
 
 st.title("streamlit-arborist")
 

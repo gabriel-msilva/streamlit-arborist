@@ -83,12 +83,25 @@ Programmatically select a node by passing its *id*:
 Appearance
 ----------
 
-Change the icons for *open*/*closed* internal nodes and *leaf* nodes using the ``icons``
+Set icons for *open*/*closed* internal nodes and *leaf* nodes using the ``icons``
 parameter.
 
 .. code-block:: python
 
-    tree_view(data, icons={"open": "🔓", "closed": "🔒", "leaf": "🍀"})
+    tree_view(data, icons={"open": "📂", "closed": "📁", "leaf": "📄"})
+
+Material Symbols icons are also supported.
+
+.. code-block:: python
+
+    tree_view(
+        data,
+        icons={
+            "open": ":material/folder_open:",
+            "closed": ":material/folder:",
+            "leaf": ":material/docs:"
+        }
+    )
 
 Customize sizes and padding:
 

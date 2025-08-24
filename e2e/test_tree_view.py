@@ -157,7 +157,7 @@ def test_should_search_nodes(page: Page):
     expect(tree_items.nth(1)).to_have_text("📄Threads")
 
 
-def test_should_change_icons(page: Page):
+def test_should_change_emoji_icons(page: Page):
     frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
     level_1 = frame.get_by_role("treeitem", level=1)
 
@@ -172,29 +172,58 @@ def test_should_change_icons(page: Page):
     expect(closed_icon).to_have_text("📁")
 
     leaf_input = page.get_by_label("Leaf", exact=True)
-    leaf_input.fill("[leaf]")
+    leaf_input.fill("🍀")
     leaf_input.press("Enter")
 
     page.wait_for_timeout(500)
 
-    expect(leaf_icon).to_have_text("[leaf]")
+    expect(leaf_icon).to_have_text("🍀")
 
     open_input = page.get_by_label("Open", exact=True)
-    open_input.fill("[open]")
+    open_input.fill("🔓")
     open_input.press("Enter")
 
     page.wait_for_timeout(500)
 
-    expect(open_icon).to_have_text("[open]")
+    expect(open_icon).to_have_text("🔓")
 
     closed_input = page.get_by_label("Closed", exact=True)
-    closed_input.fill("[closed]")
+    closed_input.fill("🔒")
     closed_input.press("Enter")
 
     page.wait_for_timeout(500)
 
     closed_icon.click()
-    expect(closed_icon).to_have_text("[closed]")
+    expect(closed_icon).to_have_text("🔒")
+
+
+def test_should_use_material_symbols_icon(page: Page):
+    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+    level_1 = frame.get_by_role("treeitem", level=1)
+
+    leaf_input = page.get_by_label("Leaf", exact=True)
+    leaf_input.fill(":material/docs:")
+    leaf_input.press("Enter")
+
+    page.wait_for_timeout(500)
+
+    leaf_icon = level_1.nth(0).locator("span")
+    expect(leaf_icon).to_have_class(re.compile(r"material-symbols-rounded"))
+    expect(leaf_icon).to_have_text("docs")
+
+
+def test_should_not_have_icon(page: Page):
+    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+    level_1 = frame.get_by_role("treeitem", level=1)
+
+    leaf_input = page.get_by_label("Leaf", exact=True)
+    leaf_input.fill("")
+    leaf_input.press("Enter")
+
+    page.wait_for_timeout(500)
+
+    leaf_icon = level_1.nth(0).locator("span")
+    expect(leaf_icon).to_have_text("")
 
 
 def test_should_select_node_by_id(page: Page):
