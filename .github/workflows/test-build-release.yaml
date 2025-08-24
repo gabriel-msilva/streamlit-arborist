@@ -11,6 +11,7 @@ on:
 
 env:
   UV_VERSION: "0.8.4"
+  UV_FROZEN: "true"
 
 jobs:
   pre-commit:
