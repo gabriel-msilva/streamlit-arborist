@@ -53,7 +53,6 @@ jobs:
 
   docs:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags')
     needs: [pre-commit]
     steps:
       - uses: actions/checkout@v4
