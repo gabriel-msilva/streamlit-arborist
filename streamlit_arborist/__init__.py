@@ -6,7 +6,7 @@ from streamlit.string_util import validate_icon_or_emoji
 
 __version__ = "0.2.1"
 
-_RELEASE = True
+_RELEASE = os.environ.get("STREAMLIT_ARBORIST_DEV", "false") != "true"
 
 if not _RELEASE:
     _component_func = components.declare_component(
@@ -17,16 +17,6 @@ else:
     parent_dir = os.path.dirname(os.path.abspath(__file__))
     build_dir = os.path.join(parent_dir, "frontend/build")
     _component_func = components.declare_component("streamlit_arborist", path=build_dir)
-
-
-def _normalize_icons(icons: dict) -> dict:
-    result = {}
-
-    for key in ("open", "closed", "leaf"):
-        value = icons.get(key) or None
-        result[key] = validate_icon_or_emoji(value)
-
-    return result
 
 
 # See `TreeProps` type in the react-arborist package:
@@ -210,3 +200,13 @@ def tree_view(
     )
 
     return component_value
+
+
+def _normalize_icons(icons: dict) -> dict:
+    result = {}
+
+    for key in ("open", "closed", "leaf"):
+        value = icons.get(key) or None  # `None` over empty string
+        result[key] = validate_icon_or_emoji(value)
+
+    return result

@@ -75,7 +75,8 @@ make setup
 
 ### Running
 
-While developing the frontend, set `_RELEASE = False` in [`__init__.py`](./streamlit_arborist/__init__.py).
+While developing the frontend, you must set the environment variable `STREAMLIT_ARBORIST_DEV=true`.
+(this is done in `make` commands)
 
 1. Run the [app/example.py](./app/example.py) app file with Streamlit:
 
@@ -93,7 +94,8 @@ Open the app running at <http://localhost:8501>.
 
 ### Build
 
-Set `_RELEASE = True` in [`__init__.py`](./streamlit_arborist/__init__.py) and run:
+Build the React frontend at `streamlit_arborist/frontend/build/` directory and the Python
+package wheels at `dist/`.
 
 ```sh
 make build

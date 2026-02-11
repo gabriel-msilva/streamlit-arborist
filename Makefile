@@ -10,14 +10,14 @@ help:
 
 .PHONY: setup
 setup:
-	uv sync
+	uv sync --frozen
 	uv run pre-commit install
 	uv run playwright install
 	(cd streamlit_arborist/frontend && npm clean-install)
 
 .PHONY: backend
 backend:
-	uv run streamlit run app/example.py
+	STREAMLIT_ARBORIST_DEV=true uv run streamlit run app/example.py
 
 .PHONY: frontend
 frontend:
@@ -25,7 +25,7 @@ frontend:
 
 .PHONY: tests
 tests:
-	uv run pytest --headed --browser firefox
+	STREAMLIT_ARBORIST_DEV=true uv run pytest --headed --browser firefox
 
 .PHONY: docs
 docs:
