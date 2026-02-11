@@ -39,6 +39,7 @@ def tree_view(
     open_by_default: bool = True,
     # Selection
     selection: str = None,
+    select_internal_nodes: bool = False,
     initial_open_state: Dict[str, bool] = None,
     # Search
     search_term: str = None,
@@ -110,6 +111,14 @@ def tree_view(
 
     selection : str or int, optional
         The node `id` to select and scroll when rendered.
+
+    select_internal_nodes : bool, default False
+        If False, clicking an internal node only toggles open/closed.
+
+        If True, internal (non-leaf) nodes can be selected:
+        - Single-click the icon to toggle open/closed
+        - Single-click the label to select
+        - Double-click the label to select and toggle
 
     initial_open_state : Dict[str, bool], optional
         A dict of node ID keys and bool values indicating whether the node is open
@@ -189,6 +198,7 @@ def tree_view(
         open_by_default=open_by_default,
         # Selection
         selection=selection,
+        select_internal_nodes=select_internal_nodes,
         # Open State
         initial_open_state=initial_open_state,
         # Search

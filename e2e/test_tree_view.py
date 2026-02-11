@@ -1,6 +1,7 @@
 import json
 import re
 from pathlib import Path
+from typing import Union
 
 import pytest
 from e2e_utils import StreamlitRunner
@@ -36,7 +37,7 @@ def go_to_app(page: Page, streamlit_app: StreamlitRunner):
     page.get_by_role("img", name="Running...").is_hidden()
 
 
-def assert_component_value_equals(expected: str, page: Page):
+def assert_component_value_equals(expected: Union[str, None], page: Page):
     # Streamlit renders Markdown code blocks as <pre><code> elements
     json_block = page.locator("pre code").nth(1)
 
@@ -94,6 +95,81 @@ def test_should_select_node_on_click(page: Page):
 
     expect(general).to_have_attribute("aria-selected", "true")
     expect(inner_div).to_have_css("background-color", COLORS["selected"])
+
+
+def test_should_select_internal_node_on_label_and_toggle_on_icon(page: Page):
+    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+
+    checkbox = page.locator("label:has-text('Select internal nodes')")
+    checkbox.click()
+
+    expect(checkbox).to_be_checked()
+
+    chat_rooms = frame.get_by_role("treeitem", level=1).nth(2)
+    icon = chat_rooms.locator("span").nth(0)
+    label = chat_rooms.locator("span", has_text="Chat Rooms")
+
+    expect(chat_rooms).to_have_attribute("aria-selected", "false")
+    expect(chat_rooms.locator("div")).to_have_class(NODE_STATES["isOpen"])
+
+    icon.click()
+
+    # Clicking the icon toggles open/closed but does not select the node
+    expect(chat_rooms).to_have_attribute("aria-selected", "false")
+    expect(chat_rooms.locator("div")).to_have_class(NODE_STATES["isClosed"])
+    assert_component_value_equals(None, page)
+
+    label.click()
+
+    # Clicking the label selects the node but does not toggle open/closed
+    expect(chat_rooms).to_have_attribute("aria-selected", "true")
+    expect(chat_rooms.locator("div")).to_have_class(NODE_STATES["isClosed"])
+    assert_component_value_equals(
+        {
+            "id": "3",
+            "name": "Chat Rooms",
+            "children": [
+                {"id": "c1", "name": "General"},
+                {"id": "c2", "name": "Random"},
+                {"id": "c3", "name": "Open Source Projects"},
+            ],
+        },
+        page,
+    )
+
+
+def test_should_select_and_toggle_internal_node_on_double_click(page: Page):
+    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+
+    checkbox = page.locator("label:has-text('Select internal nodes')")
+    checkbox.click()
+
+    expect(checkbox).to_be_checked()
+
+    direct_messages = frame.get_by_role("treeitem", level=1).nth(3)
+
+    expect(direct_messages).to_have_attribute("aria-selected", "false")
+    expect(direct_messages.locator("div")).to_have_class(NODE_STATES["isOpen"])
+
+    label = direct_messages.locator("span", has_text="Direct Messages")
+
+    label.dblclick()
+
+    # Double-clicking the label selects and toggles the node
+    expect(direct_messages).to_have_attribute("aria-selected", "true")
+    expect(direct_messages.locator("div")).to_have_class(NODE_STATES["isClosed"])
+    assert_component_value_equals(
+        {
+            "id": "4",
+            "name": "Direct Messages",
+            "children": [
+                {"id": "d1", "name": "Alice"},
+                {"id": "d2", "name": "Bob"},
+                {"id": "d3", "name": "Charlie"},
+            ],
+        },
+        page,
+    )
 
 
 def test_should_hover_node(page: Page):
