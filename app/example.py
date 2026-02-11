@@ -75,6 +75,13 @@ with st.sidebar:
         help="Whether to open nodes by default when rendered.",
     )
 
+    select_internal_nodes = st.checkbox(
+        "Select internal nodes",
+        value=False,
+        help="Click on the icon to toggle, click on the label to select,"
+        " or double-click the label to select and toggle.",
+    )
+
     selection = st.selectbox(
         "Selection",
         options=extract_ids(data),
@@ -101,6 +108,7 @@ st.code(
         data,
         icons={icons!r},
         open_by_default={open_by_default!r},
+        select_internal_nodes={select_internal_nodes!r},
         selection={selection!r},
         search_term={search_term!r},
         height=300,
@@ -116,6 +124,7 @@ with col1:
         icons=icons,
         open_by_default=open_by_default,
         selection=selection,
+        select_internal_nodes=select_internal_nodes,
         search_term=search_term,
         height=300,
     )

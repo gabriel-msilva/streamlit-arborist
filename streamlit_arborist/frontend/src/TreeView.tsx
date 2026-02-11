@@ -91,6 +91,7 @@ class TreeView extends StreamlitComponentBase<State> {
 
   private Node = ({ node, style, dragHandle }: NodeRendererProps<any>) => {
     const [isHover, setHover] = useState(false);
+    const selectInternalNodes = this.props.args["select_internal_nodes"] === true;
 
     // This is a workaround for the fact that Streamlit's `props.theme` object does not
     // contain all color properties, such as `darkenedBgMix15` and `darkenedBgMix25`.
@@ -102,6 +103,49 @@ class TreeView extends StreamlitComponentBase<State> {
       backgroundColor: theme.darkenedBgMix25,
       fontWeight: "bold"
     };
+
+    const handleRowClick = (e: React.MouseEvent) => {
+      if (node.isInternal && !selectInternalNodes) {
+        e.stopPropagation();
+        node.toggle();
+      }
+    };
+
+    const handleIconClick = (e: React.MouseEvent) => {
+      if (node.isInternal) {
+        e.stopPropagation();
+        node.toggle();
+      }
+    };
+
+    const iconElement =
+      node.isInternal && selectInternalNodes ? (
+        <span
+          className={styles.iconClickTarget}
+          onClick={handleIconClick}
+          role="button"
+          aria-label={node.isOpen ? "Collapse" : "Expand"}
+        >
+          {this.getIcon(node)}
+        </span>
+      ) : (
+        this.getIcon(node)
+      );
+
+    const labelElement =
+      node.isInternal && selectInternalNodes ? (
+        <span
+          className={styles.label}
+          onDoubleClick={(e) => {
+            e.stopPropagation();
+            node.toggle();
+          }}
+        >
+          {node.data.name || node.data.id}
+        </span>
+      ) : (
+        node.data.name || node.data.id
+      );
 
     return (
       <div
@@ -116,15 +160,10 @@ class TreeView extends StreamlitComponentBase<State> {
         }
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        onClick={(e) => {
-          if (node.isInternal) {
-            e.stopPropagation();
-            node.toggle();
-          }
-        }}
+        onClick={handleRowClick}
       >
-        {this.getIcon(node)}
-        {node.data.name || node.data.id}
+        {iconElement}
+        {labelElement}
       </div>
     );
   }
