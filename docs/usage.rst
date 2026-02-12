@@ -28,18 +28,14 @@ Each node should have the following keys:
     data = [
         {
             "id": "1",
-            "name": "Parent 1",
-            "children": [
-                {"id": "1.1", "name": "Child 1"},
-                {"id": "1.2", "name": "Child 2"}
-            ]
+            "name": "Child 1",
         },
         {
             "id": "2",
             "name": "Parent 2",
             "children": [
-                {"id": "2.1", "name": "Child 3"},
-                {"id": "2.2", "name": "Child 4"}
+                {"id": "2.1", "name": "Child 2.1"},
+                {"id": "2.2", "name": "Child 2.2"}
             ]
         }
     ]
@@ -54,6 +50,8 @@ You may include additional keys in the node's data:
         {"id": "1", "name": "Node 1", "description": "This is node 1"},
         {"id": "2", "name": "Node 2", "description": "This is node 2"}
     ]
+
+    tree_view(data)
 
 Change the default key names using ``children_accessor`` and ``id_accessor``.
 
@@ -78,7 +76,29 @@ Programmatically select a node by passing its *id*:
 
 .. code-block:: python
 
-    tree_view(data, selection="1.1")
+    tree_view(data, selection="2.1")
+
+Set ``select_internal_nodes=True`` to allow the selection of internal nodes.
+The behavior of internal nodes changes:
+
+- Single-click the icon to toggle open/closed
+- Single-click the label to select
+- Double-click the label to select and toggle
+
+Selecting an internal node returns the node's data, including the ``children`` key.
+
+.. code-block:: python
+
+    >>> selected = tree_view(data, select_internal_nodes=True)
+    >>> selected
+    {
+        "id": "2",
+        "name": "Parent 2",
+        "children": [
+            {"id": "2.1", "name": "Child 2.1"},
+            {"id": "2.2", "name": "Child 2.2"}
+        ]
+    }
 
 Appearance
 ----------
