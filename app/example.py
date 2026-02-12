@@ -8,7 +8,7 @@ st.set_page_config(page_title="streamlit-arborist")
 
 
 @st.cache_data
-def get_data():
+def get_data() -> list[dict]:
     return [
         {"id": "1", "name": "Unread"},
         {"id": "2", "name": "Threads"},
@@ -38,6 +38,7 @@ def extract_ids(data) -> list:
 
     for item in data:
         if "children" in item:
+            ids.append(item["id"])
             ids.extend(extract_ids(item["children"]))
         else:
             ids.append(item["id"])
@@ -48,14 +49,6 @@ def extract_ids(data) -> list:
 data = get_data()
 
 with st.sidebar:
-    st.header("Instructions")
-    st.markdown(
-        """
-        - Click on a leaf node (file) to select it.
-        - Click on an internal node (folder) to toggle its open/closed state.
-        - Use arrow keys to navigate through the tree, then press space to select a node.
-        """
-    )
     st.header("Configuration")
     st.markdown(
         "See all options in the [documentation](https://streamlit-arborist.readthedocs.io/)."
@@ -97,6 +90,18 @@ st.title("streamlit-arborist")
 
 st.header("Tree View")
 
+
+st.markdown(
+    """
+    - Click on a leaf node (file) to select it.
+    - Click on an internal node (folder) to toggle its open/closed state.
+    - Use arrow keys to navigate through the tree, then press space to select a node.
+    - When `select_internal_node=True`, internal nodes can be selected.
+
+    Explore some of the configurations in the sidebar.
+    """
+)
+
 with st.expander("Sample data"):
     st.json(data)
 
@@ -108,8 +113,8 @@ st.code(
         data,
         icons={icons!r},
         open_by_default={open_by_default!r},
-        select_internal_nodes={select_internal_nodes!r},
         selection={selection!r},
+        select_internal_nodes={select_internal_nodes!r},
         search_term={search_term!r},
         height=300,
     )
@@ -119,6 +124,8 @@ st.code(
 col1, col2 = st.columns(2)
 
 with col1:
+    st.markdown("Interact with the tree view:")
+
     value = tree_view(
         data,
         icons=icons,
@@ -130,7 +137,7 @@ with col1:
     )
 
 with col2:
-    st.markdown("Selected node:")
+    st.markdown("Returned value:")
 
     body = json.dumps(value, indent=2) if value else None
     st.code(body)
