@@ -46,7 +46,7 @@ def tree_view(
     # Streamlit
     key: Union[str, int] = None,
     on_change: Callable[..., None] = None,
-) -> dict:
+) -> Union[dict, None]:
     """
     Display a tree view.
 
@@ -114,8 +114,8 @@ def tree_view(
 
     select_internal_nodes : bool, default False
         If False, clicking an internal node only toggles open/closed.
-
         If True, internal (non-leaf) nodes can be selected:
+
         - Single-click the icon to toggle open/closed
         - Single-click the label to select
         - Double-click the label to select and toggle
@@ -140,7 +140,7 @@ def tree_view(
 
     Returns
     -------
-    dict
+    dict or None
         The data of the selected node.
         Returns `None` if no node is selected.
 
