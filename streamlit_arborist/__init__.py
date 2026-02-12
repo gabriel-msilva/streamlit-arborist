@@ -70,7 +70,7 @@ def tree_view(
           Emoji short codes are not supported.
 
         * An icon from the Material Symbols library (rounded style) in the format
-          ``":material/icon_name:"`` where ``"icon_name"`` is the name of the icon in
+          ``":material/icon_name:"`` where `icon_name` is the name of the icon in
           snake case.
 
     row_height : int, default 24
