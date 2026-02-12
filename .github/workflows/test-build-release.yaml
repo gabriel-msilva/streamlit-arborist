@@ -47,10 +47,14 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install Python dependencies
-        run: uv run --group tests --frozen playwright install firefox chromium
+        run: |
+          uv run --group tests \
+            playwright install firefox chromium
 
       - name: Run tests
-        run: uv run --group tests --frozen pytest --browser firefox --browser chromium
+        run: |
+          uv run --group tests \
+            pytest --color yes --browser firefox --browser chromium
 
   docs:
     runs-on: ubuntu-latest
@@ -66,7 +70,7 @@ jobs:
 
       - name: Build Sphinx docs
         run: |
-          uv run --group docs --frozen \
+          uv run --group docs \
             sphinx-build docs/ docs/_build/ \
               --builder html \
               --fail-on-warning \
