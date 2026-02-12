@@ -33,13 +33,15 @@ def get_data() -> list[dict]:
     ]
 
 
-def extract_ids(data) -> list:
+def extract_ids(data, include_internal_nodes=False) -> list:
     ids = []
 
     for item in data:
         if "children" in item:
-            ids.append(item["id"])
-            ids.extend(extract_ids(item["children"]))
+            if include_internal_nodes:
+                ids.append(item["id"])
+
+            ids.extend(extract_ids(item["children"], include_internal_nodes))
         else:
             ids.append(item["id"])
 
@@ -77,7 +79,7 @@ with st.sidebar:
 
     selection = st.selectbox(
         "Selection",
-        options=extract_ids(data),
+        options=extract_ids(data, include_internal_nodes=select_internal_nodes),
         index=None,
         help="The node id to select and scroll when rendered.",
     )
