@@ -63,6 +63,7 @@ in Streamlit documentation.
 The development environment requires
 [uv](https://docs.astral.sh/uv/getting-started/installation/)
 and [Node.js + npm](https://nodejs.org/en/download/current) installed.
+See `make help` for all commands.
 
 ### Setup
 
