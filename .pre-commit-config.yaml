@@ -30,7 +30,7 @@ repos:
 
   # Lint: YAML
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.38.0
+    rev: v1.37.1
     hooks:
       - id: yamllint
         args: ["-d {extends: relaxed, rules: {line-length: disable}}", "-s"]
@@ -45,7 +45,7 @@ repos:
 
   # Lint: Sphinx documentation
   - repo: https://github.com/sphinx-contrib/sphinx-lint
-    rev: v1.0.2
+    rev: v1.0.0
     hooks:
       - id: sphinx-lint
         args: ["--enable", "all", "--disable", "line-too-long"]
