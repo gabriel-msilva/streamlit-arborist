@@ -183,9 +183,9 @@ def tree_view(
     key = to_key(key)
 
     component_value = _component_func(
+        widget="view",
         data=data,
         icons=icons,
-        mode="single",
         # Sizes
         row_height=row_height,
         overscan_count=overscan_count,
@@ -202,7 +202,6 @@ def tree_view(
         # Selection
         selection=selection,
         select_internal_nodes=select_internal_nodes,
-        checked=None,
         # Open State
         initial_open_state=initial_open_state,
         # Search
@@ -363,9 +362,9 @@ def tree_checkbox(
     key = to_key(key)
 
     component_value = _component_func(
+        widget="checkbox",
         data=data,
         icons=icons,
-        mode="checkbox",
         # Sizes
         row_height=row_height,
         overscan_count=overscan_count,
@@ -380,8 +379,6 @@ def tree_checkbox(
         id_accessor=id_accessor,
         open_by_default=open_by_default,
         # Selection
-        selection=None,
-        select_internal_nodes=False,
         checked=checked,
         # Open State
         initial_open_state=initial_open_state,
