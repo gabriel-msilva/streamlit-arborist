@@ -3,7 +3,7 @@
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v6.0.0
     hooks:
       - id: check-added-large-files
         args: ["--maxkb=512"]
@@ -15,7 +15,7 @@ repos:
 
   # Format/lint: Python
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.9
+    rev: v0.15.17
     hooks:
       - id: ruff
         args: [--fix]
@@ -30,7 +30,7 @@ repos:
 
   # Lint: YAML
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.35.1
+    rev: v1.38.0
     hooks:
       - id: yamllint
         args: ["-d {extends: relaxed, rules: {line-length: disable}}", "-s"]
@@ -38,27 +38,27 @@ repos:
 
   # Lint: Markdown
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.41.0
+    rev: v0.48.0
     hooks:
       - id: markdownlint
         args: ["--fix"]
 
   # Lint: Sphinx documentation
   - repo: https://github.com/sphinx-contrib/sphinx-lint
-    rev: v1.0.0
+    rev: v1.0.2
     hooks:
       - id: sphinx-lint
         args: ["--enable", "all", "--disable", "line-too-long"]
 
   # Sync uv.lock
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.8.4
+    rev: 0.11.21
     hooks:
       - id: uv-lock
 
   # Fix common misspellings in text files
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.1
+    rev: v2.4.2
     hooks:
       - id: codespell
         types_or: [python, rst, markdown]
