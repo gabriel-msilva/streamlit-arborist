@@ -2,7 +2,7 @@ import json
 
 import streamlit as st
 
-from streamlit_arborist import tree_view
+from streamlit_arborist import tree_checkbox, tree_view
 
 st.set_page_config(page_title="streamlit-arborist")
 
@@ -84,6 +84,13 @@ with st.sidebar:
         help="The node id to select and scroll when rendered.",
     )
 
+    checked = st.multiselect(
+        "Checked",
+        options=extract_ids(data, include_internal_nodes=True),
+        default=[],
+        help="A list of node ids to check when rendered. Checking an internal node cascades down to its children.",
+    )
+
     search_term = st.text_input(
         "Search term", help="Only show nodes that match this term"
     )
@@ -143,3 +150,51 @@ with col2:
 
     body = json.dumps(value, indent=2) if value else None
     st.code(body)
+
+
+st.divider()
+
+st.header("Tree Checkbox")
+
+st.markdown(
+    """
+    Each row renders a checkbox.
+    Checking an internal node cascades down to its children and a node whose children are only partially checked renders as *indeterminate*.
+
+    Returns the list of fully-checked node IDs.
+    """
+)
+
+st.code(
+    f"""
+    from streamlit_arborist import tree_checkbox
+
+    tree_checkbox(
+        data,
+        icons={icons!r},
+        open_by_default={open_by_default!r},
+        checked={checked!r},
+        search_term={search_term!r},
+        height=300,
+    )
+    """
+)
+
+col3, col4 = st.columns(2)
+
+with col3:
+    st.markdown("Interact with the checkbox tree:")
+
+    checked_value = tree_checkbox(
+        data,
+        icons=icons,
+        checked=checked,
+        open_by_default=open_by_default,
+        search_term=search_term,
+        height=300,
+        key="checkbox",
+    )
+
+with col4:
+    st.markdown("Returned value:")
+    st.code(json.dumps(checked_value, indent=2))

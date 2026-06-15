@@ -1,2 +1,1 @@
-# Requirements for building the example Streamlit app
 streamlit-arborist==0.3.0

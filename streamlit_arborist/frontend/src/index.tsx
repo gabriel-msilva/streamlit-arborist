@@ -1,11 +1,18 @@
-import React from "react"
-import ReactDOM from "react-dom"
+import React, { StrictMode } from "react"
+import { createRoot } from "react-dom/client"
 import TreeView from "./TreeView"
 import "material-symbols/index.css";
 
-ReactDOM.render(
-  <React.StrictMode>
+const rootElement = document.getElementById("root")
+
+if (!rootElement) {
+  throw new Error("Root element not found")
+}
+
+const root = createRoot(rootElement)
+
+root.render(
+  <StrictMode>
     <TreeView />
-  </React.StrictMode>,
-  document.getElementById("root")
+  </StrictMode>
 )

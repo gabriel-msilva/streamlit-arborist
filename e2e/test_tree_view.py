@@ -1,52 +1,33 @@
 import json
 import re
-from pathlib import Path
 from typing import Union
 
 import pytest
-from e2e_utils import StreamlitRunner
+from conftest import COMPONENT_FRAME_SELECTOR, NODE_STATES
 from playwright.sync_api import Page, expect
 
-ROOT_DIRECTORY = Path(__file__).parents[1].absolute()
-EXAMPLE_FILE = ROOT_DIRECTORY / "app" / "example.py"
-
-COMPONENT_FRAME_SELECTOR = 'iframe[title="streamlit_arborist\\.streamlit_arborist"]'
 COLORS = {
     "background": "rgba(0, 0, 0, 0)",
     "hover": "rgba(151, 166, 195, 0.15)",
     "selected": "rgba(151, 166, 195, 0.25)",
 }
 
-NODE_STATES = {
-    "isOpen": re.compile(r"\bisOpen\b"),
-    "isClosed": re.compile(r"\bisClosed\b"),
-}
 
-
-@pytest.fixture(autouse=True, scope="module")
-def streamlit_app():
-    with StreamlitRunner(EXAMPLE_FILE) as runner:
-        yield runner
-
-
-@pytest.fixture(autouse=True, scope="function")
-def go_to_app(page: Page, streamlit_app: StreamlitRunner):
-    page.goto(streamlit_app.server_url)
-
-    # Wait for app to load
-    page.get_by_role("img", name="Running...").is_hidden()
-
-
-def assert_component_value_equals(expected: Union[str, None], page: Page):
+def assert_component_value_equals(expected: Union[dict, None], page: Page):
     # Streamlit renders Markdown code blocks as <pre><code> elements
     json_block = page.locator("pre code").nth(1)
-
     page.wait_for_timeout(500)
 
+    content = json_block.text_content()
+
     if expected is None:
-        assert json_block.text_content() == "None"
+        assert content == "None"
     else:
-        assert json.loads(json_block.text_content()) == expected
+        assert content and json.loads(content) == expected
+
+
+def tree_view_frame(page: Page):
+    return page.frame_locator(COMPONENT_FRAME_SELECTOR).first
 
 
 def test_should_return_default_value(page: Page):
@@ -60,7 +41,7 @@ def test_should_return_default_value(page: Page):
 def test_should_return_selected_value(
     page: Page, level: int, index: int, expected: dict
 ):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+    frame = tree_view_frame(page)
 
     node = frame.get_by_role("treeitem", level=level).nth(index)
     node.click()
@@ -69,7 +50,7 @@ def test_should_return_selected_value(
 
 
 def test_should_toggle_internal_node_on_click(page: Page):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+    frame = tree_view_frame(page)
 
     internal_node = frame.get_by_role("treeitem", level=1).nth(2)
     inner_div = internal_node.locator("div")
@@ -83,7 +64,7 @@ def test_should_toggle_internal_node_on_click(page: Page):
 
 
 def test_should_select_node_on_click(page: Page):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+    frame = tree_view_frame(page)
 
     general = frame.get_by_role("treeitem", level=2).nth(0)
     inner_div = general.locator("div")
@@ -98,7 +79,7 @@ def test_should_select_node_on_click(page: Page):
 
 
 def test_should_select_internal_node_on_label_and_toggle_on_icon(page: Page):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+    frame = tree_view_frame(page)
 
     checkbox = page.locator("label:has-text('Select internal nodes')")
     checkbox.click()
@@ -139,7 +120,7 @@ def test_should_select_internal_node_on_label_and_toggle_on_icon(page: Page):
 
 
 def test_should_select_and_toggle_internal_node_on_double_click(page: Page):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+    frame = tree_view_frame(page)
 
     checkbox = page.locator("label:has-text('Select internal nodes')")
     checkbox.click()
@@ -173,7 +154,7 @@ def test_should_select_and_toggle_internal_node_on_double_click(page: Page):
 
 
 def test_should_hover_node(page: Page):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+    frame = tree_view_frame(page)
 
     unread = frame.get_by_role("treeitem", level=1)
     inner_div = unread.nth(0).locator("div")
@@ -190,7 +171,7 @@ def test_should_hover_node(page: Page):
 
 
 def test_should_nodes_be_closed(page: Page):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+    frame = tree_view_frame(page)
     tree_items = frame.get_by_role("treeitem", level=1)
 
     chat_rooms = tree_items.nth(2).locator("div")
@@ -210,7 +191,7 @@ def test_should_nodes_be_closed(page: Page):
 
 
 def test_should_search_nodes(page: Page):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+    frame = tree_view_frame(page)
     search_term = page.get_by_label("Search term")
 
     search_term.fill("general")
@@ -234,7 +215,7 @@ def test_should_search_nodes(page: Page):
 
 
 def test_should_change_emoji_icons(page: Page):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+    frame = tree_view_frame(page)
     level_1 = frame.get_by_role("treeitem", level=1)
 
     leaf_icon = level_1.nth(0).locator("span")
@@ -274,7 +255,7 @@ def test_should_change_emoji_icons(page: Page):
 
 
 def test_should_use_material_symbols_icon(page: Page):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+    frame = tree_view_frame(page)
     level_1 = frame.get_by_role("treeitem", level=1)
 
     leaf_input = page.get_by_label("Leaf", exact=True)
@@ -289,7 +270,7 @@ def test_should_use_material_symbols_icon(page: Page):
 
 
 def test_should_not_have_icon(page: Page):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+    frame = tree_view_frame(page)
     level_1 = frame.get_by_role("treeitem", level=1)
 
     leaf_input = page.get_by_label("Leaf", exact=True)
@@ -303,7 +284,7 @@ def test_should_not_have_icon(page: Page):
 
 
 def test_should_select_node_by_id(page: Page):
-    frame = page.frame_locator(COMPONENT_FRAME_SELECTOR)
+    frame = tree_view_frame(page)
 
     unread = frame.get_by_role("treeitem", level=1, name="Unread")
     inner_div = unread.locator("div")
