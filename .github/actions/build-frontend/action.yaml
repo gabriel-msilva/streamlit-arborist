@@ -17,6 +17,6 @@ runs:
     - name: Build frontend
       shell: bash
       run: |
-        npm install
+        npm ci
         npm run build
       working-directory: ./streamlit_arborist/frontend
