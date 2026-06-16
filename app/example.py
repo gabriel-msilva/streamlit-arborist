@@ -144,13 +144,13 @@ with col1:
         search_term=search_term,
         height=300,
     )
+    print("Tree view value:", value)
 
 with col2:
     st.markdown("Returned value:")
 
-    body = json.dumps(value, indent=2) if value else None
+    body = "None" if value is None else json.dumps(value, indent=2)
     st.code(body)
-
 
 st.divider()
 
@@ -185,16 +185,18 @@ col3, col4 = st.columns(2)
 with col3:
     st.markdown("Interact with the checkbox tree:")
 
-    checked_value = tree_checkbox(
+    value = tree_checkbox(
         data,
         icons=icons,
         checked=checked,
         open_by_default=open_by_default,
         search_term=search_term,
         height=300,
-        key="checkbox",
     )
+    print("Checkbox value:", value)
 
 with col4:
     st.markdown("Returned value:")
-    st.code(json.dumps(checked_value, indent=2))
+
+    body = json.dumps(value, indent=2)
+    st.code(body)

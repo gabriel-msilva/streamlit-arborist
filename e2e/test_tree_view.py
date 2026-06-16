@@ -1,9 +1,11 @@
-import json
 import re
-from typing import Union
 
 import pytest
-from conftest import COMPONENT_FRAME_SELECTOR, NODE_STATES
+from conftest import (
+    NODE_STATES,
+    assert_tree_view_value_equals,
+    tree_view_frame,
+)
 from playwright.sync_api import Page, expect
 
 COLORS = {
@@ -13,25 +15,8 @@ COLORS = {
 }
 
 
-def assert_component_value_equals(expected: Union[dict, None], page: Page):
-    # Streamlit renders Markdown code blocks as <pre><code> elements
-    json_block = page.locator("pre code").nth(1)
-    page.wait_for_timeout(500)
-
-    content = json_block.text_content()
-
-    if expected is None:
-        assert content == "None"
-    else:
-        assert content and json.loads(content) == expected
-
-
-def tree_view_frame(page: Page):
-    return page.frame_locator(COMPONENT_FRAME_SELECTOR).first
-
-
 def test_should_return_default_value(page: Page):
-    assert_component_value_equals(None, page)
+    assert_tree_view_value_equals(None, page)
 
 
 @pytest.mark.parametrize(
@@ -46,7 +31,7 @@ def test_should_return_selected_value(
     node = frame.get_by_role("treeitem", level=level).nth(index)
     node.click()
 
-    assert_component_value_equals(expected, page)
+    assert_tree_view_value_equals(expected, page)
 
 
 def test_should_toggle_internal_node_on_click(page: Page):
@@ -60,7 +45,7 @@ def test_should_toggle_internal_node_on_click(page: Page):
     internal_node.click()
 
     expect(inner_div).to_have_class(NODE_STATES["isClosed"])
-    assert_component_value_equals(None, page)
+    assert_tree_view_value_equals(None, page)
 
 
 def test_should_select_node_on_click(page: Page):
@@ -98,14 +83,14 @@ def test_should_select_internal_node_on_label_and_toggle_on_icon(page: Page):
     # Clicking the icon toggles open/closed but does not select the node
     expect(chat_rooms).to_have_attribute("aria-selected", "false")
     expect(chat_rooms.locator("div")).to_have_class(NODE_STATES["isClosed"])
-    assert_component_value_equals(None, page)
+    assert_tree_view_value_equals(None, page)
 
     label.click()
 
     # Clicking the label selects the node but does not toggle open/closed
     expect(chat_rooms).to_have_attribute("aria-selected", "true")
     expect(chat_rooms.locator("div")).to_have_class(NODE_STATES["isClosed"])
-    assert_component_value_equals(
+    assert_tree_view_value_equals(
         {
             "id": "3",
             "name": "Chat Rooms",
@@ -139,7 +124,7 @@ def test_should_select_and_toggle_internal_node_on_double_click(page: Page):
     # Double-clicking the label selects and toggles the node
     expect(direct_messages).to_have_attribute("aria-selected", "true")
     expect(direct_messages.locator("div")).to_have_class(NODE_STATES["isClosed"])
-    assert_component_value_equals(
+    assert_tree_view_value_equals(
         {
             "id": "4",
             "name": "Direct Messages",
