@@ -5,7 +5,9 @@ import streamlit.components.v1 as components
 from streamlit.elements.lib.utils import Key, to_key
 from streamlit.string_util import validate_icon_or_emoji
 
-__version__ = "0.3.0"
+from streamlit_arborist._version import get_version_dict
+
+__version__ = get_version_dict()["version"]
 
 _RELEASE = os.environ.get("STREAMLIT_ARBORIST_DEV", "false") != "true"
 
