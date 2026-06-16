@@ -1,69 +1,28 @@
-import json
-
-from conftest import COMPONENT_FRAME_SELECTOR, NODE_STATES
+from conftest import (
+    NODE_STATES,
+    assert_checkbox_value_equals,
+    assert_tree_view_value_equals,
+    checkbox_chevron,
+    toggle_checked,
+    tree_checkbox_frame,
+    tree_checkbox_input,
+)
 from playwright.sync_api import Page, expect
-
-
-def assert_checkbox_value_equals(expected: list, page: Page):
-    # <pre><code> blocks on the page, in order:
-    #   nth(0) tree_view source-code example
-    #   nth(1) tree_view return value
-    #   nth(2) tree_checkbox source-code example
-    #   nth(3) tree_checkbox return value  <-- target
-    json_block = page.locator("pre code").nth(3)
-    page.wait_for_timeout(500)
-
-    content = json_block.text_content()
-    assert content and json.loads(content) == expected
-
-
-def assert_tree_view_value_equals(expected, page: Page):
-    json_block = page.locator("pre code").nth(1)
-    page.wait_for_timeout(500)
-
-    content = json_block.text_content()
-    if expected is None:
-        assert content == "None"
-    else:
-        assert content and json.loads(content) == expected
-
-
-def tree_checkbox_frame(page: Page):
-    return page.frame_locator(COMPONENT_FRAME_SELECTOR).nth(1)
-
-
-def tree_checkbox_input(page: Page, node_id: str):
-    return tree_checkbox_frame(page).locator(f'input[data-node-id="{node_id}"]')
-
-
-def checkbox_chevron(page: Page, node_id: str):
-    return tree_checkbox_frame(page).locator(f'[data-chevron-id="{node_id}"]')
 
 
 def test_should_return_default_value(page: Page):
     assert_checkbox_value_equals([], page)
 
 
-def seed_checked(page: Page, node_id: str):
-    multiselect = page.get_by_label("Checked")
-
-    multiselect.click()
-
-    page.get_by_role("option", name=node_id, exact=True).click()
-    page.keyboard.press("Escape")
-
-    page.wait_for_timeout(500)
-
-
 def test_that_seed_leaf_returns_only_that_leaf(page: Page):
-    seed_checked(page, "c1")
+    toggle_checked(page, "c1")
 
     assert_checkbox_value_equals(["c1"], page)
     expect(tree_checkbox_input(page, "c1")).to_be_checked()
 
 
 def test_that_seed_parent_cascades_to_subtree(page: Page):
-    seed_checked(page, "3")
+    toggle_checked(page, "3")
 
     assert_checkbox_value_equals(["3", "c1", "c2", "c3"], page)
     for node_id in ("3", "c1", "c2", "c3"):

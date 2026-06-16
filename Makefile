@@ -4,7 +4,7 @@
 setup:  ## Set up the development environment
 	uv sync --frozen
 	uv run pre-commit install
-	uv run playwright install
+	uv run playwright install chromium firefox
 	(cd streamlit_arborist/frontend && npm clean-install)
 
 .PHONY: backend
