@@ -22,7 +22,7 @@ pip install streamlit-arborist
 A minimal `app.py` file with sample data:
 
 ```python
-from streamlit_arborist import tree_view
+from streamlit_arborist import tree_view, tree_checkbox
 
 data = [
    {
@@ -44,6 +44,7 @@ data = [
 ]
 
 tree_view(data)
+tree_checkbox(data)
 ```
 
 Run Streamlit:
@@ -60,12 +61,12 @@ Find details about
 [custom components](https://docs.streamlit.io/develop/concepts/custom-components)
 in Streamlit documentation.
 
+### Setup
+
 The development environment requires
 [uv](https://docs.astral.sh/uv/getting-started/installation/)
 and [Node.js + npm](https://nodejs.org/en/download/current) installed.
 See `make help` for all commands.
-
-### Setup
 
 Install the `dev` Python environment defined in [pyproject.toml](./pyproject.toml)
 and `npm` packages in [streamlit_arborist/frontend](./streamlit_arborist/frontend/):
@@ -108,5 +109,5 @@ The documentation files are located in [docs/](./docs/) directory and written wi
 [Sphinx](https://www.sphinx-doc.org/en/).
 
 ```sh
-make docs
+make -C docs build
 ```

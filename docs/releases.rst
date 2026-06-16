@@ -4,14 +4,22 @@
 Release Notes
 =============
 
+.. currentmodule:: streamlit_arborist
+
+Version 0.4.0 (unreleased)
+--------------------------
+
+* Added :py:func:`tree_checkbox` component for checkbox-based multi-select with cascading
+  parent/child semantics.
+
 Version 0.3.0 (2026-02-11)
 --------------------------
 
-* Added support to select internal nodes.
-  When ``select_internal_nodes`` is _True_, internal nodes can be selected:
+* Added support to select internal nodes in :py:func:`tree_view`.
+  When ``select_internal_nodes=True``, the behavior of internal nodes changes:
 
-  - Single-click the icon to toggle open/closed
-  - Single-click the label to select
+  - Click the icon to toggle open/closed
+  - Click the label to select
   - Double-click the label to select and toggle
 
 Version 0.2.1 (2025-08-24)
