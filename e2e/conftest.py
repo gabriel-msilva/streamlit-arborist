@@ -5,7 +5,7 @@ from typing import Union
 
 import pytest
 from e2e_utils import StreamlitRunner
-from playwright.sync_api import FrameLocator, Locator, Page
+from playwright.sync_api import FrameLocator, Locator, Page, expect
 
 ROOT_DIRECTORY = Path(__file__).parents[1].absolute()
 EXAMPLE_FILE = ROOT_DIRECTORY / "app" / "example.py"
@@ -58,26 +58,16 @@ def toggle_checked(page: Page, node_id: str):
     multiselect.click()
     page.get_by_role("option", name=node_id, exact=True).click()
     page.keyboard.press("Escape")
-    page.wait_for_timeout(500)
 
 
 def assert_tree_view_value_equals(expected: Union[dict, None], page: Page):
     """Read the JSON code block following 'Returned value (tree_view):' in the demo."""
     json_block = page.locator("pre code").nth(1)
-    page.wait_for_timeout(500)
-
-    content = json_block.text_content()
-
-    if expected is None:
-        assert content == "None"
-    else:
-        assert content and json.loads(content) == expected
+    expected_text = "None" if expected is None else json.dumps(expected, indent=2)
+    expect(json_block).to_have_text(expected_text)
 
 
 def assert_checkbox_value_equals(expected: list, page: Page):
     """Read the JSON code block following 'Returned value (tree_checkbox):' in the demo."""
     json_block = page.locator("pre code").nth(3)
-    page.wait_for_timeout(500)
-
-    content = json_block.text_content()
-    assert content and json.loads(content) == expected
+    expect(json_block).to_have_text(json.dumps(expected, indent=2))

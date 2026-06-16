@@ -182,15 +182,11 @@ def test_should_search_nodes(page: Page):
     search_term.fill("general")
     search_term.press("Enter")
 
-    page.wait_for_timeout(500)
-
     expect(frame.get_by_role("treeitem", level=1)).to_have_text("📂Chat Rooms")
     expect(frame.get_by_role("treeitem", level=2)).to_have_text("📄General")
 
     search_term.fill("read")
     search_term.press("Enter")
-
-    page.wait_for_timeout(500)
 
     tree_items = frame.get_by_role("treeitem", level=1)
 
@@ -217,23 +213,17 @@ def test_should_change_emoji_icons(page: Page):
     leaf_input.fill("🍀")
     leaf_input.press("Enter")
 
-    page.wait_for_timeout(500)
-
     expect(leaf_icon).to_have_text("🍀")
 
     open_input = page.get_by_label("Open", exact=True)
     open_input.fill("🔓")
     open_input.press("Enter")
 
-    page.wait_for_timeout(500)
-
     expect(open_icon).to_have_text("🔓")
 
     closed_input = page.get_by_label("Closed", exact=True)
     closed_input.fill("🔒")
     closed_input.press("Enter")
-
-    page.wait_for_timeout(500)
 
     closed_icon.click()
     expect(closed_icon).to_have_text("🔒")
@@ -247,8 +237,6 @@ def test_should_use_material_symbols_icon(page: Page):
     leaf_input.fill(":material/docs:")
     leaf_input.press("Enter")
 
-    page.wait_for_timeout(500)
-
     leaf_icon = level_1.nth(0).locator("span")
     expect(leaf_icon).to_have_class(re.compile(r"material-symbols-rounded"))
     expect(leaf_icon).to_have_text("docs")
@@ -261,8 +249,6 @@ def test_should_not_have_icon(page: Page):
     leaf_input = page.get_by_label("Leaf", exact=True)
     leaf_input.fill("")
     leaf_input.press("Enter")
-
-    page.wait_for_timeout(500)
 
     leaf_icon = level_1.nth(0).locator("span")
     expect(leaf_icon).to_have_text("")
