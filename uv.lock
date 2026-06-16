@@ -1787,6 +1787,7 @@ dev = [
     { name = "pytest-playwright-snapshot" },
     { name = "pytest-rerunfailures" },
     { name = "requests" },
+    { name = "version-pioneer" },
 ]
 docs = [
     { name = "sphinx" },
@@ -1812,6 +1813,7 @@ dev = [
     { name = "pytest-playwright-snapshot", specifier = "==1.0" },
     { name = "pytest-rerunfailures", specifier = "==12.0" },
     { name = "requests", specifier = "==2.31.0" },
+    { name = "version-pioneer", specifier = ">=0.0.16" },
 ]
 docs = [
     { name = "sphinx", specifier = "==7.4.7" },
@@ -1944,6 +1946,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/15/22/9ee70a2574a4f4599c47dd506532914ce044817c7752a79b6a51286319bc/urllib3-2.5.0.tar.gz", hash = "sha256:3fc47733c7e419d4bc3f6b3dc2b4f890bb743906a30d56ba4a5bfa4bbff92760", size = 393185, upload-time = "2025-06-18T14:07:41.644Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a7/c2/fe1e52489ae3122415c51f387e221dd0773709bad6c6cdaa599e8a2c5185/urllib3-2.5.0-py3-none-any.whl", hash = "sha256:e6b01673c0fa6a13e374b50871808eb3bf7046c4b125b216f6bf1cc604cff0dc", size = 129795, upload-time = "2025-06-18T14:07:40.39Z" },
+]
+
+[[package]]
+name = "version-pioneer"
+version = "0.0.16"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "tomli", marker = "python_full_version < '3.11'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e7/b5/9ea189a15503a9deae858c41c2d544e21a4988165447e5c589fea9a50bef/version_pioneer-0.0.16.tar.gz", hash = "sha256:01d27dd1f859ada07173b754d5c9290744ed044e7a75959a3d7a458f0811bca8", size = 63931, upload-time = "2026-03-20T04:45:13.05Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/11/66/8706717f817464404d3dc79f74af538561e4f0528a6934c5f4fff3ace38e/version_pioneer-0.0.16-py3-none-any.whl", hash = "sha256:53bc2600e4384314c7b102ab09759c7d3c4c3dabde9f96c041a0ca03ea32fe3c", size = 48993, upload-time = "2026-03-20T04:45:14.137Z" },
 ]
 
 [[package]]

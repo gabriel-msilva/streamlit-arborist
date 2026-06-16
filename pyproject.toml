@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.27.0", "version-pioneer>=0.0.16"]
 build-backend = "hatchling.build"
 
 [project]
@@ -35,6 +35,7 @@ documentation = "https://streamlit-arborist.readthedocs.io"
 dev = [
   "ipython>=8.18.1",
   "pre-commit==4.2.0",
+  "version-pioneer>=0.0.16",
   { include-group = "tests" },
 ]
 tests = [
@@ -51,7 +52,15 @@ artifacts = ["streamlit_arborist/frontend/build/**"]
 exclude = ["streamlit_arborist/frontend/**"]
 
 [tool.hatch.version]
-path = "streamlit_arborist/__init__.py"
+source = "version-pioneer"
+
+[tool.hatch.build.hooks.version-pioneer]
+# section is empty because we read config from `[tool.version-pioneer]` section.
+
+[tool.version-pioneer]
+versionscript = "streamlit_arborist/_version.py"
+versionfile-sdist = "streamlit_arborist/_version.py"
+versionfile-wheel = "streamlit_arborist/_version.py"
 
 [tool.pytest.ini_options]
 testpaths = ["e2e"]
