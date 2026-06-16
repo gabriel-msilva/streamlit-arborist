@@ -19,10 +19,6 @@ frontend:  ## Start the frontend development server
 tests:  ## Run end-to-end tests
 	STREAMLIT_ARBORIST_DEV=true uv run pytest --headed --browser firefox
 
-.PHONY: docs
-docs:  ## Build the documentation
-	uv run --group docs sphinx-build -b html docs/ docs/_build/
-
 .PHONY: lint
 lint:  ## Run pre-commit hooks on the codebase
 	uv run pre-commit run --all-files

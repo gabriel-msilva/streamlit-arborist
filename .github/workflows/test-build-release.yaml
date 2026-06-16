@@ -73,7 +73,9 @@ jobs:
           uv run --group docs \
             sphinx-build docs/ docs/_build/ \
               --builder html \
+              --nitpicky \
               --fail-on-warning \
+              --keep-going \
               --color \
               --verbose
 
