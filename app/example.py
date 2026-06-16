@@ -144,7 +144,6 @@ with col1:
         search_term=search_term,
         height=300,
     )
-    print("Tree view value:", value)
 
 with col2:
     st.markdown("Returned value:")
@@ -193,7 +192,6 @@ with col3:
         search_term=search_term,
         height=300,
     )
-    print("Checkbox value:", value)
 
 with col4:
     st.markdown("Returned value:")
