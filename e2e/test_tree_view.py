@@ -182,17 +182,15 @@ def test_should_search_nodes(page: Page):
     search_term.fill("general")
     search_term.press("Enter")
 
-    expect(frame.get_by_role("treeitem", level=1)).to_have_text("📂Chat Rooms")
-    expect(frame.get_by_role("treeitem", level=2)).to_have_text("📄General")
+    expect(frame.get_by_role("treeitem", level=1)).to_have_text(["📂Chat Rooms"])
+    expect(frame.get_by_role("treeitem", level=2)).to_have_text(["📄General"])
 
     search_term.fill("read")
     search_term.press("Enter")
 
-    tree_items = frame.get_by_role("treeitem", level=1)
-
-    expect(tree_items).to_have_count(2)
-    expect(tree_items.nth(0)).to_have_text("📄Unread")
-    expect(tree_items.nth(1)).to_have_text("📄Threads")
+    expect(frame.get_by_role("treeitem", level=1)).to_have_text(
+        ["📄Unread", "📄Threads"]
+    )
 
 
 def test_should_change_emoji_icons(page: Page):
@@ -200,32 +198,31 @@ def test_should_change_emoji_icons(page: Page):
     level_1 = frame.get_by_role("treeitem", level=1)
 
     leaf_icon = level_1.nth(0).locator("span")
-    expect(leaf_icon).to_have_text("📄")
-
     open_icon = level_1.nth(2).locator("span")
-    expect(open_icon).to_have_text("📂")
-
     closed_icon = level_1.nth(3).locator("span")
-    closed_icon.click()
-    expect(closed_icon).to_have_text("📁")
+
+    expect(leaf_icon).to_have_text("📄")
+    expect(open_icon).to_have_text("📂")
 
     leaf_input = page.get_by_label("Leaf", exact=True)
     leaf_input.fill("🍀")
     leaf_input.press("Enter")
-
     expect(leaf_icon).to_have_text("🍀")
 
     open_input = page.get_by_label("Open", exact=True)
     open_input.fill("🔓")
     open_input.press("Enter")
-
     expect(open_icon).to_have_text("🔓")
+
+    # Switch to `open_by_default=False` so 'Direct Messages' renders closed without an iframe click
+    # Streamlit re-mounts the tree on every rerun, and a click immediately after the
+    # rerun races with React's onClick rebinding (especially on chromium).
+    page.locator("label:has-text('Open by default')").click()
+    expect(closed_icon).to_have_text("📁")
 
     closed_input = page.get_by_label("Closed", exact=True)
     closed_input.fill("🔒")
     closed_input.press("Enter")
-
-    closed_icon.click()
     expect(closed_icon).to_have_text("🔒")
 
 
