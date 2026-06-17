@@ -28,8 +28,14 @@ def streamlit_app():
 def go_to_app(page: Page, streamlit_app: StreamlitRunner):
     page.goto(streamlit_app.server_url)
 
-    # Wait for app to load
-    page.get_by_role("img", name="Running...").is_hidden()
+    # Wait for the two streamlit-arborist iframes to load and be visible.
+    tree_view = page.frame_locator(COMPONENT_FRAME_SELECTOR).first.get_by_role("tree")
+    expect(tree_view).to_be_visible()
+
+    tree_checkbox = (
+        page.frame_locator(COMPONENT_FRAME_SELECTOR).nth(1).get_by_role("tree")
+    )
+    expect(tree_checkbox).to_be_visible()
 
 
 def tree_view_frame(page: Page) -> FrameLocator:
