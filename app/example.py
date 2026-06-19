@@ -105,7 +105,7 @@ st.markdown(
     - Click on a leaf node (file) to select it.
     - Click on an internal node (folder) to toggle its open/closed state.
     - Use arrow keys to navigate through the tree, then press space to select a node.
-    - When `select_internal_node=True`, internal nodes can be selected.
+    - When `select_internal_nodes=True`, internal nodes can be selected.
 
     Explore some of the configurations in the sidebar.
     """

@@ -6,7 +6,7 @@ Release Notes
 
 .. currentmodule:: streamlit_arborist
 
-Version 0.4.0 (unreleased)
+Version 0.4.0 (2026-06-19)
 --------------------------
 
 * Added :py:func:`tree_checkbox` component for checkbox-based multi-select with cascading

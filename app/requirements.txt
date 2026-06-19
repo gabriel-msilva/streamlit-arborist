@@ -1,1 +1,1 @@
-streamlit-arborist==0.3.0
+streamlit-arborist==0.4.0
