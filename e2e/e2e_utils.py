@@ -145,7 +145,8 @@ class StreamlitRunner:
 
     def stop(self):
         """Stop the Streamlit server and close resources."""
-        self._process.stop()
+        if self._process:
+            self._process.stop()
 
     def is_server_running(self, timeout: int = 30) -> bool:
         """Check if the Streamlit server is running.

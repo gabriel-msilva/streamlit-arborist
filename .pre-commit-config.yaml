@@ -10,7 +10,6 @@ repos:
       - id: check-merge-conflict
       - id: check-toml
       - id: end-of-file-fixer
-      - id: requirements-txt-fixer
       - id: trailing-whitespace
 
   # Format/lint: Python
@@ -20,6 +19,12 @@ repos:
       - id: ruff-check
         args: [--fix]
       - id: ruff-format
+
+  # Type check: Python
+  - repo: https://github.com/astral-sh/ty-pre-commit
+    rev: v0.0.51
+    hooks:
+      - id: ty
 
   # Format: YAML, JSON and Markdown
   - repo: https://github.com/pre-commit/mirrors-prettier
