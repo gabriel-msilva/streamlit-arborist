@@ -4,19 +4,23 @@ inputs:
   node-version:
     description: Node.js version
     required: false
-    default: "22"
+    default: "24"
 
 runs:
   using: composite
   steps:
     - name: Install Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ inputs.node-version }}
+        cache: npm
+
+    - name: Install dependencies
+      shell: bash
+      run: npm clean-install
+      working-directory: ./streamlit_arborist/frontend
 
     - name: Build frontend
       shell: bash
-      run: |
-        npm ci
-        npm run build
+      run: npm run build
       working-directory: ./streamlit_arborist/frontend
