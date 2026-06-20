@@ -1,17 +1,10 @@
 import clsx from "clsx"
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { NodeRendererProps, Tree, TreeApi } from "react-arborist"
 import { ComponentProps, Streamlit } from "streamlit-component-lib"
 
 import { Icons, renderIcon } from "./shared"
 import styles from "./arborist.module.css"
-
 
 function TreeCheckbox(props: ComponentProps): React.ReactElement {
   const args = props.args
@@ -28,12 +21,12 @@ function TreeCheckbox(props: ComponentProps): React.ReactElement {
   // also stabilises the memo across re-renders.
   const theme = useMemo(
     () => (themeProp ? JSON.parse(JSON.stringify(themeProp)) : {}),
-    [themeProp]
+    [themeProp],
   )
 
   const index = useMemo(
     () => buildTreeIndex(data, childrenAccessor, idAccessor),
-    [data, childrenAccessor, idAccessor]
+    [data, childrenAccessor, idAccessor],
   )
 
   const [checked, setChecked] = useState<Set<string>>(() => new Set())
@@ -69,7 +62,7 @@ function TreeCheckbox(props: ComponentProps): React.ReactElement {
 
       Streamlit.setComponentValue(Array.from(draftChecked).sort())
     },
-    [checked, indeterminate, index]
+    [checked, indeterminate, index],
   )
 
   const treeRef = useRef<TreeApi<any> | undefined>(undefined)
@@ -135,11 +128,10 @@ interface TreeIndex {
   allIds: string[]
 }
 
-
 function buildTreeIndex(
   data: any[] | undefined,
   childrenAccessor: string,
-  idAccessor: string
+  idAccessor: string,
 ): TreeIndex {
   const parentOf = new Map<string, string | null>()
   const childrenOf = new Map<string, string[]>()
@@ -159,7 +151,10 @@ function buildTreeIndex(
 
       const children = node[childrenAccessor]
       if (Array.isArray(children) && children.length > 0) {
-        childrenOf.set(id, children.map((c: any) => String(c[idAccessor])))
+        childrenOf.set(
+          id,
+          children.map((c: any) => String(c[idAccessor])),
+        )
         visit(children, id)
       } else {
         childrenOf.set(id, [])
@@ -172,7 +167,6 @@ function buildTreeIndex(
   return { parentOf, childrenOf, allIds }
 }
 
-
 // Walk a subtree in data order and apply a mutation to every children (including the root).
 // Operates over the data index, not NodeApi, so it works for collapsed/off-screen nodes.
 function cascadeDown(
@@ -180,7 +174,7 @@ function cascadeDown(
   willCheck: boolean,
   index: TreeIndex,
   checked: Set<string>,
-  indeterminate: Set<string>
+  indeterminate: Set<string>,
 ) {
   const stack = [rootId]
 
@@ -200,12 +194,11 @@ function cascadeDown(
   }
 }
 
-
 function cascadeUp(
   startId: string,
   index: TreeIndex,
   checked: Set<string>,
-  indeterminate: Set<string>
+  indeterminate: Set<string>,
 ) {
   let current = index.parentOf.get(startId) ?? null
 
@@ -241,10 +234,9 @@ function cascadeUp(
   }
 }
 
-
 function seedState(
   seedIds: string[],
-  index: TreeIndex
+  index: TreeIndex,
 ): { checked: Set<string>; indeterminate: Set<string> } {
   const checked = new Set<string>()
   const indeterminate = new Set<string>()
@@ -260,8 +252,6 @@ function seedState(
   return { checked, indeterminate }
 }
 
-
-
 interface NodeRowProps {
   rendererProps: NodeRendererProps<any>
   theme: any
@@ -270,7 +260,6 @@ interface NodeRowProps {
   isIndeterminate: boolean
   onToggle: (id: string) => void
 }
-
 
 function NodeRow({
   rendererProps,
@@ -356,7 +345,6 @@ function NodeRow({
   )
 }
 
-
 function CheckboxCell({
   nodeId,
   checked,
@@ -400,6 +388,5 @@ function CheckboxCell({
     </span>
   )
 }
-
 
 export default TreeCheckbox

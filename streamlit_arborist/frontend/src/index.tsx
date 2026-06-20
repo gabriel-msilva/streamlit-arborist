@@ -6,9 +6,8 @@ import "material-symbols/index.css"
 import TreeView from "./TreeView"
 import TreeCheckbox from "./TreeCheckbox"
 
-
 function Router(props: ComponentProps): React.ReactElement {
-  switch(props.args["widget"]) {
+  switch (props.args["widget"]) {
     case "view":
       return <TreeView {...props} />
     case "checkbox":
@@ -18,9 +17,7 @@ function Router(props: ComponentProps): React.ReactElement {
   }
 }
 
-
 const ConnectedRouter = withStreamlitConnection(Router)
-
 
 const rootElement = document.getElementById("root")
 
@@ -33,5 +30,5 @@ const root = createRoot(rootElement)
 root.render(
   <StrictMode>
     <ConnectedRouter />
-  </StrictMode>
+  </StrictMode>,
 )

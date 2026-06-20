@@ -6,7 +6,6 @@ import { ComponentProps, Streamlit } from "streamlit-component-lib"
 import { Icons, renderIcon } from "./shared"
 import styles from "./arborist.module.css"
 
-
 function TreeView(props: ComponentProps): React.ReactElement {
   const args = props.args
   const themeProp = props.theme
@@ -16,7 +15,7 @@ function TreeView(props: ComponentProps): React.ReactElement {
   // also stabilises the memo across re-renders.
   const theme = useMemo(
     () => (themeProp ? JSON.parse(JSON.stringify(themeProp)) : {}),
-    [themeProp]
+    [themeProp],
   )
 
   const icons = args["icons"] as Icons
@@ -67,7 +66,6 @@ function TreeView(props: ComponentProps): React.ReactElement {
   )
 }
 
-
 interface NodeRowProps {
   rendererProps: NodeRendererProps<any>
   theme: any
@@ -75,13 +73,7 @@ interface NodeRowProps {
   selectInternalNodes: boolean
 }
 
-
-function NodeRow({
-  rendererProps,
-  theme,
-  icons,
-  selectInternalNodes,
-}: NodeRowProps) {
+function NodeRow({ rendererProps, theme, icons, selectInternalNodes }: NodeRowProps) {
   const { node, style, dragHandle } = rendererProps
   const [isHover, setHover] = useState(false)
 
@@ -152,6 +144,5 @@ function NodeRow({
     </div>
   )
 }
-
 
 export default TreeView
