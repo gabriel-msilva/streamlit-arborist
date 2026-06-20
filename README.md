@@ -53,6 +53,9 @@ Run Streamlit:
 streamlit run app.py
 ```
 
+See the [Reference API](https://streamlit-arborist.readthedocs.io/stable/api.html)
+for all available parameters.
+
 ## Development
 
 This repository is based on
@@ -60,6 +63,8 @@ This repository is based on
 Find details about
 [custom components](https://docs.streamlit.io/develop/concepts/custom-components)
 in Streamlit documentation.
+
+See `make help` for all development commands.
 
 ### Setup
 
