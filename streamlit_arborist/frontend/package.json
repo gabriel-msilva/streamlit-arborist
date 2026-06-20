@@ -1,6 +1,5 @@
 {
   "name": "streamlit_arborist",
-  "version": "0.2.1",
   "private": true,
   "dependencies": {
     "clsx": "^2.1.1",
