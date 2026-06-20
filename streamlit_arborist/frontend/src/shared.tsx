@@ -3,13 +3,11 @@ import { NodeApi } from "react-arborist"
 
 import styles from "./arborist.module.css"
 
-
 export interface Icons {
   open: string
   closed: string
   leaf: string
 }
-
 
 export function renderIcon(node: NodeApi<any>, icons: Icons) {
   let icon: string

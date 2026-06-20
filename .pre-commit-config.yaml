@@ -31,7 +31,6 @@ repos:
     rev: v4.0.0-alpha.8
     hooks:
       - id: prettier
-        files: ^(.*\.ya?ml|.*\.json|.*\.md)$
 
   # Lint: YAML
   - repo: https://github.com/adrienverge/yamllint
