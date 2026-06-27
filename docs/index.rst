@@ -22,6 +22,9 @@ hierarchical data structures as interactive tree views.
 Check the `demo application <https://st-arborist-example.streamlit.app/>`_ in
 Streamlit Cloud.
 
+.. image:: _static/preview.png
+   :alt: streamlit-arborist preview
+
 Installation
 ------------
 

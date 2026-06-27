@@ -8,8 +8,10 @@ _streamlit-arborist_ is a [Streamlit](https://streamlit.io) component based on
 [react-arborist](https://github.com/brimdata/react-arborist) for visualizing
 hierarchical data structures as interactive tree views.
 
-- Demo application: [st-arborist-example.streamlit.app](https://st-arborist-example.streamlit.app/)
-- Documentation: [streamlit-arborist.readthedocs.io](https://streamlit-arborist.readthedocs.io/)
+- **Demo application**: [st-arborist-example.streamlit.app](https://st-arborist-example.streamlit.app/)
+- **Documentation**: [streamlit-arborist.readthedocs.io](https://streamlit-arborist.readthedocs.io/)
+
+![streamlit-arborist preview](./docs/_static/preview.png)
 
 ## Installation
 
