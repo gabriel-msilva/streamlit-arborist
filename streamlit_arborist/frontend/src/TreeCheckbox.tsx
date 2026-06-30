@@ -81,7 +81,6 @@ function TreeCheckbox(props: ComponentProps): React.ReactElement {
   const renderNode = (rendererProps: NodeRendererProps<any>) => (
     <NodeRow
       rendererProps={rendererProps}
-      theme={theme}
       icons={icons}
       isChecked={checked.has(rendererProps.node.id)}
       isIndeterminate={indeterminate.has(rendererProps.node.id)}
@@ -89,8 +88,15 @@ function TreeCheckbox(props: ComponentProps): React.ReactElement {
     />
   )
 
+  // Hover/selected colors are applied in CSS; expose the theme values as custom
+  // properties here so the row stylesheet can read them (see arborist.module.css).
+  const themeVars = {
+    "--arborist-hover-bg": theme.darkenedBgMix15,
+    "--arborist-selected-bg": theme.darkenedBgMix25,
+  } as React.CSSProperties
+
   return (
-    <div onKeyDown={handleKeyDown}>
+    <div onKeyDown={handleKeyDown} style={themeVars}>
       <Tree
         ref={treeRef}
         initialData={data}
@@ -254,7 +260,6 @@ function seedState(
 
 interface NodeRowProps {
   rendererProps: NodeRendererProps<any>
-  theme: any
   icons: Icons
   isChecked: boolean
   isIndeterminate: boolean
@@ -263,19 +268,12 @@ interface NodeRowProps {
 
 function NodeRow({
   rendererProps,
-  theme,
   icons,
   isChecked,
   isIndeterminate,
   onToggle,
 }: NodeRowProps) {
   const { node, style, dragHandle } = rendererProps
-  const [isHover, setHover] = useState(false)
-
-  const hoverStyle: React.CSSProperties = { backgroundColor: theme.darkenedBgMix15 }
-  const selectedStyle: React.CSSProperties = {
-    backgroundColor: theme.darkenedBgMix25,
-  }
 
   const handleRowClick = (e: React.MouseEvent) => {
     // Click toggles the check (cascade for internals). We DON'T stop propagation here:
@@ -322,13 +320,7 @@ function NodeRow({
     <div
       className={clsx(styles.node, node.state)}
       ref={dragHandle}
-      style={{
-        ...style,
-        ...(isHover ? hoverStyle : {}),
-        ...(node.isSelected ? selectedStyle : {}),
-      }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      style={style}
       onClick={handleRowClick}
       onDoubleClick={handleRowDoubleClick}
     >

@@ -37,6 +37,15 @@
   display: flex;
 }
 
+.node:hover {
+  background-color: var(--arborist-hover-bg, rgba(151, 166, 195, 0.15));
+}
+
+.node:global(.isSelected) {
+  background-color: var(--arborist-selected-bg, rgba(151, 166, 195, 0.25));
+  font-weight: bold;
+}
+
 .checkboxWrapper {
   align-items: center;
   display: inline-flex;

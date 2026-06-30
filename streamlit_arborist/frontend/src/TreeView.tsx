@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import React, { useMemo, useState } from "react"
+import React, { useMemo } from "react"
 import { NodeRendererProps, Tree } from "react-arborist"
 import { ComponentProps, Streamlit } from "streamlit-component-lib"
 
@@ -22,66 +22,66 @@ function TreeView(props: ComponentProps): React.ReactElement {
   const renderNode = (rendererProps: NodeRendererProps<any>) => (
     <NodeRow
       rendererProps={rendererProps}
-      theme={theme}
       icons={icons}
       selectInternalNodes={args["select_internal_nodes"]}
     />
   )
 
+  // Hover/selected colors are applied in CSS; expose the theme values as custom
+  // properties here so the row stylesheet can read them (see arborist.module.css).
+  const themeVars = {
+    "--arborist-hover-bg": theme.darkenedBgMix15,
+    "--arborist-selected-bg": theme.darkenedBgMix25,
+  } as React.CSSProperties
+
   return (
-    <Tree
-      initialData={args["data"]}
-      // Sizes
-      rowHeight={args["row_height"]}
-      overscanCount={args["overscan_count"]}
-      width={args["width"]}
-      height={args["height"]}
-      indent={args["indent"]}
-      paddingTop={args["padding_top"]}
-      paddingBottom={args["padding_bottom"]}
-      padding={args["padding"]}
-      // Config
-      childrenAccessor={args["children_accessor"]}
-      idAccessor={args["id_accessor"]}
-      openByDefault={args["open_by_default"]}
-      disableMultiSelection={true}
-      disableEdit={true}
-      disableDrag={true}
-      disableDrop={true}
-      // Event handlers
-      onSelect={(nodes) => {
-        if (nodes.length !== 0) {
-          Streamlit.setComponentValue(nodes[0].data)
-        }
-      }}
-      // Selection
-      selection={args["selection"]}
-      // Open State
-      initialOpenState={args["initial_open_state"]}
-      // Search
-      searchTerm={args["search_term"]}
-    >
-      {renderNode}
-    </Tree>
+    <div style={themeVars}>
+      <Tree
+        initialData={args["data"]}
+        // Sizes
+        rowHeight={args["row_height"]}
+        overscanCount={args["overscan_count"]}
+        width={args["width"]}
+        height={args["height"]}
+        indent={args["indent"]}
+        paddingTop={args["padding_top"]}
+        paddingBottom={args["padding_bottom"]}
+        padding={args["padding"]}
+        // Config
+        childrenAccessor={args["children_accessor"]}
+        idAccessor={args["id_accessor"]}
+        openByDefault={args["open_by_default"]}
+        disableMultiSelection={true}
+        disableEdit={true}
+        disableDrag={true}
+        disableDrop={true}
+        // Event handlers
+        onSelect={(nodes) => {
+          if (nodes.length !== 0) {
+            Streamlit.setComponentValue(nodes[0].data)
+          }
+        }}
+        // Selection
+        selection={args["selection"]}
+        // Open State
+        initialOpenState={args["initial_open_state"]}
+        // Search
+        searchTerm={args["search_term"]}
+      >
+        {renderNode}
+      </Tree>
+    </div>
   )
 }
 
 interface NodeRowProps {
   rendererProps: NodeRendererProps<any>
-  theme: any
   icons: Icons
   selectInternalNodes: boolean
 }
 
-function NodeRow({ rendererProps, theme, icons, selectInternalNodes }: NodeRowProps) {
+function NodeRow({ rendererProps, icons, selectInternalNodes }: NodeRowProps) {
   const { node, style, dragHandle } = rendererProps
-  const [isHover, setHover] = useState(false)
-
-  const hoverStyle: React.CSSProperties = { backgroundColor: theme.darkenedBgMix15 }
-  const selectedStyle: React.CSSProperties = {
-    backgroundColor: theme.darkenedBgMix25,
-    fontWeight: "bold",
-  }
 
   const handleRowClick = (e: React.MouseEvent) => {
     if (node.isInternal && !selectInternalNodes) {
@@ -130,13 +130,7 @@ function NodeRow({ rendererProps, theme, icons, selectInternalNodes }: NodeRowPr
     <div
       className={clsx(styles.node, node.state)}
       ref={dragHandle}
-      style={{
-        ...style,
-        ...(isHover ? hoverStyle : {}),
-        ...(node.isSelected ? selectedStyle : {}),
-      }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      style={style}
       onClick={handleRowClick}
     >
       {iconElement}

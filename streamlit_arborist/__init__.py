@@ -113,7 +113,10 @@ def tree_view(
         Whether all nodes should be open when rendered.
 
     selection : str or int, optional
-        The node `id` to select and scroll when rendered.
+        The node `id` to select and scroll into view.
+
+        Applied on every render: changing `selection` on a re-run moves the selection
+        to the new node (it is *not* initial-only).
 
     select_internal_nodes : bool, default False
         If False, clicking an internal node only toggles open/closed.
@@ -124,8 +127,9 @@ def tree_view(
         - Double-click the label to select and toggle
 
     initial_open_state : Dict[str, bool], optional
-        A dict of node ID keys and bool values indicating whether the node is open
-        (`True`) or closed (`False`) when rendered.
+        A dict of node ID keys to booleans setting whether each node starts open
+        (`True`) or closed (`False`).
+        Seeds the **initial** open/closed state when the tree is first rendered.
 
     search_term : str, optional
         Only show nodes that match `search_term`.
@@ -312,11 +316,15 @@ def tree_checkbox(
         Initial set of checked node IDs.
         Checking an internal node checks itself *and* all children.
 
-        Passing a different list on subsequent re-runs does not overwrite frontend state.
+        This is **initial-only**: the value seeds the checkbox state on first render
+        and is re-applied only when `data` changes.
+        Passing a different `checked` list on a later re-run does *not* overwrite the
+        user's current selection.
 
     initial_open_state : Dict[str, bool], optional
-        A dict of node ID keys and bool values indicating whether the node is open
-        (`True`) or closed (`False`) when rendered.
+        A dict of node ID keys to booleans setting whether each node starts open
+        (`True`) or closed (`False`).
+        Seeds the **initial** open/closed state when the tree is first rendered.
 
     search_term : str, optional
         Only show nodes that match `search_term`.
