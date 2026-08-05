@@ -6,6 +6,15 @@ Release Notes
 
 .. currentmodule:: streamlit_arborist
 
+Version 1.0.0 (unreleased)
+--------------------------
+
+Build changes
+~~~~~~~~~~~~~
+
+* Dropped support for Python 3.9
+* Updated minimum required Streamlit version to 1.51.0
+
 Version 0.4.0 (2026-06-19)
 --------------------------
 

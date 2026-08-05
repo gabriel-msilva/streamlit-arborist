@@ -4,6 +4,8 @@ import pytest
 from conftest import (
     NODE_STATES,
     assert_tree_view_value_equals,
+    sidebar_text_input,
+    toggle_sidebar_checkbox,
     tree_view_frame,
 )
 from playwright.sync_api import Page, expect
@@ -66,9 +68,7 @@ def test_should_select_node_on_click(page: Page):
 def test_should_select_internal_node_on_label_and_toggle_on_icon(page: Page):
     frame = tree_view_frame(page)
 
-    checkbox = page.locator("label:has-text('Select internal nodes')")
-    checkbox.click()
-
+    checkbox = toggle_sidebar_checkbox(page, "Select internal nodes")
     expect(checkbox).to_be_checked()
 
     chat_rooms = frame.get_by_role("treeitem", level=1).nth(2)
@@ -107,9 +107,7 @@ def test_should_select_internal_node_on_label_and_toggle_on_icon(page: Page):
 def test_should_select_and_toggle_internal_node_on_double_click(page: Page):
     frame = tree_view_frame(page)
 
-    checkbox = page.locator("label:has-text('Select internal nodes')")
-    checkbox.click()
-
+    checkbox = toggle_sidebar_checkbox(page, "Select internal nodes")
     expect(checkbox).to_be_checked()
 
     direct_messages = frame.get_by_role("treeitem", level=1).nth(3)
@@ -165,10 +163,10 @@ def test_should_nodes_be_closed(page: Page):
     expect(chat_rooms).to_have_class(NODE_STATES["isOpen"])
     expect(direct_messages).to_have_class(NODE_STATES["isOpen"])
 
-    checkbox = page.locator("label:has-text('Open by default')")
+    checkbox = page.get_by_role("checkbox", name="Open by default")
 
     expect(checkbox).to_be_checked()
-    checkbox.click()
+    toggle_sidebar_checkbox(page, "Open by default")
     expect(checkbox).not_to_be_checked()
 
     expect(chat_rooms).to_have_class(NODE_STATES["isClosed"])
@@ -177,7 +175,7 @@ def test_should_nodes_be_closed(page: Page):
 
 def test_should_search_nodes(page: Page):
     frame = tree_view_frame(page)
-    search_term = page.get_by_label("Search term")
+    search_term = sidebar_text_input(page, "Search term")
 
     search_term.fill("general")
     search_term.press("Enter")
@@ -204,12 +202,12 @@ def test_should_change_emoji_icons(page: Page):
     expect(leaf_icon).to_have_text("📄")
     expect(open_icon).to_have_text("📂")
 
-    leaf_input = page.get_by_label("Leaf", exact=True)
+    leaf_input = sidebar_text_input(page, "Leaf")
     leaf_input.fill("🍀")
     leaf_input.press("Enter")
     expect(leaf_icon).to_have_text("🍀")
 
-    open_input = page.get_by_label("Open", exact=True)
+    open_input = sidebar_text_input(page, "Open")
     open_input.fill("🔓")
     open_input.press("Enter")
     expect(open_icon).to_have_text("🔓")
@@ -217,10 +215,10 @@ def test_should_change_emoji_icons(page: Page):
     # Switch to `open_by_default=False` so 'Direct Messages' renders closed without an iframe click
     # Streamlit re-mounts the tree on every rerun, and a click immediately after the
     # rerun races with React's onClick rebinding (especially on chromium).
-    page.locator("label:has-text('Open by default')").click()
+    toggle_sidebar_checkbox(page, "Open by default")
     expect(closed_icon).to_have_text("📁")
 
-    closed_input = page.get_by_label("Closed", exact=True)
+    closed_input = sidebar_text_input(page, "Closed")
     closed_input.fill("🔒")
     closed_input.press("Enter")
     expect(closed_icon).to_have_text("🔒")
@@ -230,7 +228,7 @@ def test_should_use_material_symbols_icon(page: Page):
     frame = tree_view_frame(page)
     level_1 = frame.get_by_role("treeitem", level=1)
 
-    leaf_input = page.get_by_label("Leaf", exact=True)
+    leaf_input = sidebar_text_input(page, "Leaf")
     leaf_input.fill(":material/docs:")
     leaf_input.press("Enter")
 
@@ -243,7 +241,7 @@ def test_should_not_have_icon(page: Page):
     frame = tree_view_frame(page)
     level_1 = frame.get_by_role("treeitem", level=1)
 
-    leaf_input = page.get_by_label("Leaf", exact=True)
+    leaf_input = sidebar_text_input(page, "Leaf")
     leaf_input.fill("")
     leaf_input.press("Enter")
 

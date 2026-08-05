@@ -58,9 +58,36 @@ def checkbox_chevron(page: Page, node_id: str) -> Locator:
     return tree_checkbox_frame(page).locator(f'[data-chevron-id="{node_id}"]')
 
 
+def sidebar_text_input(page: Page, label: str) -> Locator:
+    """Locate a sidebar ``st.text_input`` by its label.
+
+    Scoping to ``role="textbox"`` avoids strict-mode violations: newer Streamlit
+    renders each ``st.selectbox``/``st.multiselect`` with an internal
+    dropdown-toggle button carrying ``aria-label="Open"``, and every widget with
+    a ``help=`` argument adds a ``aria-label="Help for <label>"`` button. A bare
+    ``get_by_label`` would match those too; restricting the role to ``textbox``
+    resolves to the single input element.
+    """
+    return page.get_by_role("textbox", name=label, exact=True)
+
+
+def toggle_sidebar_checkbox(page: Page, label: str) -> Locator:
+    """Toggle a sidebar ``st.checkbox`` and return its ``role=checkbox`` locator.
+
+    Streamlit's react-aria checkbox hides the real ``<input>`` (it is
+    ``sr-only``) and intercepts pointer events on the label, so clicking is
+    unreliable and often does not flip the state. Focusing the input and
+    pressing Space toggles it deterministically.
+    """
+    checkbox = page.get_by_role("checkbox", name=label)
+    checkbox.focus()
+    page.keyboard.press(" ")
+    return checkbox
+
+
 def toggle_checked(page: Page, node_id: str):
     """Toggle a node id in the sidebar's "Checked" st.multiselect."""
-    multiselect = page.get_by_label("Checked")
+    multiselect = page.get_by_role("combobox", name="Checked", exact=True)
     multiselect.click()
     page.get_by_role("option", name=node_id, exact=True).click()
     page.keyboard.press("Escape")
