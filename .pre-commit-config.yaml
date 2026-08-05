@@ -6,7 +6,6 @@ repos:
     rev: v6.0.0
     hooks:
       - id: check-added-large-files
-        args: ["--maxkb=512"]
       - id: check-merge-conflict
       - id: check-toml
       - id: end-of-file-fixer
@@ -14,7 +13,7 @@ repos:
 
   # Format/lint: Python
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.17
+    rev: v0.16.1
     hooks:
       - id: ruff-check
         args: [--fix]
@@ -22,7 +21,7 @@ repos:
 
   # Type check: Python
   - repo: https://github.com/astral-sh/ty-pre-commit
-    rev: v0.0.51
+    rev: v0.0.66
     hooks:
       - id: ty
 
@@ -34,7 +33,7 @@ repos:
 
   # Lint: YAML
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.37.1
+    rev: v1.38.0
     hooks:
       - id: yamllint
         args: ["-d {extends: relaxed, rules: {line-length: disable}}", "-s"]
@@ -42,27 +41,27 @@ repos:
 
   # Lint: Markdown
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.48.0
+    rev: v0.49.1
     hooks:
       - id: markdownlint
         args: ["--fix"]
 
   # Lint: Sphinx documentation
   - repo: https://github.com/sphinx-contrib/sphinx-lint
-    rev: v1.0.0
+    rev: v1.0.2
     hooks:
       - id: sphinx-lint
         args: ["--enable", "all", "--disable", "line-too-long"]
 
   # Sync uv.lock
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.21
+    rev: 0.12.1
     hooks:
       - id: uv-lock
 
   # Fix common misspellings in text files
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.2
+    rev: v2.4.3
     hooks:
       - id: codespell
         types_or: [python, rst, markdown]
