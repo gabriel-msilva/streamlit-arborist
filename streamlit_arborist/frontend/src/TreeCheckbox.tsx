@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { NodeRendererProps, Tree, TreeApi } from "react-arborist"
 import { ComponentProps, Streamlit } from "streamlit-component-lib"
 
-import { Icons, renderIcon } from "./shared"
+import { Icons, renderIcon, useStableValue } from "./shared"
 import styles from "./arborist.module.css"
 
 function TreeCheckbox(props: ComponentProps): React.ReactElement {
@@ -93,7 +93,7 @@ function TreeCheckbox(props: ComponentProps): React.ReactElement {
     <div onKeyDown={handleKeyDown}>
       <Tree
         ref={treeRef}
-        initialData={data}
+        data={data}
         // Sizes
         rowHeight={args["row_height"]}
         overscanCount={args["overscan_count"]}
@@ -120,15 +120,6 @@ function TreeCheckbox(props: ComponentProps): React.ReactElement {
       </Tree>
     </div>
   )
-}
-
-// Streamlit resends args with new object identities (same contents) when the
-// iframe resizes, e.g. toggling the sidebar in wide layout. Keep the previous
-// reference while the contents are unchanged so memos and effects don't re-run.
-function useStableValue<T>(value: T): T {
-  const key = useMemo(() => JSON.stringify(value), [value])
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  return useMemo(() => value, [key])
 }
 
 interface TreeIndex {

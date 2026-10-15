@@ -1,7 +1,16 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { NodeApi } from "react-arborist"
 
 import styles from "./arborist.module.css"
+
+// Streamlit resends args with new object identities (same contents) when the
+// iframe resizes, e.g. toggling the sidebar in wide layout. Keep the previous
+// reference while the contents are unchanged so memos and effects don't re-run.
+export function useStableValue<T>(value: T): T {
+  const key = useMemo(() => JSON.stringify(value), [value])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useMemo(() => value, [key])
+}
 
 export interface Icons {
   open: string

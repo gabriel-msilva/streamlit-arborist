@@ -82,3 +82,19 @@ def test_changed_data_reseeds_checked_state(page: Page):
 
     expect(child).not_to_be_checked()
     assert_value_equals("[]", page)
+
+
+def test_changed_data_rerenders_tree(page: Page):
+    frame = component_frame(page)
+    new_child = frame.locator('input[data-node-id="new"]')
+
+    expect(new_child).to_have_count(0)
+
+    page.get_by_text("Replace data").click()
+
+    expect(frame.get_by_text("Updated data")).to_be_visible()
+    expect(new_child).to_be_visible()
+
+    new_child.check()
+
+    assert_value_equals("['new']", page)
