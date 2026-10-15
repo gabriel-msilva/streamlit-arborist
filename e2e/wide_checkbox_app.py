@@ -10,6 +10,7 @@ replace_data = st.sidebar.checkbox("Replace data")
 data = [{"id": "data", "children": [{"id": "child"}]}]
 if replace_data:
     data[0]["name"] = "Updated data"
+    data[0]["children"].append({"id": "new"})
 
 selected = tree_checkbox(data, key="test_tree")
 
