@@ -6,6 +6,16 @@ Release Notes
 
 .. currentmodule:: streamlit_arborist
 
+Version 0.4.1 (unreleased)
+--------------------------
+
+* Fixed :py:func:`tree_checkbox` resetting checked nodes when the component is resized,
+  e.g. when toggling the sidebar with ``layout="wide"``
+  (`#9 <https://github.com/gabriel-msilva/streamlit-arborist/issues/9>`_).
+* Fixed :py:func:`tree_view` and :py:func:`tree_checkbox` not updating when ``data``
+  changes between reruns.
+  Nodes keep their open/closed state if their ID is unchanged.
+
 Version 0.4.0 (2026-06-19)
 --------------------------
 
