@@ -1,7 +1,8 @@
 import json
 import re
+from contextlib import contextmanager
 from pathlib import Path
-from typing import Union
+from typing import Iterator, Union
 
 import pytest
 from e2e_utils import StreamlitRunner
@@ -77,3 +78,35 @@ def assert_checkbox_value_equals(expected: list, page: Page):
     """Read the JSON code block following 'Returned value (tree_checkbox):' in the demo."""
     json_block = page.locator("pre code").nth(3)
     expect(json_block).to_have_text(json.dumps(expected, indent=2))
+
+
+@contextmanager
+def wait_for_render(frame: FrameLocator) -> Iterator[None]:
+    """Wait until the component handles the next Streamlit render triggered in the block.
+
+    Without this, assertions on frontend state may pass before the render lands.
+    Relies on the `streamlit:render` message posted by streamlit-component-lib.
+    """
+    tree = frame.get_by_role("tree")
+    tree.evaluate(
+        """tree => {
+            const win = tree.ownerDocument.defaultView
+            tree.dataset.renderComplete = "false"
+
+            const onMessage = event => {
+                if (event.data?.type !== "streamlit:render") return
+
+                win.removeEventListener("message", onMessage)
+                // Wait two frames so React commits and runs effects for the render.
+                win.requestAnimationFrame(() => win.requestAnimationFrame(() => {
+                    tree.dataset.renderComplete = "true"
+                }))
+            }
+
+            win.addEventListener("message", onMessage)
+        }"""
+    )
+
+    yield
+
+    expect(tree).to_have_attribute("data-render-complete", "true")
