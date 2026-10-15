@@ -6,7 +6,7 @@ Release Notes
 
 .. currentmodule:: streamlit_arborist
 
-Version 0.4.1 (unreleased)
+Version 0.4.1 (2026-10-14)
 --------------------------
 
 * Fixed :py:func:`tree_checkbox` resetting checked nodes when the component is resized,
