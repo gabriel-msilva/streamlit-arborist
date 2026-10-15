@@ -71,6 +71,9 @@ Change the default key names using ``children_accessor`` and ``id_accessor``.
     data3 = [{"key": "A", "contents": [{"key": "A.1"}, {"key": "A.2"}]}]
     tree_view(data3, children_accessor="contents", id_accessor="key")
 
+Passing different data on a rerun updates the tree.
+Nodes keep their open/closed state as long as their ID does not change.
+
 Single selection (``tree_view``)
 --------------------------------
 
@@ -162,6 +165,8 @@ superset of what you passed in:
     The ``checked`` argument is applied only on the initial render.
     Passing a different list on subsequent Streamlit reruns does not overwrite the user's interactive state.
     To reset the widget, pass a new ``key``.
+
+    Passing different ``data`` resets the checked state to ``checked``.
 
 Appearance
 ----------

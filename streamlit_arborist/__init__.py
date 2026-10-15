@@ -61,6 +61,9 @@ def tree_view(
         Optional keys are `name` for display (otherwise uses `id`), and `children` for
         child nodes.
 
+        Passing different `data` on a rerun updates the tree.
+        Nodes keep their open/closed state as long as their ID does not change.
+
     icons : dict, optional
         A dict of keys ``"open"``, ``"closed"``, and ``"leaf"`` with string values
         representing the icons to use for open internal nodes, closed internal nodes,
@@ -257,6 +260,9 @@ def tree_checkbox(
         Optional keys are `name` for display (otherwise uses `id`), and `children` for
         child nodes.
 
+        Passing different `data` on a rerun updates the tree.
+        Nodes keep their open/closed state as long as their ID does not change.
+
     icons : dict, optional
         A dict of keys ``"open"``, ``"closed"``, and ``"leaf"`` with string values
         representing the icons to use for open internal nodes, closed internal nodes,
@@ -313,6 +319,7 @@ def tree_checkbox(
         Checking an internal node checks itself *and* all children.
 
         Passing a different list on subsequent re-runs does not overwrite frontend state.
+        Passing different `data` resets the checked state to `checked`.
 
     initial_open_state : Dict[str, bool], optional
         A dict of node ID keys and bool values indicating whether the node is open
