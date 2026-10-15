@@ -10,7 +10,7 @@ function TreeCheckbox(props: ComponentProps): React.ReactElement {
   const args = props.args
   const themeProp = props.theme
 
-  const data = args["data"]
+  const data = useStableValue(args["data"])
   const icons = args["icons"] as Icons
   const childrenAccessor = args["children_accessor"]
   const idAccessor = args["id_accessor"]
@@ -120,6 +120,15 @@ function TreeCheckbox(props: ComponentProps): React.ReactElement {
       </Tree>
     </div>
   )
+}
+
+// Streamlit resends args with new object identities (same contents) when the
+// iframe resizes, e.g. toggling the sidebar in wide layout. Keep the previous
+// reference while the contents are unchanged so memos and effects don't re-run.
+function useStableValue<T>(value: T): T {
+  const key = useMemo(() => JSON.stringify(value), [value])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useMemo(() => value, [key])
 }
 
 interface TreeIndex {
