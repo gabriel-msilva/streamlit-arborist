@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react"
 import { NodeRendererProps, Tree } from "react-arborist"
 import { ComponentProps, Streamlit } from "streamlit-component-lib"
 
-import { Icons, renderIcon } from "./shared"
+import { Icons, renderIcon, useStableValue } from "./shared"
 import styles from "./arborist.module.css"
 
 function TreeView(props: ComponentProps): React.ReactElement {
@@ -18,6 +18,7 @@ function TreeView(props: ComponentProps): React.ReactElement {
     [themeProp],
   )
 
+  const data = useStableValue(args["data"])
   const icons = args["icons"] as Icons
   const renderNode = (rendererProps: NodeRendererProps<any>) => (
     <NodeRow
@@ -30,7 +31,7 @@ function TreeView(props: ComponentProps): React.ReactElement {
 
   return (
     <Tree
-      initialData={args["data"]}
+      data={data}
       // Sizes
       rowHeight={args["row_height"]}
       overscanCount={args["overscan_count"]}
