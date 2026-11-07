@@ -28,6 +28,16 @@ run = "uv run pytest --headed"
 description = "Run pre-commit hooks on the codebase"
 run = "uv run pre-commit run --all-files"
 
+[tasks.docs]
+description = "Build the Sphinx documentation"
+dir = "docs"
+run = "uv run --group docs sphinx-build --nitpicky --fail-on-warning --keep-going --builder html . _build/html"
+
+[tasks.docs-clean]
+description = "Remove the built Sphinx documentation"
+dir = "docs"
+run = "rm -rf _build/html"
+
 [tasks.frontend-build]
 description = "Build the frontend assets"
 hide = true
