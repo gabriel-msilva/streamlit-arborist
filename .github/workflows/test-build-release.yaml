@@ -31,8 +31,14 @@ jobs:
           version-file: .tool-versions
           enable-cache: true
 
+      - name: Cache pre-commit hooks
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml', '.python-version') }}
+
       - name: Run pre-commit hooks
-        run: uvx pre-commit@4.2.0 run --show-diff-on-failure --color=always --all-files
+        run: uv run pre-commit run --show-diff-on-failure --color=always --all-files
 
   pytest:
     runs-on: ubuntu-latest
