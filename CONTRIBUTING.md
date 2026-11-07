@@ -104,7 +104,8 @@ The same file is read by `mise`, the GitHub Actions workflow, and Read the Docs.
 
 The [GitHub Actions workflow](./.github/workflows/test-build-release.yaml) runs the `pre-commit`
 hooks, the end-to-end tests on every supported Python version, and the documentation build on each
-pull request and push to `main`. Pull requests also build the package.
+pull request and push to `main`.
+Pull requests also build the package.
 
 ## Commit messages
 
