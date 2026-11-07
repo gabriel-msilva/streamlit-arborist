@@ -88,17 +88,11 @@ mise run setup
 The backend and end-to-end test tasks set `STREAMLIT_ARBORIST_DEV=true`
 automatically.
 
-1. Run the [app/example.py](./app/example.py) app file with Streamlit:
+Run both the backend and frontend development server in parallel:
 
-   ```sh
-   mise run backend
-   ```
-
-2. Start the component's frontend server:
-
-   ```sh
-   mise run frontend
-   ```
+```sh
+mise run backend ::: frontend
+```
 
 Open the app running at <http://localhost:8501>.
 
