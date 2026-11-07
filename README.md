@@ -66,8 +66,8 @@ Find details about
 [custom components](https://docs.streamlit.io/develop/concepts/custom-components)
 in Streamlit documentation.
 
-See `mise tasks` for all development commands. The `mise.toml` configuration
-also manages the Node.js and uv versions used by these tasks.
+See `mise tasks` for all development commands. Node.js and uv versions are
+pinned in [.tool-versions](./.tool-versions), which both mise and CI read.
 
 ### Setup
 
