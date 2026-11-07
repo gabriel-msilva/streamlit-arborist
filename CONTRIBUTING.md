@@ -9,18 +9,6 @@ This repository is based on the
 See the Streamlit documentation on
 [custom components](https://docs.streamlit.io/develop/concepts/custom-components) for background.
 
-## Project layout
-
-```text
-.
-├── streamlit_arborist/
-│   ├── __init__.py      # Python API
-│   └── frontend/src/    # React components
-├── app/                 # Demo app, also used by the end-to-end tests
-├── e2e/                 # End-to-end tests
-└── docs/                # Sphinx documentation and release notes
-```
-
 The project has two parts:
 
 - A Python package in [streamlit_arborist/](./streamlit_arborist/) that exposes the components.
