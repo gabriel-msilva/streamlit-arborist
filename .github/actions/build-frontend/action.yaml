@@ -5,10 +5,6 @@ inputs:
     description: Path to the frontend directory
     required: false
     default: ./streamlit_arborist/frontend
-  node-version:
-    description: Node.js version
-    required: false
-    default: "24"
 
 runs:
   using: composite
@@ -16,7 +12,7 @@ runs:
     - name: Install Node.js
       uses: actions/setup-node@v6
       with:
-        node-version: ${{ inputs.node-version }}
+        node-version-file: .tool-versions
         cache: npm
         cache-dependency-path: ${{ inputs.path }}/package-lock.json
 

@@ -1,6 +1,4 @@
-[tools]
-node = "24"
-uv = "0.13.7"
+# Tool versions live in .tool-versions so CI setup actions can read them too.
 
 [tasks.setup]
 description = "Set up the development environment"
