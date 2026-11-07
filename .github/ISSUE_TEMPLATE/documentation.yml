@@ -1,0 +1,26 @@
+name: Documentation issue
+description: Report missing, unclear or incorrect documentation.
+labels: [documentation]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      description: Link to the page, or the name of the function or parameter.
+      placeholder: https://streamlit-arborist.readthedocs.io/stable/api.html
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is missing, unclear or incorrect?
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested improvement
+      description: How could the documentation be improved?

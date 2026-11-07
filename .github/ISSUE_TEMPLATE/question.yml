@@ -1,0 +1,25 @@
+name: Question
+description: Ask how to use streamlit-arborist.
+labels: [question]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The [documentation](https://streamlit-arborist.readthedocs.io/)
+        and the [demo app](https://st-arborist-example.streamlit.app/)
+        may already have the answer.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What are you trying to do, and what have you tried?
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Code
+      description: Relevant code from your Streamlit app, if any.
+      render: python

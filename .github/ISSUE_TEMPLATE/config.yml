@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://streamlit-arborist.readthedocs.io/
+    about: Usage guide and API reference.
+  - name: Demo app
+    url: https://st-arborist-example.streamlit.app/
+    about: Try the components in your browser.
