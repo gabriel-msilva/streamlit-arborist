@@ -1,0 +1,49 @@
+[tools]
+node = "24"
+uv = "0.13.7"
+
+[tasks.setup]
+description = "Set up the development environment"
+run = [
+  "uv sync --frozen",
+  "uv run pre-commit install",
+  "uv run playwright install chromium firefox",
+  "npm --prefix streamlit_arborist/frontend clean-install",
+]
+
+[tasks.backend]
+description = "Run the Streamlit backend"
+env = { STREAMLIT_ARBORIST_DEV = "true" }
+run = "uv run streamlit run app/example.py"
+
+[tasks.frontend]
+description = "Start the frontend development server"
+dir = "streamlit_arborist/frontend"
+run = "npm run start"
+
+[tasks.tests]
+description = "Run end-to-end tests"
+env = { STREAMLIT_ARBORIST_DEV = "true" }
+run = "uv run pytest --headed"
+
+[tasks.lint]
+description = "Run pre-commit hooks on the codebase"
+run = "uv run pre-commit run --all-files"
+
+[tasks.frontend-build]
+description = "Build the frontend assets"
+hide = true
+run = "npm run build"
+dir = "streamlit_arborist/frontend"
+sources = [
+  "src/**/*",
+  "public/**/*",
+  "package.json",
+  "package-lock.json",
+]
+outputs = ["build/**"]
+
+[tasks.build]
+description = "Build the frontend assets and the Python package"
+depends = ["frontend-build"]
+run = "uv build"
