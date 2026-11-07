@@ -41,3 +41,7 @@ Delete the sections that don't apply.
 ### CI
 
 <!-- CI: GitHub Actions workflows. -->
+
+### AI
+
+<!-- AI: Instructions and skills for AI coding agents, such as AGENTS.md. -->

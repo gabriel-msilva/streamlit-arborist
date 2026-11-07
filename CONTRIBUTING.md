@@ -133,6 +133,7 @@ the imperative mood, for example `FIX: Re-render tree_view when data changes`.
 | `DOCS`     | Documentation                                    |
 | `BLD`      | Build system, dependencies and development tools |
 | `CI`       | GitHub Actions workflows                         |
+| `AI`       | Instructions and skills for AI coding agents     |
 
 ## Releasing
 
