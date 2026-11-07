@@ -66,37 +66,38 @@ Find details about
 [custom components](https://docs.streamlit.io/develop/concepts/custom-components)
 in Streamlit documentation.
 
-See `make help` for all development commands.
+See `mise tasks` for all development commands. The `mise.toml` configuration
+also manages the Node.js and uv versions used by these tasks.
 
 ### Setup
 
-The development environment requires
-[uv](https://docs.astral.sh/uv/getting-started/installation/)
-and [Node.js + npm](https://nodejs.org/en/download/current) installed.
-See `make help` for all commands.
+Install [mise](https://mise.jdx.dev/installing-mise.html) to manage the
+development tools and tasks.
 
-Install the `dev` Python environment defined in [pyproject.toml](./pyproject.toml)
-and `npm` packages in [streamlit_arborist/frontend](./streamlit_arborist/frontend/):
+Install the configured Node.js and uv versions, then install the `dev` Python
+environment defined in [pyproject.toml](./pyproject.toml) and the npm packages
+in [streamlit_arborist/frontend](./streamlit_arborist/frontend/):
 
 ```sh
-make setup
+mise install
+mise run setup
 ```
 
 ### Running
 
-While developing the frontend, you must set the environment variable `STREAMLIT_ARBORIST_DEV=true`.
-(this is done in `make` commands)
+The backend and end-to-end test tasks set `STREAMLIT_ARBORIST_DEV=true`
+automatically.
 
 1. Run the [app/example.py](./app/example.py) app file with Streamlit:
 
    ```sh
-   make backend
+   mise run backend
    ```
 
 2. Start the component's frontend server:
 
    ```sh
-   make frontend
+   mise run frontend
    ```
 
 Open the app running at <http://localhost:8501>.
@@ -107,7 +108,7 @@ Build the React frontend at `streamlit_arborist/frontend/build/` directory and t
 package wheels at `dist/`.
 
 ```sh
-make build
+mise run build
 ```
 
 ### Documentation
