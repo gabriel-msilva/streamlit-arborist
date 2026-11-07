@@ -58,58 +58,8 @@ streamlit run app.py
 See the [Reference API](https://streamlit-arborist.readthedocs.io/stable/api.html)
 for all available parameters.
 
-## Development
+## Contributing
 
-This repository is based on
-[streamlit/component-template](https://github.com/streamlit/component-template) template.
-Find details about
-[custom components](https://docs.streamlit.io/develop/concepts/custom-components)
-in Streamlit documentation.
-
-See `mise tasks` for all development commands. Node.js and uv versions are
-pinned in [.tool-versions](./.tool-versions), which both mise and CI read.
-
-### Setup
-
-Install [mise](https://mise.jdx.dev/installing-mise.html) to manage the
-development tools and tasks.
-
-Install the configured Node.js and uv versions, then install the `dev` Python
-environment defined in [pyproject.toml](./pyproject.toml) and the npm packages
-in [streamlit_arborist/frontend](./streamlit_arborist/frontend/):
-
-```sh
-mise install
-mise run setup
-```
-
-### Running
-
-The backend and end-to-end test tasks set `STREAMLIT_ARBORIST_DEV=true`
-automatically.
-
-Run both the backend and frontend development server in parallel:
-
-```sh
-mise run backend ::: frontend
-```
-
-Open the app running at <http://localhost:8501>.
-
-### Build
-
-Build the React frontend at `streamlit_arborist/frontend/build/` directory and the Python
-package wheels at `dist/`.
-
-```sh
-mise run build
-```
-
-### Documentation
-
-The documentation files are located in [docs/](./docs/) directory and written with
-[Sphinx](https://www.sphinx-doc.org/en/).
-
-```sh
-mise run docs
-```
+Contributions are welcome! See the
+[contributing guide](https://github.com/gabriel-msilva/streamlit-arborist/blob/main/CONTRIBUTING.md)
+to set up a development environment, run the example app and tests, and build the package.
