@@ -117,5 +117,5 @@ The documentation files are located in [docs/](./docs/) directory and written wi
 [Sphinx](https://www.sphinx-doc.org/en/).
 
 ```sh
-make -C docs build
+mise run docs
 ```
