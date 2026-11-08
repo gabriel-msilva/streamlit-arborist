@@ -4,7 +4,7 @@ import pytest
 from conftest import (
     NODE_STATES,
     assert_tree_view_value_equals,
-    tree_view_frame,
+    tree_view_component,
 )
 from playwright.sync_api import Page, expect
 
@@ -26,18 +26,18 @@ def test_should_return_default_value(page: Page):
 def test_should_return_selected_value(
     page: Page, level: int, index: int, expected: dict
 ):
-    frame = tree_view_frame(page)
+    tree = tree_view_component(page)
 
-    node = frame.get_by_role("treeitem", level=level).nth(index)
+    node = tree.get_by_role("treeitem", level=level).nth(index)
     node.click()
 
     assert_tree_view_value_equals(expected, page)
 
 
 def test_should_toggle_internal_node_on_click(page: Page):
-    frame = tree_view_frame(page)
+    tree = tree_view_component(page)
 
-    internal_node = frame.get_by_role("treeitem", level=1).nth(2)
+    internal_node = tree.get_by_role("treeitem", level=1).nth(2)
     inner_div = internal_node.locator("div")
 
     expect(inner_div).to_have_class(NODE_STATES["isOpen"])
@@ -49,9 +49,9 @@ def test_should_toggle_internal_node_on_click(page: Page):
 
 
 def test_should_select_node_on_click(page: Page):
-    frame = tree_view_frame(page)
+    tree = tree_view_component(page)
 
-    general = frame.get_by_role("treeitem", level=2).nth(0)
+    general = tree.get_by_role("treeitem", level=2).nth(0)
     inner_div = general.locator("div")
 
     expect(general).to_have_attribute("aria-selected", "false")
@@ -64,14 +64,14 @@ def test_should_select_node_on_click(page: Page):
 
 
 def test_should_select_internal_node_on_label_and_toggle_on_icon(page: Page):
-    frame = tree_view_frame(page)
+    tree = tree_view_component(page)
 
     checkbox = page.locator("label:has-text('Select internal nodes')")
     checkbox.click()
 
     expect(checkbox).to_be_checked()
 
-    chat_rooms = frame.get_by_role("treeitem", level=1).nth(2)
+    chat_rooms = tree.get_by_role("treeitem", level=1).nth(2)
     icon = chat_rooms.locator("span").nth(0)
     label = chat_rooms.locator("span", has_text="Chat Rooms")
 
@@ -105,14 +105,14 @@ def test_should_select_internal_node_on_label_and_toggle_on_icon(page: Page):
 
 
 def test_should_select_and_toggle_internal_node_on_double_click(page: Page):
-    frame = tree_view_frame(page)
+    tree = tree_view_component(page)
 
     checkbox = page.locator("label:has-text('Select internal nodes')")
     checkbox.click()
 
     expect(checkbox).to_be_checked()
 
-    direct_messages = frame.get_by_role("treeitem", level=1).nth(3)
+    direct_messages = tree.get_by_role("treeitem", level=1).nth(3)
 
     expect(direct_messages).to_have_attribute("aria-selected", "false")
     expect(direct_messages.locator("div")).to_have_class(NODE_STATES["isOpen"])
@@ -139,9 +139,9 @@ def test_should_select_and_toggle_internal_node_on_double_click(page: Page):
 
 
 def test_should_hover_node(page: Page):
-    frame = tree_view_frame(page)
+    tree = tree_view_component(page)
 
-    unread = frame.get_by_role("treeitem", level=1)
+    unread = tree.get_by_role("treeitem", level=1)
     inner_div = unread.nth(0).locator("div")
 
     expect(inner_div).to_have_css("background-color", COLORS["background"])
@@ -156,8 +156,8 @@ def test_should_hover_node(page: Page):
 
 
 def test_should_nodes_be_closed(page: Page):
-    frame = tree_view_frame(page)
-    tree_items = frame.get_by_role("treeitem", level=1)
+    tree = tree_view_component(page)
+    tree_items = tree.get_by_role("treeitem", level=1)
 
     chat_rooms = tree_items.nth(2).locator("div")
     direct_messages = tree_items.nth(3).locator("div")
@@ -176,26 +176,26 @@ def test_should_nodes_be_closed(page: Page):
 
 
 def test_should_search_nodes(page: Page):
-    frame = tree_view_frame(page)
-    search_term = page.get_by_label("Search term")
+    tree = tree_view_component(page)
+    search_term = page.get_by_label("Search term", exact=True)
 
     search_term.fill("general")
     search_term.press("Enter")
 
-    expect(frame.get_by_role("treeitem", level=1)).to_have_text(["📂Chat Rooms"])
-    expect(frame.get_by_role("treeitem", level=2)).to_have_text(["📄General"])
+    expect(tree.get_by_role("treeitem", level=1)).to_have_text(["📂Chat Rooms"])
+    expect(tree.get_by_role("treeitem", level=2)).to_have_text(["📄General"])
 
     search_term.fill("read")
     search_term.press("Enter")
 
-    expect(frame.get_by_role("treeitem", level=1)).to_have_text(
+    expect(tree.get_by_role("treeitem", level=1)).to_have_text(
         ["📄Unread", "📄Threads"]
     )
 
 
 def test_should_change_emoji_icons(page: Page):
-    frame = tree_view_frame(page)
-    level_1 = frame.get_by_role("treeitem", level=1)
+    tree = tree_view_component(page)
+    level_1 = tree.get_by_role("treeitem", level=1)
 
     leaf_icon = level_1.nth(0).locator("span")
     open_icon = level_1.nth(2).locator("span")
@@ -209,12 +209,12 @@ def test_should_change_emoji_icons(page: Page):
     leaf_input.press("Enter")
     expect(leaf_icon).to_have_text("🍀")
 
-    open_input = page.get_by_label("Open", exact=True)
+    open_input = page.get_by_role("textbox", name="Open", exact=True)
     open_input.fill("🔓")
     open_input.press("Enter")
     expect(open_icon).to_have_text("🔓")
 
-    # Switch to `open_by_default=False` so 'Direct Messages' renders closed without an iframe click
+    # Switch to `open_by_default=False` so 'Direct Messages' renders closed without a click
     # Streamlit re-mounts the tree on every rerun, and a click immediately after the
     # rerun races with React's onClick rebinding (especially on chromium).
     page.locator("label:has-text('Open by default')").click()
@@ -227,8 +227,8 @@ def test_should_change_emoji_icons(page: Page):
 
 
 def test_should_use_material_symbols_icon(page: Page):
-    frame = tree_view_frame(page)
-    level_1 = frame.get_by_role("treeitem", level=1)
+    tree = tree_view_component(page)
+    level_1 = tree.get_by_role("treeitem", level=1)
 
     leaf_input = page.get_by_label("Leaf", exact=True)
     leaf_input.fill(":material/docs:")
@@ -240,8 +240,8 @@ def test_should_use_material_symbols_icon(page: Page):
 
 
 def test_should_not_have_icon(page: Page):
-    frame = tree_view_frame(page)
-    level_1 = frame.get_by_role("treeitem", level=1)
+    tree = tree_view_component(page)
+    level_1 = tree.get_by_role("treeitem", level=1)
 
     leaf_input = page.get_by_label("Leaf", exact=True)
     leaf_input.fill("")
@@ -252,9 +252,9 @@ def test_should_not_have_icon(page: Page):
 
 
 def test_should_select_node_by_id(page: Page):
-    frame = tree_view_frame(page)
+    tree = tree_view_component(page)
 
-    unread = frame.get_by_role("treeitem", level=1, name="Unread")
+    unread = tree.get_by_role("treeitem", level=1, name="Unread")
     inner_div = unread.locator("div")
 
     expect(unread).to_have_attribute("aria-selected", "false")

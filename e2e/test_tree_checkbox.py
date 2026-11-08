@@ -4,7 +4,7 @@ from conftest import (
     assert_tree_view_value_equals,
     checkbox_chevron,
     toggle_checked,
-    tree_checkbox_frame,
+    tree_checkbox_component,
     tree_checkbox_input,
 )
 from playwright.sync_api import Page, expect
@@ -79,7 +79,7 @@ def test_that_uncheck_all_leaves_makes_parent_unchecked(page: Page):
 
 def test_that_leaf_row_click_toggles_check(page: Page):
     # Click anywhere on a leaf row toggles its check.
-    leaf_row = tree_checkbox_frame(page).get_by_role("treeitem", name="Unread")
+    leaf_row = tree_checkbox_component(page).get_by_role("treeitem", name="Unread")
     leaf_checkbox = tree_checkbox_input(page, "1")
 
     expect(leaf_checkbox).not_to_be_checked()
@@ -96,7 +96,9 @@ def test_that_leaf_row_click_toggles_check(page: Page):
 
 
 def test_that_internal_row_click_toggles_check_with_cascade(page: Page):
-    internal_row = tree_checkbox_frame(page).get_by_role("treeitem", name="Chat Rooms")
+    internal_row = tree_checkbox_component(page).get_by_role(
+        "treeitem", name="Chat Rooms"
+    )
     inner_div = internal_row.locator("div").first
 
     expect(tree_checkbox_input(page, "3")).not_to_be_checked()
@@ -114,7 +116,7 @@ def test_that_internal_row_click_toggles_check_with_cascade(page: Page):
 def test_that_space_key_toggles_focused_row(page: Page):
     # Keyboard accessibility: clicking a row both checks AND focuses it; Space
     # then toggles the focused row's check.
-    leaf_row = tree_checkbox_frame(page).get_by_role("treeitem", name="Unread")
+    leaf_row = tree_checkbox_component(page).get_by_role("treeitem", name="Unread")
     leaf_checkbox = tree_checkbox_input(page, "1")
 
     leaf_row.click()
@@ -122,14 +124,14 @@ def test_that_space_key_toggles_focused_row(page: Page):
     expect(leaf_checkbox).to_be_checked()
     expect(leaf_row).to_have_attribute("aria-selected", "true")
 
-    tree_checkbox_frame(page).get_by_role("tree").press(" ")
+    tree_checkbox_component(page).get_by_role("tree").press(" ")
 
     expect(leaf_checkbox).not_to_be_checked()
     assert_checkbox_value_equals([], page)
 
 
 def test_that_internal_row_double_click_checks_and_toggles_open(page: Page):
-    internal_row = tree_checkbox_frame(page).get_by_role(
+    internal_row = tree_checkbox_component(page).get_by_role(
         "treeitem", name="Direct Messages"
     )
     inner_div = internal_row.locator("div").first
@@ -150,7 +152,7 @@ def test_that_internal_row_double_click_checks_and_toggles_open(page: Page):
 def test_that_leaf_row_double_click_only_toggles_check(page: Page):
     # Leaves have no open/close to toggle, so dblclick is equivalent to a
     # single click: the check ends up toggled once, not zero times.
-    leaf_row = tree_checkbox_frame(page).get_by_role("treeitem", name="Threads")
+    leaf_row = tree_checkbox_component(page).get_by_role("treeitem", name="Threads")
     leaf_checkbox = tree_checkbox_input(page, "2")
 
     expect(leaf_checkbox).not_to_be_checked()
@@ -163,7 +165,9 @@ def test_that_leaf_row_double_click_only_toggles_check(page: Page):
 
 def test_that_chevron_click_only_toggles_open(page: Page):
     chevron = checkbox_chevron(page, "3")
-    internal_row = tree_checkbox_frame(page).get_by_role("treeitem", name="Chat Rooms")
+    internal_row = tree_checkbox_component(page).get_by_role(
+        "treeitem", name="Chat Rooms"
+    )
     inner_div = internal_row.locator("div").first
 
     expect(inner_div).to_have_class(NODE_STATES["isOpen"])
