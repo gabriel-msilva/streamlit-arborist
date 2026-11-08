@@ -1,0 +1,7 @@
+# Component manifest that Streamlit reads at runtime to find the frontend assets.
+[project]
+name = "streamlit-arborist"
+
+[[tool.streamlit.component.components]]
+name = "streamlit_arborist"
+asset_dir = "frontend/build"

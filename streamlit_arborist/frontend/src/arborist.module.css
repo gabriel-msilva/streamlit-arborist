@@ -2,11 +2,11 @@
   border: 1px solid transparent;
   border-radius: 0.5rem;
   box-sizing: border-box;
-  background-color: var(--secondary-background-color);
+  background-color: var(--st-secondary-background-color);
 }
 
 [role="tree"]:focus-within {
-  border-color: var(--primary-color);
+  border-color: var(--st-primary-color);
   transition-property: border;
   transition-duration: 0.2s;
   transition-timing-function: cubic-bezier(0.2, 0.8, 0.4, 1);
@@ -51,8 +51,8 @@
 .checkbox {
   -webkit-appearance: none;
   appearance: none;
-  background-color: var(--background-color);
-  border: 1px solid color-mix(in srgb, var(--text-color), transparent 80%);
+  background-color: var(--st-background-color);
+  border: 1px solid color-mix(in srgb, var(--st-text-color), transparent 80%);
   border-radius: 0.25rem;
   box-sizing: border-box;
   cursor: pointer;
@@ -66,8 +66,8 @@
 
 .checkbox:checked,
 .checkbox:indeterminate {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
+  background-color: var(--st-primary-color);
+  border-color: var(--st-primary-color);
 }
 
 .checkmark {

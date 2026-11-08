@@ -1,29 +1,23 @@
 import clsx from "clsx"
-import React, { useMemo, useState } from "react"
+import React, { useState } from "react"
 import { NodeRendererProps, Tree } from "react-arborist"
-import { ComponentProps, Streamlit } from "streamlit-component-lib"
 
-import { Icons, renderIcon, useStableValue } from "./shared"
+import {
+  ComponentProps,
+  HOVER_COLOR,
+  Icons,
+  SELECTED_COLOR,
+  renderIcon,
+  useStableValue,
+} from "./shared"
 import styles from "./arborist.module.css"
 
-function TreeView(props: ComponentProps): React.ReactElement {
-  const args = props.args
-  const themeProp = props.theme
-
-  // Workaround: Streamlit's `props.theme` object does not contain all color
-  // properties (e.g. `darkenedBgMix15`, `darkenedBgMix25`). The deep clone
-  // also stabilises the memo across re-renders.
-  const theme = useMemo(
-    () => (themeProp ? JSON.parse(JSON.stringify(themeProp)) : {}),
-    [themeProp],
-  )
-
+function TreeView({ args, setStateValue }: ComponentProps): React.ReactElement {
   const data = useStableValue(args["data"])
   const icons = args["icons"] as Icons
   const renderNode = (rendererProps: NodeRendererProps<any>) => (
     <NodeRow
       rendererProps={rendererProps}
-      theme={theme}
       icons={icons}
       selectInternalNodes={args["select_internal_nodes"]}
     />
@@ -52,7 +46,7 @@ function TreeView(props: ComponentProps): React.ReactElement {
       // Event handlers
       onSelect={(nodes) => {
         if (nodes.length !== 0) {
-          Streamlit.setComponentValue(nodes[0].data)
+          setStateValue("selected", nodes[0].data)
         }
       }}
       // Selection
@@ -69,18 +63,17 @@ function TreeView(props: ComponentProps): React.ReactElement {
 
 interface NodeRowProps {
   rendererProps: NodeRendererProps<any>
-  theme: any
   icons: Icons
   selectInternalNodes: boolean
 }
 
-function NodeRow({ rendererProps, theme, icons, selectInternalNodes }: NodeRowProps) {
+function NodeRow({ rendererProps, icons, selectInternalNodes }: NodeRowProps) {
   const { node, style, dragHandle } = rendererProps
   const [isHover, setHover] = useState(false)
 
-  const hoverStyle: React.CSSProperties = { backgroundColor: theme.darkenedBgMix15 }
+  const hoverStyle: React.CSSProperties = { backgroundColor: HOVER_COLOR }
   const selectedStyle: React.CSSProperties = {
-    backgroundColor: theme.darkenedBgMix25,
+    backgroundColor: SELECTED_COLOR,
     fontWeight: "bold",
   }
 

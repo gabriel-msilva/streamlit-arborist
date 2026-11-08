@@ -1,11 +1,22 @@
-import React, { useMemo } from "react"
+import { FrontendRendererArgs } from "@streamlit/component-v2-lib"
+import { useMemo } from "react"
 import { NodeApi } from "react-arborist"
 
 import styles from "./arborist.module.css"
 
-// Streamlit resends args with new object identities (same contents) when the
-// iframe resizes, e.g. toggling the sidebar in wide layout. Keep the previous
-// reference while the contents are unchanged so memos and effects don't re-run.
+export interface ComponentProps {
+  args: Record<string, any>
+  setStateValue: FrontendRendererArgs["setStateValue"]
+}
+
+// Streamlit's `darkenedBgMix15` and `darkenedBgMix25` theme colors, which
+// aren't exposed to v2 components.
+export const HOVER_COLOR = "rgba(151, 166, 195, 0.15)"
+export const SELECTED_COLOR = "rgba(151, 166, 195, 0.25)"
+
+// Streamlit parses all args again when any of them changes, so unchanged values
+// get new object identities. Keep the previous reference while the contents are
+// unchanged so memos and effects don't re-run.
 export function useStableValue<T>(value: T): T {
   const key = useMemo(() => JSON.stringify(value), [value])
   // eslint-disable-next-line react-hooks/exhaustive-deps

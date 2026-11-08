@@ -1,28 +1,23 @@
 import clsx from "clsx"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { NodeRendererProps, Tree, TreeApi } from "react-arborist"
-import { ComponentProps, Streamlit } from "streamlit-component-lib"
 
-import { Icons, renderIcon, useStableValue } from "./shared"
+import {
+  ComponentProps,
+  HOVER_COLOR,
+  Icons,
+  SELECTED_COLOR,
+  renderIcon,
+  useStableValue,
+} from "./shared"
 import styles from "./arborist.module.css"
 
-function TreeCheckbox(props: ComponentProps): React.ReactElement {
-  const args = props.args
-  const themeProp = props.theme
-
+function TreeCheckbox({ args, setStateValue }: ComponentProps): React.ReactElement {
   const data = useStableValue(args["data"])
   const icons = args["icons"] as Icons
   const childrenAccessor = args["children_accessor"]
   const idAccessor = args["id_accessor"]
   const seed = args["checked"] as string[]
-
-  // Workaround: Streamlit's `props.theme` object does not contain all color
-  // properties (e.g. `darkenedBgMix15`, `darkenedBgMix25`). The deep clone
-  // also stabilises the memo across re-renders.
-  const theme = useMemo(
-    () => (themeProp ? JSON.parse(JSON.stringify(themeProp)) : {}),
-    [themeProp],
-  )
 
   const index = useMemo(
     () => buildTreeIndex(data, childrenAccessor, idAccessor),
@@ -45,7 +40,7 @@ function TreeCheckbox(props: ComponentProps): React.ReactElement {
     setChecked(c)
     setIndeterminate(i)
 
-    Streamlit.setComponentValue(Array.from(c).sort())
+    setStateValue("checked", Array.from(c).sort())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index])
 
@@ -60,9 +55,9 @@ function TreeCheckbox(props: ComponentProps): React.ReactElement {
       setChecked(draftChecked)
       setIndeterminate(draftIndet)
 
-      Streamlit.setComponentValue(Array.from(draftChecked).sort())
+      setStateValue("checked", Array.from(draftChecked).sort())
     },
-    [checked, indeterminate, index],
+    [checked, indeterminate, index, setStateValue],
   )
 
   const treeRef = useRef<TreeApi<any> | undefined>(undefined)
@@ -81,7 +76,6 @@ function TreeCheckbox(props: ComponentProps): React.ReactElement {
   const renderNode = (rendererProps: NodeRendererProps<any>) => (
     <NodeRow
       rendererProps={rendererProps}
-      theme={theme}
       icons={icons}
       isChecked={checked.has(rendererProps.node.id)}
       isIndeterminate={indeterminate.has(rendererProps.node.id)}
@@ -254,7 +248,6 @@ function seedState(
 
 interface NodeRowProps {
   rendererProps: NodeRendererProps<any>
-  theme: any
   icons: Icons
   isChecked: boolean
   isIndeterminate: boolean
@@ -263,7 +256,6 @@ interface NodeRowProps {
 
 function NodeRow({
   rendererProps,
-  theme,
   icons,
   isChecked,
   isIndeterminate,
@@ -272,9 +264,9 @@ function NodeRow({
   const { node, style, dragHandle } = rendererProps
   const [isHover, setHover] = useState(false)
 
-  const hoverStyle: React.CSSProperties = { backgroundColor: theme.darkenedBgMix15 }
+  const hoverStyle: React.CSSProperties = { backgroundColor: HOVER_COLOR }
   const selectedStyle: React.CSSProperties = {
-    backgroundColor: theme.darkenedBgMix25,
+    backgroundColor: SELECTED_COLOR,
   }
 
   const handleRowClick = (e: React.MouseEvent) => {

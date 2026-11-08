@@ -1,25 +1,25 @@
-import os
-from typing import Callable, Dict, List, Optional, Union
+import functools
+from typing import Any, Callable, Dict, List, Optional, Union
 
-import streamlit.components.v1 as components
-from streamlit.elements.lib.utils import Key, to_key
+import streamlit as st
+from streamlit.elements.lib.utils import Key
 from streamlit.string_util import validate_icon_or_emoji
 
 from streamlit_arborist._version import get_version_dict
 
 __version__ = get_version_dict()["version"]
 
-_RELEASE = os.environ.get("STREAMLIT_ARBORIST_DEV", "false") != "true"
 
-if not _RELEASE:
-    _component_func = components.declare_component(
-        "streamlit_arborist",
-        url="http://localhost:3001",
+@functools.cache
+def _get_component() -> Callable[..., Any]:
+    # Streamlit finds the assets with the manifest in `streamlit_arborist/pyproject.toml`
+    # only while its runtime is running, so registering at import time would fail.
+    return st.components.v2.component(
+        "streamlit-arborist.streamlit_arborist",
+        html='<div class="react-root"></div>',
+        css="index-*.css",
+        js="index-*.js",
     )
-else:
-    parent_dir = os.path.dirname(os.path.abspath(__file__))
-    build_dir = os.path.join(parent_dir, "frontend/build")
-    _component_func = components.declare_component("streamlit_arborist", path=build_dir)
 
 
 # See `TreeProps` type in the react-arborist package:
@@ -185,39 +185,41 @@ def tree_view(
     >>> tree_view(data)
     """
     icons = _normalize_icons(icons or {})
-    key = to_key(key)
 
-    component_value = _component_func(
-        widget="view",
-        data=data,
-        icons=icons,
-        # Sizes
-        row_height=row_height,
-        overscan_count=overscan_count,
-        width=width,
-        height=height,
-        indent=indent,
-        padding_top=padding_top,
-        padding_bottom=padding_bottom,
-        padding=padding,
-        # Config
-        children_accessor=children_accessor,
-        id_accessor=id_accessor,
-        open_by_default=open_by_default,
-        # Selection
-        selection=selection,
-        select_internal_nodes=select_internal_nodes,
-        # Open State
-        initial_open_state=initial_open_state,
-        # Search
-        search_term=search_term,
+    result = _get_component()(
+        data={
+            "widget": "view",
+            "data": data,
+            "icons": icons,
+            # Sizes
+            "row_height": row_height,
+            "overscan_count": overscan_count,
+            "width": width,
+            "height": height,
+            "indent": indent,
+            "padding_top": padding_top,
+            "padding_bottom": padding_bottom,
+            "padding": padding,
+            # Config
+            "children_accessor": children_accessor,
+            "id_accessor": id_accessor,
+            "open_by_default": open_by_default,
+            # Selection
+            "selection": selection,
+            "select_internal_nodes": select_internal_nodes,
+            # Open State
+            "initial_open_state": initial_open_state,
+            # Search
+            "search_term": search_term,
+        },
         # Streamlit
         key=key,
-        on_change=on_change,
-        default=None,
+        default={"selected": None},
+        on_selected_change=on_change or _noop,
     )
 
-    return component_value
+    # The result is empty when there's no script run context.
+    return result.get("selected")
 
 
 def tree_checkbox(
@@ -368,38 +370,43 @@ def tree_checkbox(
     """
     icons = _normalize_icons(icons or {})
     checked = list(checked) if checked else []
-    key = to_key(key)
 
-    component_value = _component_func(
-        widget="checkbox",
-        data=data,
-        icons=icons,
-        # Sizes
-        row_height=row_height,
-        overscan_count=overscan_count,
-        width=width,
-        height=height,
-        indent=indent,
-        padding_top=padding_top,
-        padding_bottom=padding_bottom,
-        padding=padding,
-        # Config
-        children_accessor=children_accessor,
-        id_accessor=id_accessor,
-        open_by_default=open_by_default,
-        # Selection
-        checked=checked,
-        # Open State
-        initial_open_state=initial_open_state,
-        # Search
-        search_term=search_term,
+    result = _get_component()(
+        data={
+            "widget": "checkbox",
+            "data": data,
+            "icons": icons,
+            # Sizes
+            "row_height": row_height,
+            "overscan_count": overscan_count,
+            "width": width,
+            "height": height,
+            "indent": indent,
+            "padding_top": padding_top,
+            "padding_bottom": padding_bottom,
+            "padding": padding,
+            # Config
+            "children_accessor": children_accessor,
+            "id_accessor": id_accessor,
+            "open_by_default": open_by_default,
+            # Selection
+            "checked": checked,
+            # Open State
+            "initial_open_state": initial_open_state,
+            # Search
+            "search_term": search_term,
+        },
         # Streamlit
         key=key,
-        on_change=on_change,
-        default=checked,
+        default={"checked": checked},
+        on_checked_change=on_change or _noop,
     )
 
-    return component_value
+    return result.get("checked", checked)
+
+
+def _noop() -> None:
+    pass
 
 
 def _normalize_icons(icons: dict) -> dict:

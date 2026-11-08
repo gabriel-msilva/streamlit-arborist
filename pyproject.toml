@@ -9,9 +9,9 @@ description = "Streamlit component for creating tree views"
 readme = "README.md"
 authors = [{ name = "Gabriel Mello Silva", email = "gabriel.zyx@gmail.com" }]
 license-files = ["LICENSE"]
-requires-python = ">=3.9"
-# Version 1.36.0 implements `on_change` for `CustomComponent`
-dependencies = ["streamlit>=1.36.0"]
+requires-python = ">=3.10"
+# Version 1.52.0 includes `data` in the identity of v2 components without a key
+dependencies = ["streamlit>=1.52.0"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Environment :: Plugins",
@@ -19,7 +19,6 @@ classifiers = [
   "Intended Audience :: Developers",
   "Intended Audience :: Science/Research",
   "License :: OSI Approved :: MIT License",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -67,7 +66,7 @@ testpaths = ["e2e"]
 addopts = "-vv"
 
 [tool.ruff]
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = [

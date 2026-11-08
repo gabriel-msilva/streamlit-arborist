@@ -7,21 +7,20 @@ run = [
   "uv run pre-commit install",
   "uv run playwright install chromium firefox",
   "npm --prefix streamlit_arborist/frontend clean-install",
+  "npm --prefix streamlit_arborist/frontend run build",
 ]
 
 [tasks.backend]
 description = "Run the Streamlit backend"
-env = { STREAMLIT_ARBORIST_DEV = "true" }
 run = "uv run streamlit run app/example.py"
 
 [tasks.frontend]
-description = "Start the frontend development server"
+description = "Rebuild the frontend assets on changes"
 dir = "streamlit_arborist/frontend"
-run = "npm run start"
+run = "npm run dev"
 
 [tasks.tests]
 description = "Run end-to-end tests"
-env = { STREAMLIT_ARBORIST_DEV = "true" }
 run = "uv run pytest --headed"
 
 [tasks.lint]
@@ -45,10 +44,10 @@ run = "npm run build"
 dir = "streamlit_arborist/frontend"
 sources = [
   "src/**/*",
-  "public/**/*",
   "package.json",
   "package-lock.json",
   "tsconfig.json",
+  "vite.config.ts",
 ]
 outputs = ["build/**"]
 

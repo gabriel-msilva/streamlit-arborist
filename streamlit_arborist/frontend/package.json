@@ -1,42 +1,26 @@
 {
   "name": "streamlit_arborist",
   "private": true,
-  "dependencies": {
-    "clsx": "^2.1.1",
-    "material-symbols": "^0.34.1",
-    "react": "^18.2.0",
-    "react-arborist": "^3.4.0",
-    "react-dom": "^18.2.0",
-    "streamlit-component-lib": "^2.0.0"
-  },
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "npm run typecheck && cross-env NODE_ENV=production vite build",
+    "dev": "cross-env NODE_ENV=development vite build --watch",
+    "typecheck": "tsc --noEmit"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "dependencies": {
+    "@streamlit/component-v2-lib": "^0.2.0",
+    "clsx": "^2.1.1",
+    "react": "^18.3.1",
+    "react-arborist": "^3.4.0",
+    "react-dom": "^18.3.1"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "homepage": ".",
   "devDependencies": {
-    "@types/babel__core": "^7.20.5",
-    "@types/node": "^12.0.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1",
-    "typescript": "^4.2.0"
+    "@types/node": "^22.14.1",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
+    "@vitejs/plugin-react": "^6.0.1",
+    "cross-env": "^10.1.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.10"
   }
 }
