@@ -17,7 +17,7 @@ Read [CONTRIBUTING.md](./CONTRIBUTING.md) first.
 ## Changing a component parameter
 
 - Update the signature and docstring in [`__init__.py`](./streamlit_arborist/__init__.py),
-  the `_component_func()` call,
+  the `data` passed to the component,
   and `args["snake_case_name"]` in `TreeView.tsx` or `TreeCheckbox.tsx`.
 - Keep parameters shared by both components in sync.
 - Add an end-to-end test, and an example to [usage.rst](./docs/usage.rst) if useful.
@@ -36,7 +36,7 @@ Read [CONTRIBUTING.md](./CONTRIBUTING.md) first.
   Changing the demo app's layout can break tests.
 - Test other scenarios with a small app,
   like [test_tree_view_data.py](./e2e/test_tree_view_data.py).
-- Wait with `expect()` or `wait_for_render()`, never with `wait_for_timeout()` or `time.sleep()`.
+- Wait with `expect()`, never with `wait_for_timeout()` or `time.sleep()`.
 
 ## Writing documentation
 
