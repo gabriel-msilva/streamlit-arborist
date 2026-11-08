@@ -1,6 +1,10 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 
+default_language_version:
+  # Use the Node from .tool-versions instead of one downloaded by pre-commit.
+  node: system
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -26,9 +30,9 @@ repos:
     hooks:
       - id: ty
 
-  # Format: YAML, JSON and Markdown
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.8
+  # Format: YAML, JSON, Markdown, TypeScript and CSS
+  - repo: https://github.com/rbubley/mirrors-prettier
+    rev: v3.9.10
     hooks:
       - id: prettier
 
