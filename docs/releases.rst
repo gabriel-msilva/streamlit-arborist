@@ -6,6 +6,18 @@ Release Notes
 
 .. currentmodule:: streamlit_arborist
 
+Version 0.5.0 (unreleased)
+--------------------------
+
+* Migrated :py:func:`tree_view` and :py:func:`tree_checkbox` to Streamlit's `custom components v2
+  <https://docs.streamlit.io/develop/concepts/custom-components/components-v2>`_.
+  The trees render in the app page instead of an iframe and use the app's font.
+* **Breaking:** Requires Streamlit 1.52.0 or later and Python 3.10 or later.
+* **Breaking:** With a ``key``, ``st.session_state[key]`` holds a dict with the component's value
+  under ``"selected"`` for :py:func:`tree_view`, and ``"checked"`` for :py:func:`tree_checkbox`,
+  instead of the value itself.
+  The return values are unchanged.
+
 Version 0.4.1 (2026-10-14)
 --------------------------
 

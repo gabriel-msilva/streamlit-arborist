@@ -33,22 +33,26 @@ List all available commands with `mise tasks`.
 
 ## Running the example app
 
-Start the Streamlit backend and the frontend development server in parallel:
+Start the Streamlit backend and the frontend build in watch mode in parallel:
 
 ```sh
 mise run backend ::: frontend
 ```
 
 Open the app running at <http://localhost:8501>.
-Changes to the frontend reload automatically.
+The `frontend` task rebuilds the assets in `streamlit_arborist/frontend/build/` when the frontend
+changes, and Streamlit serves the new files.
+Reload the page to see the changes.
 
-The `backend` and `tests` tasks set `STREAMLIT_ARBORIST_DEV=true`, which makes the component load
-from the frontend development server at <http://localhost:3001> instead of the built assets.
+Streamlit finds the assets through the component manifest in
+[streamlit_arborist/pyproject.toml](./streamlit_arborist/pyproject.toml), and only if the build
+directory exists when it starts.
+`mise run setup` builds the frontend once for that.
 
 ## Testing
 
 End-to-end tests in [e2e/](./e2e/) use `pytest` and Playwright.
-With the frontend development server running (`mise run frontend`), run:
+They use the built frontend assets, so keep `mise run frontend` running, and run:
 
 ```sh
 mise run tests
