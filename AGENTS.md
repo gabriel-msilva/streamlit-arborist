@@ -31,7 +31,7 @@ Read [CONTRIBUTING.md](./CONTRIBUTING.md) first.
 ## Testing
 
 - Prefer the [headless test run](./CONTRIBUTING.md#testing) to `mise run tests`.
-- Run `mise run frontend-build` after frontend changes, or the tests use stale assets.
+- Run `mise run frontend:build` after frontend changes, or the tests use stale assets.
 - [conftest.py](./e2e/conftest.py) finds elements in [example.py](./app/example.py) by position.
   Changing the demo app's layout can break tests.
 - Test other scenarios with a small app,

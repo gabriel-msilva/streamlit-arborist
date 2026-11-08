@@ -79,10 +79,10 @@ The documentation in [docs/](./docs/) is written with [Sphinx](https://www.sphin
 Build it at `docs/_build/html/`:
 
 ```sh
-mise run docs
+mise run docs:build
 ```
 
-Remove the built pages with `mise run docs-clean`.
+Remove the built pages with `mise run docs:clean`.
 
 ## Building
 
