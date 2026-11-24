@@ -1,7 +1,7 @@
 import functools
-from typing import Any, Callable, Dict, List, Optional, Union
+from collections.abc import Callable
 
-import streamlit as st
+import streamlit.components.v2
 from streamlit.elements.lib.utils import Key
 from streamlit.string_util import validate_icon_or_emoji
 
@@ -11,10 +11,10 @@ __version__ = get_version_dict()["version"]
 
 
 @functools.cache
-def _get_component() -> Callable[..., Any]:
+def _get_component():
     # Streamlit finds the assets with the manifest in `streamlit_arborist/pyproject.toml`
     # only while its runtime is running, so registering at import time would fail.
-    return st.components.v2.component(
+    return streamlit.components.v2.component(
         "streamlit-arborist.streamlit_arborist",
         html='<div class="react-root"></div>',
         css="index-*.css",
@@ -25,31 +25,31 @@ def _get_component() -> Callable[..., Any]:
 # See `TreeProps` type in the react-arborist package:
 # https://github.com/brimdata/react-arborist/blob/v3.4.0/packages/react-arborist/src/types/tree-props.ts
 def tree_view(
-    data: List[dict],
-    icons: Optional[Dict[str, str]] = None,
+    data: list[dict],
+    icons: dict[str, str] | None = None,
     # Sizes
     row_height: int = 24,
-    width: Union[int, str] = "auto",
+    width: int | str = "auto",
     height: int = 500,
     indent: int = 24,
     overscan_count: int = 1,
-    padding_top: Optional[int] = None,
-    padding_bottom: Optional[int] = None,
-    padding: Optional[int] = None,
+    padding_top: int | None = None,
+    padding_bottom: int | None = None,
+    padding: int | None = None,
     # Config
     children_accessor: str = "children",
     id_accessor: str = "id",
     open_by_default: bool = True,
     # Selection
-    selection: Optional[str] = None,
+    selection: str | None = None,
     select_internal_nodes: bool = False,
-    initial_open_state: Optional[Dict[str, bool]] = None,
+    initial_open_state: dict[str, bool] | None = None,
     # Search
-    search_term: Optional[str] = None,
+    search_term: str | None = None,
     # Streamlit
-    key: Optional[Key] = None,
-    on_change: Optional[Callable[..., None]] = None,
-) -> Optional[dict]:
+    key: Key | None = None,
+    on_change: Callable[..., None] | None = None,
+) -> dict | None:
     """
     Display a tree view.
 
@@ -126,7 +126,7 @@ def tree_view(
         - Single-click the label to select
         - Double-click the label to select and toggle
 
-    initial_open_state : Dict[str, bool], optional
+    initial_open_state : dict[str, bool], optional
         A dict of node ID keys and bool values indicating whether the node is open
         (`True`) or closed (`False`) when rendered.
 
@@ -223,30 +223,30 @@ def tree_view(
 
 
 def tree_checkbox(
-    data: List[dict],
-    icons: Optional[Dict[str, str]] = None,
+    data: list[dict],
+    icons: dict[str, str] | None = None,
     # Sizes
     row_height: int = 24,
-    width: Union[int, str] = "auto",
+    width: int | str = "auto",
     height: int = 500,
     indent: int = 24,
     overscan_count: int = 1,
-    padding_top: Optional[int] = None,
-    padding_bottom: Optional[int] = None,
-    padding: Optional[int] = None,
+    padding_top: int | None = None,
+    padding_bottom: int | None = None,
+    padding: int | None = None,
     # Config
     children_accessor: str = "children",
     id_accessor: str = "id",
     open_by_default: bool = True,
     # Selection
-    checked: Optional[List[str]] = None,
-    initial_open_state: Optional[Dict[str, bool]] = None,
+    checked: list[str] | None = None,
+    initial_open_state: dict[str, bool] | None = None,
     # Search
-    search_term: Optional[str] = None,
+    search_term: str | None = None,
     # Streamlit
-    key: Optional[Key] = None,
-    on_change: Optional[Callable[..., None]] = None,
-) -> List[str]:
+    key: Key | None = None,
+    on_change: Callable[..., None] | None = None,
+) -> list[str]:
     """
     Display a tree view with checkboxes and cascading multi-selection.
 
@@ -323,7 +323,7 @@ def tree_checkbox(
         Passing a different list on subsequent re-runs does not overwrite frontend state.
         Passing different `data` resets the checked state to `checked`.
 
-    initial_open_state : Dict[str, bool], optional
+    initial_open_state : dict[str, bool], optional
         A dict of node ID keys and bool values indicating whether the node is open
         (`True`) or closed (`False`) when rendered.
 

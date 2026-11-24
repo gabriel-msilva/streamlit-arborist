@@ -1,7 +1,6 @@
 import json
 import re
 from pathlib import Path
-from typing import Union
 
 import pytest
 from e2e_utils import StreamlitRunner
@@ -62,7 +61,7 @@ def toggle_checked(page: Page, node_id: str):
     page.keyboard.press("Escape")
 
 
-def assert_tree_view_value_equals(expected: Union[dict, None], page: Page):
+def assert_tree_view_value_equals(expected: dict | None, page: Page):
     """Read the JSON code block following 'Returned value (tree_view):' in the demo."""
     json_block = page.locator("pre code").nth(1)
     expected_text = "None" if expected is None else json.dumps(expected, indent=2)
