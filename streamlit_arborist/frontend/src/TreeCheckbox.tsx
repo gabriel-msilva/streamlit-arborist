@@ -2,17 +2,14 @@ import clsx from "clsx"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { NodeRendererProps, Tree, TreeApi } from "react-arborist"
 
-import {
-  ComponentProps,
-  HOVER_COLOR,
-  Icons,
-  SELECTED_COLOR,
-  renderIcon,
-  useStableValue,
-} from "./shared"
+import { ComponentProps, Icons, Theme, renderIcon, useStableValue } from "./shared"
 import styles from "./arborist.module.css"
 
-function TreeCheckbox({ args, setStateValue }: ComponentProps): React.ReactElement {
+function TreeCheckbox({
+  args,
+  theme,
+  setStateValue,
+}: ComponentProps): React.ReactElement {
   const data = useStableValue(args["data"])
   const icons = args["icons"] as Icons
   const childrenAccessor = args["children_accessor"]
@@ -76,6 +73,7 @@ function TreeCheckbox({ args, setStateValue }: ComponentProps): React.ReactEleme
   const renderNode = (rendererProps: NodeRendererProps<any>) => (
     <NodeRow
       rendererProps={rendererProps}
+      theme={theme}
       icons={icons}
       isChecked={checked.has(rendererProps.node.id)}
       isIndeterminate={indeterminate.has(rendererProps.node.id)}
@@ -248,6 +246,7 @@ function seedState(
 
 interface NodeRowProps {
   rendererProps: NodeRendererProps<any>
+  theme: Theme
   icons: Icons
   isChecked: boolean
   isIndeterminate: boolean
@@ -256,6 +255,7 @@ interface NodeRowProps {
 
 function NodeRow({
   rendererProps,
+  theme,
   icons,
   isChecked,
   isIndeterminate,
@@ -264,9 +264,9 @@ function NodeRow({
   const { node, style, dragHandle } = rendererProps
   const [isHover, setHover] = useState(false)
 
-  const hoverStyle: React.CSSProperties = { backgroundColor: HOVER_COLOR }
+  const hoverStyle: React.CSSProperties = { backgroundColor: theme.darkenedBgMix15 }
   const selectedStyle: React.CSSProperties = {
-    backgroundColor: SELECTED_COLOR,
+    backgroundColor: theme.darkenedBgMix25,
   }
 
   const handleRowClick = (e: React.MouseEvent) => {
@@ -295,6 +295,7 @@ function NodeRow({
   const chevronElement = node.isInternal ? (
     <span
       className={styles.chevron}
+      style={{ "--chevron-hover-color": theme.darkenedBgMix25 } as React.CSSProperties}
       onClick={(e) => {
         e.stopPropagation()
         node.toggle()

@@ -3,11 +3,17 @@ from conftest import (
     assert_checkbox_value_equals,
     assert_tree_view_value_equals,
     checkbox_chevron,
+    switch_to_dark_theme,
     toggle_checked,
     tree_checkbox_component,
     tree_checkbox_input,
 )
 from playwright.sync_api import Page, expect
+
+CHEVRON_HOVER_COLORS = {
+    "light": "rgba(151, 166, 195, 0.25)",
+    "dark": "rgba(172, 177, 195, 0.25)",
+}
 
 
 def test_should_return_default_value(page: Page):
@@ -184,6 +190,19 @@ def test_that_chevron_click_only_toggles_open(page: Page):
 
     expect(inner_div).to_have_class(NODE_STATES["isOpen"])
     expect(chevron).to_have_attribute("data-open", "true")
+
+
+def test_that_chevron_hover_follows_theme(page: Page):
+    chevron = checkbox_chevron(page, "3")
+
+    chevron.hover()
+
+    expect(chevron).to_have_css("background-color", CHEVRON_HOVER_COLORS["light"])
+
+    switch_to_dark_theme(page)
+    chevron.hover()
+
+    expect(chevron).to_have_css("background-color", CHEVRON_HOVER_COLORS["dark"])
 
 
 def test_that_components_are_independent(page: Page):

@@ -2,22 +2,16 @@ import clsx from "clsx"
 import React, { useState } from "react"
 import { NodeRendererProps, Tree } from "react-arborist"
 
-import {
-  ComponentProps,
-  HOVER_COLOR,
-  Icons,
-  SELECTED_COLOR,
-  renderIcon,
-  useStableValue,
-} from "./shared"
+import { ComponentProps, Icons, Theme, renderIcon, useStableValue } from "./shared"
 import styles from "./arborist.module.css"
 
-function TreeView({ args, setStateValue }: ComponentProps): React.ReactElement {
+function TreeView({ args, theme, setStateValue }: ComponentProps): React.ReactElement {
   const data = useStableValue(args["data"])
   const icons = args["icons"] as Icons
   const renderNode = (rendererProps: NodeRendererProps<any>) => (
     <NodeRow
       rendererProps={rendererProps}
+      theme={theme}
       icons={icons}
       selectInternalNodes={args["select_internal_nodes"]}
     />
@@ -63,17 +57,18 @@ function TreeView({ args, setStateValue }: ComponentProps): React.ReactElement {
 
 interface NodeRowProps {
   rendererProps: NodeRendererProps<any>
+  theme: Theme
   icons: Icons
   selectInternalNodes: boolean
 }
 
-function NodeRow({ rendererProps, icons, selectInternalNodes }: NodeRowProps) {
+function NodeRow({ rendererProps, theme, icons, selectInternalNodes }: NodeRowProps) {
   const { node, style, dragHandle } = rendererProps
   const [isHover, setHover] = useState(false)
 
-  const hoverStyle: React.CSSProperties = { backgroundColor: HOVER_COLOR }
+  const hoverStyle: React.CSSProperties = { backgroundColor: theme.darkenedBgMix15 }
   const selectedStyle: React.CSSProperties = {
-    backgroundColor: SELECTED_COLOR,
+    backgroundColor: theme.darkenedBgMix25,
     fontWeight: "bold",
   }
 

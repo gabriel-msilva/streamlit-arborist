@@ -3,7 +3,7 @@ import React, { StrictMode } from "react"
 import { createRoot, Root } from "react-dom/client"
 
 import "./material-symbols.css"
-import { ComponentProps } from "./shared"
+import { ComponentProps, getTheme } from "./shared"
 import TreeCheckbox from "./TreeCheckbox"
 import TreeView from "./TreeView"
 
@@ -40,9 +40,12 @@ const renderer: FrontendRenderer<Record<string, unknown>, Record<string, any>> =
     reactRoots.set(parentElement, reactRoot)
   }
 
+  // The theme's CSS custom properties are set on an ancestor of the shadow host.
+  const host = parentElement instanceof ShadowRoot ? parentElement.host : parentElement
+
   reactRoot.render(
     <StrictMode>
-      <Router args={data} setStateValue={setStateValue} />
+      <Router args={data} theme={getTheme(host)} setStateValue={setStateValue} />
     </StrictMode>,
   )
 

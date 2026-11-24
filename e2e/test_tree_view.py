@@ -4,6 +4,7 @@ import pytest
 from conftest import (
     NODE_STATES,
     assert_tree_view_value_equals,
+    switch_to_dark_theme,
     tree_view_component,
 )
 from playwright.sync_api import Page, expect
@@ -12,6 +13,11 @@ COLORS = {
     "background": "rgba(0, 0, 0, 0)",
     "hover": "rgba(151, 166, 195, 0.15)",
     "selected": "rgba(151, 166, 195, 0.25)",
+}
+
+DARK_COLORS = {
+    "hover": "rgba(172, 177, 195, 0.15)",
+    "selected": "rgba(172, 177, 195, 0.25)",
 }
 
 
@@ -153,6 +159,24 @@ def test_should_hover_node(page: Page):
     page.mouse.move(0, 0)
 
     expect(inner_div).to_have_css("background-color", COLORS["background"])
+
+
+def test_should_follow_theme_colors(page: Page):
+    tree = tree_view_component(page)
+
+    unread = tree.get_by_role("treeitem", level=1, name="Unread")
+    inner_div = unread.locator("div")
+
+    switch_to_dark_theme(page)
+
+    inner_div.hover()
+
+    expect(inner_div).to_have_css("background-color", DARK_COLORS["hover"])
+
+    unread.click()
+    page.mouse.move(0, 0)
+
+    expect(inner_div).to_have_css("background-color", DARK_COLORS["selected"])
 
 
 def test_should_nodes_be_closed(page: Page):

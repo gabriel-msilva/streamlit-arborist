@@ -95,7 +95,7 @@
 }
 
 .chevron:hover {
-  background-color: rgba(151, 166, 195, 0.2);
+  background-color: var(--chevron-hover-color);
 }
 
 .chevron > span {

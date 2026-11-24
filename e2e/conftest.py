@@ -61,6 +61,19 @@ def toggle_checked(page: Page, node_id: str):
     page.keyboard.press("Escape")
 
 
+def switch_to_dark_theme(page: Page):
+    """Choose the dark theme in Streamlit's settings dialog."""
+    page.get_by_test_id("stMainMenu").click()
+    page.get_by_text("Settings").click()
+
+    dialog = page.get_by_role("dialog")
+    dialog.get_by_text("Use system setting").click()
+    page.get_by_role("option", name="Dark").click()
+    page.keyboard.press("Escape")
+
+    expect(dialog).to_be_hidden()
+
+
 def assert_tree_view_value_equals(expected: dict | None, page: Page):
     """Read the JSON code block following 'Returned value (tree_view):' in the demo."""
     json_block = page.locator("pre code").nth(1)
