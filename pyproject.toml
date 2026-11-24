@@ -46,6 +46,9 @@ tests = [
 ]
 docs = ["sphinx==7.4.7", "sphinx-rtd-theme==3.0.2"]
 
+[tool.uv]
+resolution = "lowest-direct"
+
 [tool.hatch.build]
 artifacts = ["streamlit_arborist/frontend/build/**"]
 exclude = ["streamlit_arborist/frontend/**"]
